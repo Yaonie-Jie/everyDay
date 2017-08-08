@@ -1,0 +1,175 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+html,body{
+	font-size: 14px;
+	font-family: "微软雅黑";
+}
+
+i{
+	font-style: normal;
+}
+
+li{
+	list-style: none;
+}
+
+.box{
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.location{
+	font-size: 18px;
+}
+
+.location a{
+	font-size: 18px;
+	color: #303030;
+	text-decoration: none;
+}
+
+.location a:hover{
+	text-decoration: underline;
+}
+
+.good_tags{
+	width: 100%;
+	height: auto;
+	min-height: 500px;
+	overflow: hidden;
+	padding: 0 20px 100px 20px;
+	box-sizing: border-box;
+	border: 1px solid #303030;
+	margin-top: 30px;
+}
+
+.good_tag1,.good_tag2{
+	width: 50%;
+	margin-top: 30px;
+	padding: 0 25%;
+	overflow: hidden;
+}
+
+.tag_name1,.tag_name2,.tag_name3{
+	float: left;
+	line-height: 30px;
+	font-size: 16px;
+}
+
+.tag_name3 .add_interest{
+	border-radius: 5px;
+	background: #1E9FFF;
+	color: #FFFFFF;
+	text-decoration: none;
+	margin-top: 20px;
+	display: block;
+	text-align: center;
+}
+
+.tag_list1,.tag_list2,.tag_list3{
+	float: left;
+	margin-left: 50px;
+}
+
+.tag_list1_title,.tag_list2_title,.tag_list3_title{
+	width: 250px;
+	height: 30px;
+	background: #303030;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 30px;
+}
+
+.tag_list1 ul{
+	width: 250px;
+	height: auto;
+	overflow: hidden;
+}
+
+.tag_list1 ul li{
+	width: 248px;
+	height: 28px;
+	text-align: center;
+	line-height: 30px;
+	border: 1px solid #303030;
+}
+
+.tag_list1 ul li:last-child{
+	border-top: 0;
+}
+
+.tag_list2 ul{
+	width: 250px;
+	height: auto;
+	overflow: hidden;
+}
+
+.tag_list2 ul li{
+	width: 248px;
+	height: 28px;
+	text-align: center;
+	line-height: 30px;
+	border: 1px solid #303030;
+}
+
+.tag_list3 ul{
+	width: 250px;
+	height: auto;
+	overflow: hidden;
+}
+
+.tag_list3 ul li{
+	width: 248px;
+	height: 36px;
+	text-align: center;
+	line-height: 38px;
+	border: 1px solid #303030;
+	vertical-align: middle;
+}
+
+.bordertop{
+	border-top: 0 !important;
+}
+
+.tag_list3 ul li a{
+	padding: 2px 10px;
+	color: #FFFFFF;
+	text-decoration: none;
+	background: #303030;
+	margin: 0 10px 0 20px;
+	font-size: 14px;
+	line-height: 30px;
+	display: inline;
+}
+
+.tag_list3 ul li span{
+	padding: 2px 10px;
+	color: #FFFFFF;
+	text-decoration: none;
+	background: #303030;
+	font-size: 14px;
+}
+
+.good_tag3{
+	width: 70%;
+	margin-top: 30px;
+	padding: 0 5% 0 25%;
+	overflow: hidden;
+}
+
+.tag3_tip{
+	width: 250px;
+	height: 88px;
+	border: 1px solid #303030;
+	text-align: center;
+	line-height: 90px;	
+	color: #303030;
+	float: left;
+	margin-left: 30px;
+}

@@ -1,0 +1,70 @@
+html,body{
+	font-size: 14px;
+	font-family: "微软雅黑";
+}
+
+i{
+	font-style: normal;
+}
+
+.box{
+	width: 100%;
+	height: 100%;
+	min-height: 600px;
+	padding: 10px;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.location{
+	font-size: 18px;
+}
+
+.location a{
+	font-size: 18px;
+	color: #303030;
+	text-decoration: none;
+}
+
+.location a:hover{
+	text-decoration: underline;
+}
+
+.invoice{
+	width: 100%;
+	min-height: 500px;
+	border: 1px solid #303030;
+	margin-top: 30px;
+	overflow: hidden;
+	position: relative;
+}
+
+.invoice_title{
+	text-align: center;
+	line-height: 60px;
+	font-size: 16px;
+	margin-top: 20px;
+}
+
+.add_invoice_btn{
+	width: 100px;
+	height: 30px;
+	border-radius: 5px;
+	background: #1E9FFF;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 30px;
+	position: absolute;
+	right: 10%;
+	top: 30px;
+}
+
+.invoice_form{
+	width: 100%;
+	padding: 0 10% 50px 10%;
+}
+
+.table tr td{
+	text-align: center;
+	border-color: #303030 !important;
+}

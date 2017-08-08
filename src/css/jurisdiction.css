@@ -1,0 +1,212 @@
+html,body{
+	font-size: 14px;
+	font-family: "微软雅黑";
+}
+
+i{
+	font-style: normal;
+}
+
+.box{
+	width: 100%;
+	height: 100%;
+	min-height: 600px;
+	padding: 10px;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.location{
+	font-size: 18px;
+}
+
+.location a{
+	font-size: 18px;
+	color: #303030;
+	text-decoration: none;
+}
+
+.location a:hover{
+	text-decoration: underline;
+}
+
+.add_account{
+	width: 100%;
+	height: 200px;
+	border: 1px solid #303030;
+	margin-top: 30px;
+}
+
+.add_title,.add_name,.add_distribution{
+	width: 100%;
+	padding: 0 25%;
+	box-sizing: border-box;
+}
+
+.add_title{
+	text-align: center;
+	line-height: 60px;
+	font-size: 16px;
+	margin-top: 20px;
+}
+
+.add_name{
+	width: 100%;
+	height: 20px;
+}
+
+.add_name input{
+	width: 100%;
+	height: 20px;
+	font-size: 14px;
+}
+
+.add_distribution{
+	text-align: left;
+	line-height: 48px;
+	font-size: 14px;
+}
+
+.add_distribution a{
+	color: #303030;
+	text-decoration: none;
+}
+
+.add_btn{
+	width: 50%;
+	height: 30px;
+	color: #FFFFFF;
+	background: #1E9FFF;
+	margin-left: 25%;
+	box-sizing: border-box;
+	text-align: center;
+	line-height: 30px;
+	cursor: pointer;
+}
+
+.add_btn:hover{
+	background: #178FE5;
+}
+
+.distribution{
+	width: 100%;
+	height: 500px;
+	border: 1px solid #303030;
+	border-top: 0;
+	overflow: hidden;
+}
+
+.distribution_title{
+	text-align: center;
+	font-size: 18px;
+	line-height: 60px;
+	margin-top: 20px;
+}
+
+.distribution_form{
+  width: 80%;
+  margin: 0 10%;
+}
+
+.table tr td{
+	text-align: center;
+	border-color: #303030 !important;
+}
+
+.operation a{
+	color: #303030;
+}
+
+.operation a:hover{
+	text-decoration: underline;
+	color: #303030;
+}
+
+.operation a:first-child{
+	margin-right: 5px;
+}
+
+.page{
+	width: 100%;
+}
+
+.pager{
+	float: right;
+	padding-right: 10%;
+}
+
+.pager li{
+	margin-left: 10px;
+}
+
+.pager li a{
+	color: #FFFFFF !important;
+}
+
+.box2{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: rgba(0,0,0,0.5);
+	display: none;
+}
+
+.box2 .permission_assignment{
+	width: 300px;
+	height: 500px;
+	background: #FFFFFF;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -150px;
+	margin-top: -300px;
+}
+
+.permission_assignment_title{
+	font-size: 16px;
+	line-height: 60px;
+	margin-top: 10px;
+	text-align: center;
+	border-bottom: 2px solid #303030;
+}
+
+.permission_assignment dl{
+	width: 70%;
+	margin-left: 20%;
+	margin-top: 20%;
+}
+
+.permission_btn{
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+	position: relative;
+	top: 60px;
+}
+
+.permission_cancel,.permission_confirm{
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	float: left;
+	cursor: pointer;
+}
+
+.permission_cancel{
+	background: #838383;
+	float: left;
+	margin-left: 20px;
+}
+
+.permission_confirm{
+	background: #1E9FFF;
+	float: right;
+	margin-right: 20px;
+}
+
+.permission_confirm:hover{
+	background: #178FE5;
+}

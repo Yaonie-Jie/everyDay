@@ -1,0 +1,110 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+html,body{
+	font-size: 16px;
+	font-family: "微软雅黑";
+}
+
+i{
+	font-style: normal;
+}
+
+.box{
+	width: 100%;
+	height: 100%;
+	min-height: 600px;
+	padding: 10px;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.location{
+	font-size: 20px;
+}
+
+.location a{
+	font-size: 20px;
+	color: #303030;
+	text-decoration: none;
+}
+
+.location a:hover{
+	text-decoration: underline;
+}
+
+.phone{
+	width: 100%;
+	height: 100%;
+	min-height: 600px;
+	border: 1px solid #838383;
+	padding: 10px;
+	box-sizing: border-box;
+	margin-top: 20px;
+	position: relative;
+}
+
+.current_phone{
+	margin-top: 30px;
+}
+
+.current_phone p span{
+	padding: 4px 15px;
+	background: #303030;
+	margin-left: 20px;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.change_phone{
+	width: 450px;
+	height: 150px;
+	border: 1px solid #303030;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -225px;
+	margin-top: -75px;
+	display: none;
+}
+
+.change_ipt{
+	position: relative;
+	top: 40%;
+	width: 100%;
+	padding: 0 20px;
+	box-sizing: border-box;
+}
+
+.change_ipt input{
+	width: 280px;
+	float: right;
+	height: 20px;
+	font-size: 16px;
+}
+
+.change_btns{
+	position: relative;
+	top: 55%;
+	width: 100%;
+	padding: 0 100px;
+	box-sizing: border-box;
+}
+
+.change_btns i{
+	padding: 4px 15px;
+	color: #FFFFFF;
+	background: #303030;
+}
+
+.change_btns .canceling{
+	float: left;
+	cursor: pointer;
+}
+
+.change_btns .changeing{
+	float: right;
+	cursor: pointer;
+}
