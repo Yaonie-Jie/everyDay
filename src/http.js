@@ -18,6 +18,7 @@ const apiMap={
   'updataOrderNum':hosts.api+'order/modifyOrderPriceByOrderNum',    //订单改价
   'removeOrder':hosts.api+'order/removeOrder',    //取消订单
   'showOrder':hosts.api+'order/findOrderByOrderNum',    //订单详情
+  'returnOrderList':hosts.api+'order/findOrderRefundList',    //退款中订单列表
 }
 
 export default{

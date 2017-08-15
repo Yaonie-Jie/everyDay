@@ -3,7 +3,7 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>待发货订单</el-breadcrumb-item>
+        <el-breadcrumb-item>已退款订单</el-breadcrumb-item>
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -65,18 +65,40 @@
                 </ul>
               </div>
             </div>
-            <div class="TopTitle NoBorderTop NoBorderBottom">
-              <div class="right">
-                <el-button>发货</el-button>
-                <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
-
-              </div>
-            </div>
           </li>
         </ul>
       </div>
-    </div>
+      <div class="apply_">
 
+        <div class="order-list order-lists">
+          <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
+            <ul class="left width100">
+              <div class="titlee">退款信息</div>
+              <li class="marginTopLeft">申请退款时间：<span>2017-12-22   12：00:00</span></li>
+              <li class="marginTopLeft">退款类型：退货退款</li>
+              <li class="marginTopLeft">退款金额：￥21323.00</li>
+              <li class="marginTopLeft">用户备注：-----</li>
+              <li class="marginTopLeft">用户支付宝/微信账号：132231321232</li>
+            </ul>
+
+          </div>
+          <div class="TopTitle NoPadding NoBorderBottom">
+            <ul class="left width100">
+              <div class="titlee">退款记录</div>
+              <ul style="overflow: auto;">
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
+                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
+              </ul>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style>
@@ -147,7 +169,7 @@
     data(){
       return {
         orderNum: '',    //订单号
-        listData: ''
+        listData: '',
       }
     },
     created() {
@@ -180,7 +202,6 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
-              console.log(data)
               this.listData = data
 
             }
@@ -190,41 +211,6 @@
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
-      },
-      Delete(orderNum){
-        this.$confirm('此操作将取消订单, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let url = http.apiMap.removeOrder;
-          let data = {
-            orderNum: orderNum,
-            common: this.GLOBAL.common
-          };
-          this.$http.post(url, data).then(
-            function (res) {
-              if (res.body.result) {
-                this.$message({
-                  type: 'success',
-                  message: '取消订单成功!'
-                });
-
-                this.getList()
-              } else {
-                this.$message({
-                  type: 'warning',
-                  message: '取消订单失败'
-                });
-              }
-            }
-          );
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          });
-        });
       },
     }
   }

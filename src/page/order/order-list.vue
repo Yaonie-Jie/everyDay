@@ -21,16 +21,9 @@
           </div>
           <div class="apply_information">
             订单状态：
-            <select name="">
-              <option value="">全部</option>
-              <option value="">未付款</option>
-              <option value="">已付款</option>
-              <option value="">待发货</option>
-              <option value="">待收货</option>
-              <option value="">已完成</option>
-              <option value="">已退款</option>
-            </select>
-            <input type="text" value="输入订单号或用户账号查找订单"/>
+
+
+            <el-input v-model="input8" ></el-input>
             <el-button type="success">搜索</el-button>
           </div>
         </div>
@@ -41,7 +34,7 @@
                 <li>订单号：<span>{{i.orderNum}}</span> 下单账号：<span>{{i.userAccount}}</span></li>
                 <li>下单时间：<span>{{i.createOn}}</span></li>
               </ul>
-              <div class="right zt">订单状态：<span class="pink">{{stataFilter(i.state)}}</span></div>
+              <div class="right zt">订单状态：<span class="pink">{{stataFilter(i.orderState)}}</span></div>
             </div>
             <div class="Bottom">
               <div class="left ShopShowList">
@@ -59,7 +52,7 @@
                     <div class="shopPic">
                       <p>商品单价：<span>{{list.unitPrice}}</span></p>
                       <p>购买数量：X<span>{{list.amount}}</span></p>
-                      <p>总价：<span>{{list.unitPrice*list.amount}}</span></p>
+                      <p>总价：<span>{{list.unitPrice * list.amount}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -73,7 +66,7 @@
                 <p>包含运费：<span>{{i.freigh}}</span></p>
                 <el-button @click="DisplayBlock(i.orderNum)">改价</el-button>
                 <el-button @click="open2(i.orderNum)">取消订单</el-button>
-                <el-button @click="shows(i.orderNum)">订单详情</el-button>
+                <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
             </div>
           </li>
@@ -117,9 +110,16 @@
         :current-page.sync="currentPage"
         :page-size="10"
         layout="prev, pager, next, jumper"
-        :total="200">
+        :total="count11">
       </el-pagination>
     </div>
+    <el-select v-model="currentType" clearable placeholder="请选择活动分类">
+      <el-option
+        v-for="type in types"
+        :value="type">
+      </el-option>
+    </el-select>
+
   </div>
 
 </template>
@@ -288,6 +288,9 @@
     width: 75%;
     float: left;
   }
+  .el-input__inner{
+    width:200px;
+  }
 </style>
 
 <script>
@@ -295,11 +298,17 @@
   export default{
     data(){
       return {
+
+        currentType: '全部',
+        selectItems:[],
+        types: ['全部','测试活动','免费活动','收费活动'],
         dataList: '',
-        price:'',       //改价的订单价格
-        orderNum:'',    //订单号
-        time:'',         //选择时间搜索
-        currentPage:1
+        price: '',       //改价的订单价格
+        orderNum: '',    //订单号
+        time: '',         //选择时间搜索
+        currentPage: 1,
+        count11: 1,
+        input8:'565'
       }
     },
     created() {
@@ -307,12 +316,22 @@
     },
     methods: {
       stataFilter(value){
-          if(value == 1){
-              return '已完成'
-          }
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
+          return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
+        }
       },
       DisplayBlock: function (orderNum) {
-        this.orderNum=orderNum;
+        this.orderNum = orderNum;
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -331,8 +350,20 @@
         $('.mask').css('display', 'none');
         $('.deliver_goods').css('display', 'none');
       },
-      shows: function (row) {
-        this.$router.push('/OrderNo/'+row+'');
+      //跳转详情页
+      shows: function (num, state) {
+        console.log(state)
+        if (state == 0) {
+          this.$router.push('/OrderNo/' + num + '');
+        } else if (state == 1) {
+          this.$router.push('/OrderDeliver/' + num + '');
+        } else if (state == 2) {
+          this.$router.push('/OrderReceived/' + num + '');
+        } else if (state == 3) {
+          this.$router.push('/OrderEnd/' + num + '');
+        } else if (state == 4) {
+          this.$router.push('/OrderMoney/' + num + '');
+        }
       },
       //取消订单
       open2(orderNum) {
@@ -343,7 +374,7 @@
         }).then(() => {
           let url = http.apiMap.removeOrder;
           let data = {
-            orderNum:orderNum,
+            orderNum: orderNum,
             common: this.GLOBAL.common
           };
           this.$http.post(url, data).then(
@@ -355,10 +386,10 @@
                 });
 
                 this.getList()
-              }else {
+              } else {
                 this.$message({
                   type: 'warning',
-                  message: '取消订单失败'
+                  message: res.body.msg
                 });
               }
             }
@@ -381,6 +412,7 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.count11 = res.body.data.count;
               let data = res.body.data.orderList;
               this.dataList = data;
             }
@@ -391,8 +423,8 @@
       updata(){
         let url = http.apiMap.updataOrderNum;
         let data = {
-          orderNum:this.orderNum,
-          price:this.price,
+          orderNum: this.orderNum,
+          price: this.price,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(
@@ -408,9 +440,13 @@
           }
         );
       },
+      //分页跳转
       handleCurrentChange(val) {
-        this.currentPage=val;
+        this.currentPage = val;
         this.getList()
+      },
+      add(){
+          alert(5)
       }
     }
   }

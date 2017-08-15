@@ -18,7 +18,7 @@
                 <li>下单时间：<span>{{listData.createOn}}</span></li>
               </ul>
               <ul class="right">
-                <li>订单状态：<span class="pink">{{stataFilter(listData.state)}}</span></li>
+                <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price}}</span> 包含运费：￥<span>{{listData.freigh}}</span></li>
                 <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span class="pink">{{listData.price}}</span>
                 </li>
@@ -33,9 +33,9 @@
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>发票抬头：<span>杭州上行科技有限公司</span></li>
-                <li>发票税号：<span>17696018825</span></li>
-                <li>发票内容：<span>食品</span></li>
+                <li>发票抬头：<span>{{listData.invoiceHeader}}</span></li>
+                <li>发票税号：<span>{{listData.dutyNumber}}</span></li>
+                <li>发票内容：<span>{{listData.invoiceType}}</span></li>
               </ul>
             </div>
             <div class="TopTitle NoBorderTop">
@@ -240,10 +240,18 @@
     },
     methods: {
       stataFilter(value){
-        if (value == 1) {
-          return '已完成'
-        } else if (value == 0) {
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
           return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
         }
       },
       getshow(){

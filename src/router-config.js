@@ -1,4 +1,3 @@
-
 import activePublic from './page/activePublic/index.vue'
 import step1 from './page/activePublic/step1.vue'
 import step2 from './page/activePublic/step2.vue'
@@ -34,10 +33,11 @@ import OrderDeliverGoods from './page/order/order-deliver-goods.vue'
 import OrderEnd from './page/order/order-end.vue'
 import OrderList from './page/order/order-list.vue'
 import OrderNo from './page/order/order-no.vue'
-import OrderReceivedGoods from './page/order/order-received-goods.vue'
 import OrderRefund from './page/order/order-refund.vue'
-import OrderRefundList from './page/order/order-refund-list.vue'
 import OrderRefundShow from './page/order/order-refund-show.vue'
+import OrderDeliver from './page/order/order-deliver-goods.vue'
+import OrderReceived from './page/order/order-received-goods.vue'
+import OrderMoney from './page/order/order-refund-money.vue'
 
 import  BillDemo from './page/order-service/bill-demo.vue'
 import  FreightManage from './page/order-service/freight-manage.vue'
@@ -62,13 +62,13 @@ import userManage from './page/user/userManage.vue'
 export default [
   {
     path: '/activeManage',
-    component:totalpages,
-    children:[
-      { path: '', component: activeManage},
+    component: totalpages,
+    children: [
+      {path: '', component: activeManage},
       {
         path: 'detail', component: detail,
         children: [
-          {path:'',component: page1},
+          {path: '', component: page1},
           {
             path: 'page1', component: page1,
             children: [
@@ -79,137 +79,143 @@ export default [
               {path: 'step4', component: step4}
             ]
           },
-          { path: 'page2', component: page2  },
-          { path: 'page3', component: page3  },
-          { path: 'page4', component: page4  },
-          { path: 'page5', component: page5  }
+          {path: 'page2', component: page2},
+          {path: 'page3', component: page3},
+          {path: 'page4', component: page4},
+          {path: 'page5', component: page5}
         ]
       },
     ]
   },
   {
-    path:'/activePublic',component:activePublic,
-    children:[
-      { path: ''      , component: step1  },
-      { path: 'step1', component: step1  },
-      { path: 'step2', component: step2  },
-      { path: 'step3', component: step3  },
-      { path: 'step4', component: step4  }
+    path: '/activePublic', component: activePublic,
+    children: [
+      {path: '', component: step1},
+      {path: 'step1', component: step1},
+      {path: 'step2', component: step2},
+      {path: 'step3', component: step3},
+      {path: 'step4', component: step4}
     ]
   },
   {
-    path:'/Jurisdiction',component:Jurisdiction,
+    path: '/Jurisdiction', component: Jurisdiction,
   },
   {
-    path:'/ManageAccount',component:ManageAccount,
+    path: '/ManageAccount', component: ManageAccount,
   },
   {
-    path:'/RecordAccount',component:RecordAccount,
+    path: '/RecordAccount', component: RecordAccount,
   },
   {
-    path:'/BrandGoods',component:BrandGoods,
+    path: '/BrandGoods', component: BrandGoods,
   },
   {
-    path:'/Classify',component:Classify,
+    path: '/Classify', component: Classify,
   },
   {
-    path:'/ManageGoods',component:ManageGoods,
+    path: '/ManageGoods', component: ManageGoods,
     //children:[{ path:'/AddGoods',component:AddGoods}]
   },
-  { path:'/AddGoods',component:AddGoods},
+  {path: '/AddGoods', component: AddGoods},
   {
-    path:'/RecommendGoods',component:RecommendGoods,
+    path: '/RecommendGoods', component: RecommendGoods,
   },
   {
-    path:'/RecommendGoodsLike',component:RecommendGoodsLike,
+    path: '/RecommendGoodsLike', component: RecommendGoodsLike,
   },
   {
-    path:'/TagGoods',component:tagGoods,
+    path: '/TagGoods', component: tagGoods,
   },
   {
-    path:'/AccountedFor',component:AccountedFor,
+    path: '/AccountedFor', component: AccountedFor,
   },
   {
-    path:'/OutOf',component:OutOf,
+    path: '/OutOf', component: OutOf,
   },
   {
-    path:'/UserWithdrawApply',component:UserWithdrawApply,
+    path: '/UserWithdrawApply', component: UserWithdrawApply,
   },
   {
-    path:'/OrderDeliverGoods',component:OrderDeliverGoods,
+    path: '/OrderDeliverGoods', component: OrderDeliverGoods,
   },
   {
-    path:'/OrderEnd',component:OrderEnd,
+    path: '/OrderEnd', component: OrderEnd,
   },
   {
-    path:'/OrderList',component:OrderList,
+    path: '/OrderList', component: OrderList,
   },
   {
-    path:'/OrderNo/:orderNum',component:OrderNo,
+    path: '/OrderNo/:orderNum', component: OrderNo,
   },
   {
-    path:'/OrderReceivedGoods',component:OrderReceivedGoods,
+    path: '/OrderDeliver/:orderNum', component: OrderDeliver,   //待发货订单详情
   },
   {
-    path:'/OrderRefund',component:OrderRefund,
+    path: '/OrderReceived/:orderNum', component: OrderReceived,   //待收货订单详情
   },
   {
-    path:'/OrderRefundList',component:OrderRefundList,
+    path: '/OrderEnd/:orderNum', component: OrderEnd,     //已完成订单详情
   },
   {
-    path:'/OrderRefundShow',component:OrderRefundShow,
+    path: '/OrderRefund', component: OrderRefund,
   },
   {
-    path:'/BillDemo',component:BillDemo,
+    path: '/OrderMoney/:orderNum', component: OrderMoney, //已退款订单详情
   },
   {
-    path:'/FreightManage',component:FreightManage,
+    path: '/OrderRefundShow', component: OrderRefundShow,
   },
   {
-    path:'/Phone',component:Phone,
+    path: '/BillDemo', component: BillDemo,
   },
   {
-    path:'/PersonNum',component:PersonNum,
+    path: '/FreightManage', component: FreightManage,
   },
   {
-    path:'/ShopmanApply',component:ShopmanApply,
+    path: '/Phone', component: Phone,
+  },
+  {
+    path: '/PersonNum', component: PersonNum,
+  },
+  {
+    path: '/ShopmanApply', component: ShopmanApply,
 
   },
   {
-    path:'/ShopmanApplyShow',
-    component:ShopmanApplyShow
+    path: '/ShopmanApplyShow',
+    component: ShopmanApplyShow
   },
   {
-    path:'/ShopmanManage',component:ShopmanManage,
+    path: '/ShopmanManage', component: ShopmanManage,
   },
   {
-    path:'/ShopmanManageShow',component:ShopmanManageShow
+    path: '/ShopmanManageShow', component: ShopmanManageShow
   },
   {
-    path:'/ShopmanTeam',component:ShopmanTeam,
+    path: '/ShopmanTeam', component: ShopmanTeam,
     //children:[{path:'/ShopmanTeamShow',component:ShopmanTeamShow}]
   },
   {
-    path:'/ShopmanTeamShow',component:ShopmanTeamShow
+    path: '/ShopmanTeamShow', component: ShopmanTeamShow
   },
   {
-    path:'/ShopmanTeamShow2',component:ShopmanTeamShow2
+    path: '/ShopmanTeamShow2', component: ShopmanTeamShow2
   },
   {
-    path:'/ShopmanTeamShow3',component:ShopmanTeamShow3
+    path: '/ShopmanTeamShow3', component: ShopmanTeamShow3
   },
   {
-    path:'/ShopmanCommission',component:ShopmanCommission,
+    path: '/ShopmanCommission', component: ShopmanCommission,
   },
   {
-    path:'/User',component:User,
+    path: '/User', component: User,
   },
   {
-    path:'/ChangePass',component:ChangePass,
+    path: '/ChangePass', component: ChangePass,
   }
   ,
   {
-    path:'/userManage',component:userManage,
+    path: '/userManage', component: userManage,
   }
 
 ]

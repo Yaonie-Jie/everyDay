@@ -11,7 +11,7 @@
         <div class="apply_condition">
           <div class="apply_time">
             <div class="block">
-              <el-radio class="radio" v-model="radio" label="1">只看已审核同意的订单</el-radio>
+              <el-radio class="radio" label="1">只看已审核同意的订单</el-radio>
             </div>
           </div>
           <div class="apply_information">
@@ -21,120 +21,52 @@
               <option value="">退款</option>
               <option value="">退货退款</option>
             </select>
-            <input type="text" value="输入订单号或用户账号查找订单" />
+            <input type="text" value="输入订单号或用户账号查找订单"/>
             <el-button type="success">搜索</el-button>
           </div>
         </div>
-        <ul class="order-list">
+        <ul class="order-list" v-for="i in dataList" :key="i.id">
           <li>
             <div class="TopTitle">
               <ul class="left">
-                <li>订单号：<span>20170101121201001</span> 下单账号：<span>17696018825</span></li>
-                <li>下单时间：<span>2017-12-22 12：00:00</span></li>
+                <li>订单号：<span>{{i.orderNum}}</span> 下单账号：<span>{{i.userAccount}}</span></li>
+                <li>下单时间：<span>{{i.createOn}}</span></li>
               </ul>
-              <div class="right zt">订单状态：<span class="pink">待收货</span></div>
+              <div class="right zt">订单状态：<span class="pink">{{stataFilter(i.orderState)}}</span></div>
             </div>
             <div class="Bottom">
               <div class="left ShopShowList">
                 <ul>
-                  <li class="shopList">
+                  <li class="shopList" v-for="list in i.orderProduct">
                     <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
+                      <img
+                        :src="list.picture"
+                        alt="">
                     </div>
                     <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
+                      <p>{{list.proName}}</p>
+                      <p>{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
-                    </div>
-                  </li>
-                  <li class="shopList">
-                    <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
-                    </div>
-                    <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
-                    </div>
-                    <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
+                      <p>商品单价：<span>{{list.unitPrice}}</span></p>
+                      <p>购买数量：X<span>{{list.amount}}</span></p>
+                      <p>总价：<span>{{list.unitPrice * list.amount}}</span></p>
                     </div>
                   </li>
                 </ul>
                 <div class="Pic">
                   <div class="left">
-                    <p>共<span class="pink">20</span>件商品</p>
-                    <p>商品总额：￥<span class="pink">284.00</span></p>
+                    <p>共<span class="pink">{{i.orderState}}</span>件商品</p>
+                    <p>商品总额：￥<span class="pink">{{i.price}}</span></p>
                   </div>
-                  <div class="right"><el-button type="danger">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button></div>
+                  <div class="right">
+                    <el-button type="danger">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button>
+                  </div>
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>200.00</span></p>
-                <p>包含运费：<span>11.00</span></p>
-                <el-button @click="open2">审核驳回</el-button>
-                <el-button @click="open3">审核同意</el-button>
-                <el-button @click="open4">退款成功</el-button>
-                <el-button @click="shows">订单详情</el-button>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="TopTitle">
-              <ul class="left">
-                <li>订单号：<span>20170101121201001</span> 下单账号：<span>17696018825</span></li>
-                <li>下单时间：<span>2017-12-22 12：00:00</span></li>
-              </ul>
-              <div class="right zt">订单状态：<span class="pink">待收货</span></div>
-            </div>
-            <div class="Bottom">
-              <div class="left ShopShowList">
-                <ul>
-                  <li class="shopList">
-                    <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
-                    </div>
-                    <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
-                    </div>
-                    <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
-                    </div>
-                  </li>
-                  <li class="shopList">
-                    <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
-                    </div>
-                    <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
-                    </div>
-                    <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
-                    </div>
-                  </li>
-                </ul>
-                <div class="Pic">
-                  <div class="left">
-                    <p>共<span class="pink">20</span>件商品</p>
-                    <p>商品总额：￥<span class="pink">284.00</span></p>
-                  </div>
-                  <div class="right"><el-button type="danger">退款中&nbsp;&nbsp;&nbsp;退款类型：退款</el-button></div>
-                </div>
-              </div>
-              <div class="right AddPic">
-                <p>订单总额：<span>200.00</span></p>
-                <p>包含运费：<span>11.00</span></p>
+                <p>订单总额：<span>{{i.price}}</span></p>
+                <p>包含运费：<span>{{i.freigh}}</span></p>
                 <el-button @click="open2">审核驳回</el-button>
                 <el-button @click="open3">审核同意</el-button>
                 <el-button @click="open4">退款成功</el-button>
@@ -145,12 +77,71 @@
         </ul>
       </div>
     </div>
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
+  import http from '../../http'
+
   export default {
+    data(){
+      return {
+        currentPage: 1,
+        dataList:'',
+        count:1
+      }
+
+    },
+    created(){
+      this.getList()
+    },
     methods: {
+      stataFilter(value){
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
+          return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
+        }
+      },
+      //获取列表
+      getList(){
+        let url = http.apiMap.returnOrderList;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count= res.body.data.count;
+              let data = res.body.data.orderList;
+              this.dataList = data;
+            }
+          }
+        );
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getList()
+      },
       open2() {
         this.$confirm('此操作将驳回审核, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -168,7 +159,7 @@
           });
         });
       },
-      shows:function(){
+      shows: function () {
         this.$router.push('/OrderNo');
       },
       open3() {
