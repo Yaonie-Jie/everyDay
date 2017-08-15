@@ -145,7 +145,7 @@ export default [
     path:'/OrderList',component:OrderList,
   },
   {
-    path:'/OrderNo',component:OrderNo,
+    path:'/OrderNo/:orderNum',component:OrderNo,
   },
   {
     path:'/OrderReceivedGoods',component:OrderReceivedGoods,

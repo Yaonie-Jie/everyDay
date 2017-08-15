@@ -10,67 +10,56 @@
       <div class="apply_">
         <div class="titlee" style="border:0;">订单详情</div>
         <ul class="order-list order-lists">
-          <li>
+          <li v-bind="listData">
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>订单号：<span>20170101121201001</span> </li>
-                <li>下单账号：<span>17696018825</span></li>
-                <li>下单时间：<span>2017-12-22 12：00:00</span></li>
+                <li>订单号：<span>{{listData.orderNum}}</span></li>
+                <li>下单账号：<span>{{listData.userAccount}}</span></li>
+                <li>下单时间：<span>{{listData.createOn}}</span></li>
               </ul>
               <ul class="right">
-                <li>订单状态：<span class="pink">待发货</span> </li>
-                <li>订单总额：￥<span>1212.00</span>    包含运费：￥<span>11.00</span></li>
-                <li>共<b class="pink">20</b>件商品，商品总额：￥<span class="pink">284.00</span></li>
+                <li>订单状态：<span class="pink">{{stataFilter(listData.state)}}</span></li>
+                <li>订单总额：￥<span>{{listData.price}}</span> 包含运费：￥<span>{{listData.freigh}}</span></li>
+                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span class="pink">{{listData.price}}</span>
+                </li>
               </ul>
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>收件人：<span>果果</span> </li>
-                <li>收件电话：<span>17696018825</span></li>
-                <li>收货地址：<span>浙江省小米市A区   详细地址详细地址详细地址详细地址详细地址</span></li>
+                <li>收件人：<span>{{listData.consignee}}</span></li>
+                <li>收件电话：<span>{{listData.phone}}</span></li>
+                <li>收货地址：<span>{{listData.addr}}</span></li>
               </ul>
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>发票抬头：<span>杭州上行科技有限公司</span> </li>
+                <li>发票抬头：<span>杭州上行科技有限公司</span></li>
                 <li>发票税号：<span>17696018825</span></li>
                 <li>发票内容：<span>食品</span></li>
               </ul>
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>订单备注：<span>杭州上行科技有限公司</span> </li>
+                <li>订单备注：<span>{{listData.remarks}}</span></li>
               </ul>
             </div>
             <div class="Bottom NoBorderBottom">
               <div class="ShopShowList MarginAuto " style="border:0;">
                 <ul>
-                  <li class="shopList ">
+                  <li class="shopList " v-for="i in listData.orderProduct">
                     <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
+                      <img
+                        :src="i.picture"
+                        alt="">
                     </div>
                     <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
+                      <p>{{i.proName}}</p>
+                      <p>{{i.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
-                    </div>
-                  </li>
-                  <li class="shopList ">
-                    <div class="shopImgBox">
-                      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
-                    </div>
-                    <div class="shopMessage">
-                      <p>商品名称商品名称商品名称商品名称商品名称商品名称商品名</p>
-                      <p>用户所选规格用户所选规格</p>
-                    </div>
-                    <div class="shopPic">
-                      <p>商品单价：<span>16.02</span></p>
-                      <p>购买数量：X<span>10</span></p>
-                      <p>总价：<span>160.2</span></p>
+                      <p>商品单价：<span>{{i.unitPrice}}</span></p>
+                      <p>购买数量：X<span>{{i.amount}}</span></p>
+                      <p>总价：<span>{{i.amount * i.unitPrice}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -78,9 +67,10 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button>订单改价</el-button>
+                <el-button @click="DisplayBlock(listData.orderNum)">改价</el-button>
                 <el-button>发货</el-button>
-                <el-button>取消此订单</el-button>
+                <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
+
               </div>
             </div>
           </li>
@@ -89,17 +79,17 @@
       <div class="apply_">
 
         <div class="order-list order-lists">
-            <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
-              <ul class="left width100">
-                <div class="titlee">退款信息</div>
-                <li class="marginTopLeft">申请退款时间：<span>2017-12-22   12：00:00</span></li>
-                <li class="marginTopLeft">退款类型：退货退款</li>
-                <li class="marginTopLeft">退款金额：￥21323.00</li>
-                <li class="marginTopLeft">用户备注：-----</li>
-                <li class="marginTopLeft">用户支付宝/微信账号：132231321232</li>
-              </ul>
+          <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
+            <ul class="left width100">
+              <div class="titlee">退款信息</div>
+              <li class="marginTopLeft">申请退款时间：<span>2017-12-22   12：00:00</span></li>
+              <li class="marginTopLeft">退款类型：退货退款</li>
+              <li class="marginTopLeft">退款金额：￥21323.00</li>
+              <li class="marginTopLeft">用户备注：-----</li>
+              <li class="marginTopLeft">用户支付宝/微信账号：132231321232</li>
+            </ul>
 
-            </div>
+          </div>
           <div class="TopTitle NoPadding NoBorderBottom">
             <ul class="left width100">
               <div class="titlee">退款记录</div>
@@ -129,7 +119,9 @@
               </ul>
               <div class="right imgNum">
                 <div class="imgBOXs">
-                  <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg" alt="">
+                  <img
+                    src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"
+                    alt="">
                 </div>
                 <div class="shopNUMs">共 <span>20</span>件商品</div>
               </div>
@@ -157,58 +149,196 @@
         </div>
       </div>
     </div>
+    <div class="mask"></div>
+    <div class="change_price popup">
+      <div class="change_nowprice">
+        <div class="change_nowprice_title">修改当前订单价格</div>
+        <el-input placeholder="" v-model="price"></el-input>
+      </div>
+      <div class="deliver_goods_btns">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary" @click="updata">订单改价</el-button>
+      </div>
+    </div>
   </div>
 </template>
 <style>
-  .wlxq{
+  .wlxq {
     display: flex;
     justify-content: space-around;
   }
-  .order-lists{
-    max-width:800px;
-    margin:0 auto;
-    border:1px solid #838383;
+
+  .order-lists {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid #838383;
     overflow: hidden;
   }
-  .NoBorderTop{
-    border-top:0!important;
+
+  .NoBorderTop {
+    border-top: 0 !important;
   }
-  .NoBorderBottom{
-    border-bottom:0!important;
+
+  .NoBorderBottom {
+    border-bottom: 0 !important;
   }
-  .MarginAuto{
-    margin:0 auto;
+
+  .MarginAuto {
+    margin: 0 auto;
   }
-  .width100{
-    width:100%;
+
+  .width100 {
+    width: 100%;
     overflow: hidden;
   }
-  .NoPadding{
-    padding:0;
+
+  .NoPadding {
+    padding: 0;
   }
-  .marginTopLeft{
-    margin-top:20px ;
-    margin-left:20px;
+
+  .marginTopLeft {
+    margin-top: 20px;
+    margin-left: 20px;
   }
-  .imgNum{
-    padding:20px;
+
+  .imgNum {
+    padding: 20px;
     box-sizing: border-box;
   }
-  .imgBOXs{
-    width:150px;
-    height:100px;
+
+  .imgBOXs {
+    width: 150px;
+    height: 100px;
     overflow: hidden;
   }
-  .imgBOXs img{
-    width:100%;
+
+  .imgBOXs img {
+    width: 100%;
   }
-  .shopNUMs{
-    width:100%;
+
+  .shopNUMs {
+    width: 100%;
     text-align: center;
-    border:1px solid #838383;
-    border-top:0;
+    border: 1px solid #838383;
+    border-top: 0;
     box-sizing: border-box;
   }
 </style>
+<script>
+  import http from '../../http'
+  export default{
+    data(){
+      return {
+        orderNum: '',    //订单号
+        listData: '',
+        price: ''
+      }
+    },
+    created() {
+      this.orderNum = this.$route.params.orderNum;
+      this.getshow()
+    },
+    methods: {
+      stataFilter(value){
+        if (value == 1) {
+          return '已完成'
+        } else if (value == 0) {
+          return '待发货'
+        }
+      },
+      getshow(){
+        let url = http.apiMap.showOrder;
+        let data = {
+          orderNum: this.orderNum,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.order;
+              console.log(data)
+              this.listData = data
+
+            }
+          }
+        );
+      },
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.change_price').css('display', 'none');
+      },
+      DisplayBlock (orderNum) {
+        this.orderNum = orderNum;
+        console.log(orderNum)
+        $('.mask').css('display', 'block');
+        $('.change_price').css('display', 'block');
+      },
+      //改价
+      updata(){
+        let url = http.apiMap.updataOrderNum;
+        let data = {
+          orderNum: this.orderNum,
+          price: this.price,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.DisplayNone();
+              this.$message({
+                type: 'success',
+                message: '订单修改成功!'
+              });
+              this.getshow()
+            }else {
+              this.DisplayNone();
+              this.$message({
+                type: 'warning',
+                message: '订单修改失败!'
+              });
+            }
+          }
+        );
+      },
+      Delete(orderNum){
+        this.$confirm('此操作将取消订单, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.removeOrder;
+          let data = {
+            orderNum:orderNum,
+            common: this.GLOBAL.common
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '取消订单成功!'
+                });
+
+                this.getList()
+              }else {
+                this.$message({
+                  type: 'warning',
+                  message: '取消订单失败'
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });
+        });
+      },
+    }
+  }
+
+
+</script>
 
 

@@ -21,7 +21,7 @@
               :span='2'
               label="品牌logo">
               <template scope="scope">
-              <img v-bind:src="scope.row.picture" alt="">
+                <img v-bind:src="scope.row.picture" alt="" style="width: 100px;height: 100px;padding-top: 5px">
               </template>
             </el-table-column>
             <el-table-column
@@ -37,15 +37,18 @@
             <el-table-column
               :span='5'
               label="操作">
-               <template scope="scope">
-                 <el-button type="text" size="small" @click="Up(scope.row)" v-if="scope.row.number!=1">上移</el-button>
-                 <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.number!=DataLength">下移</el-button>
-                 <el-button type="text" size="small" @click="Top(scope.row)" v-if="scope.row.number!=1">置顶</el-button>
-                 <el-button type="text" size="small" @click="Bottom(scope.row)" v-show="scope.row.number!=DataLength">置底</el-button>
-                 <el-button type="text" size="small" @click="DisplayBlock2">修改</el-button>
-                 <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
-                 <span></span>
-               </template>
+              <template scope="scope">
+                <el-button type="text" size="small" @click="Up(scope.row)" v-if="scope.row.number!=1">上移</el-button>
+                <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.number!=DataLength">下移
+                </el-button>
+                <el-button type="text" size="small" @click="Top(scope.row)" v-if="scope.row.number!=1">置顶</el-button>
+                <el-button type="text" size="small" @click="Bottom(scope.row)" v-show="scope.row.number!=DataLength">
+                  置底
+                </el-button>
+                <el-button type="text" size="small" @click="DisplayBlock2(scope.row)">修改</el-button>
+                <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
+                <span></span>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -57,23 +60,39 @@
       <div class="add_commodity_brands_title popup_title">添加商品品牌</div>
       <div class="brand_logo">
         <div class="brand_logo_title">品牌logo</div>
-        <div class="brand_logo_img"></div>
+        <el-upload
+          class="avatar-uploader"
+          ref="upload"
+          name="pictureUrl"
+          :show-file-list="false"
+          :on-change="addd"
+          :data={name:this.name,common:this.GLOBAL.common,details:this.details}
+          :action="updloadUrl"
+          :on-success="addSuccess"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :auto-upload="false">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+
       </div>
       <div class="brand_name">
         <div class="brand_name_title">品牌名称</div>
-        <el-input></el-input>
+        <el-input v-model="name" placeholder="请输入品牌名称"></el-input>
       </div>
       <div class="brand_introduce">
         <div class="brand_introduce_title">品牌介绍</div>
         <el-input
           type="textarea"
           :rows="2"
+          v-model="details"
         >
         </el-input>
       </div>
       <div class="add_commodity_brand_btn">
         <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary">确认</el-button>
+        <el-button type="primary" @click="submitUpload">确认</el-button>
       </div>
     </div>
 
@@ -81,152 +100,177 @@
       <div class="popup_title">修改商品信息</div>
       <div class="popup_form">
         <div class="popup_form_title">品牌logo</div>
-        <div class="brand_logo_img"></div>
+        <el-upload
+          class="avatar-uploader"
+          ref="upadd"
+          :show-file-list="false"
+          :action="updataUrl"
+          name="pictureUrl"
+          :on-change="addd1"
+          :data={name:this.updataName,common:this.GLOBAL.common,details:this.updataDetails,id:this.id}
+          :on-success="addSuccess1"
+          :on-preview="handlePreview1"
+          :on-remove="handleRemove1"
+          :auto-upload="false">
+          <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
       </div>
       <div class="popup_form">
         <div class="popup_form_title">品牌名称</div>
-        <el-input></el-input>
+        <el-input v-model="updataName"></el-input>
       </div>
       <div class="popup_form">
         <div class="popup_form_title">品牌介绍</div>
         <el-input
           type="textarea"
           :rows="2"
-          >
+          v-model="updataDetails"
+        >
         </el-input>
       </div>
       <div class="add_commodity_brand_btn">
         <el-button @click="DisplayNone2">取消</el-button>
-        <el-button type="primary">确认</el-button>
+        <el-button type="primary" @click="submitUpload1">确认</el-button>
       </div>
     </div>
   </div>
 </template>
 
 
-
 <script>
+  import http from '../../http'
   export default {
     data() {
       return {
         tableData: [],
-        TableDataUrl:this.GLOBAL.baseUrl+'productBrand/findProductBrandList',
-        TopUrl:this.GLOBAL.baseUrl+'productBrand/modifyProductBrandTop',
-        BottomUrl:this.GLOBAL.baseUrl+'productBrand/modifyProductBrandBottom',
-        UpDownUrl:this.GLOBAL.baseUrl+'productBrand/modifyProductBrandPosition',
-        DeleteUrl:this.GLOBAL.baseUrl+'productBrand/removeProductBrandByIdL',
-        DataLength:'',
-        currentChange:1
+        TableDataUrl: this.GLOBAL.baseUrl + 'productBrand/findProductBrandList',
+        TopUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandTop',
+        BottomUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandBottom',
+        UpDownUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandPosition',
+        DeleteUrl: this.GLOBAL.baseUrl + 'productBrand/removeProductBrandByIdL',
+        AddUrl: this.GLOBAL.baseUrl + 'productBrand/addProductBrand',
+        DataLength: '',
+        currentChange: 1,
+        imageUrl: '',
+        imageUrl2: '',
+        name: '',
+        details: '',
+        updloadUrl: http.apiMap.AddProductBrand,
+        updataUrl: http.apiMap.updataProductBrand,
+        updataName: '',
+        updataDetails: '',
+        id:''
       }
     },
-    created: function(){
+    created: function () {
       this.getTable()//定义方法
     },
     methods: {
       //获取列表信息
-      getTable:function(){
-        var tableList=[];
+      getTable: function () {
+        var tableList = [];
         var sumPage;
         $.ajax({
-          type:'POST',
-          data:{'common':this.GLOBAL.common,'size':10,'nowpage':this.currentChange},
-          async:false,
-          url:this.TableDataUrl,
-          success:function (data) {
-            if(data.result){
-              tableList=data.data.productBrandList;
-            }else{
-              swal({title:'',text:data.msg})
+          type: 'POST',
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentChange},
+          async: false,
+          url: this.TableDataUrl,
+          success: function (data) {
+            if (data.result) {
+              tableList = data.data.productBrandList;
+            } else {
+              swal({title: '', text: data.msg})
             }
           }
         })
-        this.tableData=tableList;
-        this.DataLength=tableList[tableList.length-1].number;
+        this.tableData = tableList;
+        this.DataLength = tableList[tableList.length - 1].number;
       },
       //上移
-      Up:function(row){
-         var nowID=row.id;
-         var nowNumber=row.number;
-         var table=this.tableData;
-         var FrontID;
-         var FrontNumber;
-         for(var i=0;i<table.length;i++){
-             if(table[i].id==nowID){
-               FrontID=table[i-1].id;
-               FrontNumber=table[i-1].number;
-             }
-         }
-         var arr=[{'id':nowID,'number':nowNumber-1},{'id':FrontID,'number':FrontNumber+1}];
-         var data={'list':JSON.stringify(arr),'common':this.GLOBAL.common};
-         var that=this;
-         $.ajax({
-           type:'POST',
-           url:this.UpDownUrl,
-           data:data,
-           success:function(data){
-              if(data.result){
-                  that.getTable()
-              }else{
-                  swal({title:'',text:data.msg})
-              }
-           }
-         })
+      Up: function (row) {
+        var nowID = row.id;
+        var nowNumber = row.number;
+        var table = this.tableData;
+        var FrontID;
+        var FrontNumber;
+        for (var i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i - 1].id;
+            FrontNumber = table[i - 1].number;
+          }
+        }
+        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
+        var that = this;
+        $.ajax({
+          type: 'POST',
+          url: this.UpDownUrl,
+          data: data,
+          success: function (data) {
+            if (data.result) {
+              that.getTable()
+            } else {
+              swal({title: '', text: data.msg})
+            }
+          }
+        })
 
       },
       //下移
-      Down:function(row){
-        var nowID=row.id;
-        var nowNumber=row.number;
-        var table=this.tableData;
+      Down: function (row) {
+        var nowID = row.id;
+        var nowNumber = row.number;
+        var table = this.tableData;
         var FrontID;
         var FrontNumber;
-        for(var i=0;i<table.length;i++){
-          if(table[i].id==nowID){
-            FrontID=table[i+1].id;
-            FrontNumber=table[i+1].number;
+        for (var i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i + 1].id;
+            FrontNumber = table[i + 1].number;
           }
         }
-        var arr=[{'id':nowID,'number':nowNumber+1},{'id':FrontID,'number':FrontNumber-1}];
-        var data={'list':JSON.stringify(arr),'common':this.GLOBAL.common};
-        var that=this;
+        var arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
+        var that = this;
         $.ajax({
-          type:'POST',
-          url:this.UpDownUrl,
-          data:data,
-          success:function(data){
-            if(data.result){
+          type: 'POST',
+          url: this.UpDownUrl,
+          data: data,
+          success: function (data) {
+            if (data.result) {
               that.getTable()
-            }else{
-              swal({title:'',text:data.msg})
+            } else {
+              swal({title: '', text: data.msg})
             }
           }
         })
       },
       //置顶
-      Top:function(row){
-        var data={'id':row.id,'number':row.number,'common':this.GLOBAL.common};
-        var that=this;
+      Top: function (row) {
+        var data = {'id': row.id, 'number': row.number, 'common': this.GLOBAL.common};
+        var that = this;
         $.ajax({
-          type:'POST',
-          url:that.TopUrl,
-          data:data,
-          success:function(data){
-             if(data.result){
-                 that.getTable();
-             }
+          type: 'POST',
+          url: that.TopUrl,
+          data: data,
+          success: function (data) {
+            if (data.result) {
+              that.getTable();
+            }
           }
         })
       },
       //置底
-      Bottom:function(row){
-        var data={'number':row.number,'common':this.GLOBAL.common};
-        var that=this;
+      Bottom: function (row) {
+        var data = {'number': row.number, 'common': this.GLOBAL.common};
+        var that = this;
         $.ajax({
-          type:'POST',
-          url:that.BottomUrl,
-          data:data,
-          success:function(data){
-            if(data.result){
+          type: 'POST',
+          url: that.BottomUrl,
+          data: data,
+          success: function (data) {
+            if (data.result) {
               that.getTable();
             }
           }
@@ -234,31 +278,31 @@
       },
       //删除
       open2(row) {
-        var data={'id':row.id,'common':this.GLOBAL.common}
-        var that=this;
+        var data = {'id': row.id, 'common': this.GLOBAL.common}
+        var that = this;
         this.$confirm('此操作将删除该商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            var item=this;
+          var item = this;
           $.ajax({
-            type:'POST',
-            url:that.DeleteUrl,
-            data:data,
-            success:function(data){
-                if(data.result){
-                  item.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                  });
-                  that.getTable();
-                }else{
-                  this.$message({
-                    type: 'info',
-                    message: '删除失败!'
-                  });
-                }
+            type: 'POST',
+            url: that.DeleteUrl,
+            data: data,
+            success: function (data) {
+              if (data.result) {
+                item.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                that.getTable();
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '删除失败!'
+                });
+              }
             }
           })
         }).catch(() => {
@@ -268,107 +312,218 @@
           });
         });
       },
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_commodity_brand').css('display','block');
+      DisplayBlock: function () {
+        $('.mask').css('display', 'block');
+        $('.add_commodity_brand').css('display', 'block');
       },
 
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_commodity_brand').css('display','none');
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.add_commodity_brand').css('display', 'none');
       },
-      DisplayBlock2:function(){
-        $('.mask').css('display','block');
-        $('.change_brand').css('display','block');
+      DisplayBlock2(row){
+        $('.mask').css('display', 'block');
+        $('.change_brand').css('display', 'block');
+        this.updataName = row.name;
+        this.updataDetails = row.details;
+        this.imageUrl2 = row.picture;
+        this.id = row.id;
       },
 
-      DisplayNone2:function(){
-        $('.mask').css('display','none');
-        $('.change_brand').css('display','none');
+      DisplayNone2: function () {
+        $('.mask').css('display', 'none');
+        $('.change_brand').css('display', 'none');
+      },
+
+      //添加商品品牌
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      addd(event, file, fileList){
+        this.imageUrl = file[file.length - 1].url
+      },
+      addSuccess(response){
+        this.getTable()
+        this.DisplayNone()
+        if (response.result == true) {
+          this.$message({
+            type: 'info',
+            message: '添加成功'
+          });
+          this.DisplayNone()
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.msg
+          });
+          this.DisplayNone()
+        }
+      },
+      //修改商品品牌
+      submitUpload1() {
+        this.$refs.upadd.submit();
+      },
+      handleRemove1(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview1(file) {
+        console.log(file);
+      },
+      addd1(event, file, fileList){
+        this.imageUrl2 = file[file.length - 1].url
+      },
+      addSuccess1(response){
+        this.getTable()
+        this.DisplayNone()
+        if (response.result == true) {
+          this.$message({
+            type: 'info',
+            message: '修改成功'
+          });
+          this.DisplayNone2()
+        } else {
+          this.$message({
+            type: 'error',
+            message: response.msg
+          });
+          this.DisplayNone2()
+        }
       }
     },
 
   }
 </script>
 <style>
-  .el-button+.el-button{
-    margin:10px 10px 0px!important;
+  .el-button + .el-button {
+    margin: 10px 10px 0px !important;
   }
-  .el-button{
-    margin:10px 10px 0px!important;
+
+  .el-button {
+    margin: 10px 10px 0px !important;
   }
-  .brand_{
+
+  .brand_ {
     width: 100%;
     min-height: 500px;
     margin-top: 30px;
     overflow: hidden;
     position: relative;
   }
-  .brand_title{
+
+  .brand_title {
     text-align: center;
     line-height: 60px;
     font-size: 16px;
     margin-top: 20px;
   }
-  .brand_form{
+
+  .brand_form {
     width: 80%;
-    margin:60px auto 0;
+    margin: 60px auto 0;
   }
-  .brand_form table tr td{
+
+  .brand_form table tr td {
     text-align: center;
   }
-  .brand_form table tr th{
+
+  .brand_form table tr th {
     text-align: center;
   }
-  .table tr td{
+
+  .table tr td {
     text-align: center;
     border-color: #303030 !important;
   }
-  .table tr td:nth-child(4){
+
+  .table tr td:nth-child(4) {
     width: 35%;
   }
-  .brand_operate_btn a{
+
+  .brand_operate_btn a {
     margin: 0 5px;
     color: #303030;
   }
-  .brand_logo,.brand_name,.brand_introduce{
+
+  .brand_logo, .brand_name, .brand_introduce {
     width: 70%;
     margin: 0 auto;
     overflow: hidden;
     margin-top: 20px;
   }
-  .brand_logo_title,.brand_name_title,.brand_introduce_title{
+
+  .brand_logo_title, .brand_name_title, .brand_introduce_title {
     float: left;
     line-height: 36px;
   }
-  .brand_logo_img{
+
+  .brand_logo_img {
     width: 200px;
     height: 120px;
     background: #cccccc;
     float: left;
     margin-left: 20px;
   }
-  .brand_name .el-input{
+
+  .brand_name .el-input {
     width: 75%;
     float: left;
     margin-left: 20px;
   }
-  .brand_introduce .el-textarea{
+
+  .brand_introduce .el-textarea {
     width: 75%;
     float: left;
     margin-left: 20px;
   }
-  .add_commodity_brand_btn{
+
+  .add_commodity_brand_btn {
     overflow: hidden;
     margin: 0 auto;
     margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
   }
-  .add_commodity_brand_btn .el-button:nth-child(1){
+
+  .add_commodity_brand_btn .el-button:nth-child(1) {
     float: left;
     margin-left: 30%;
   }
-  .add_commodity_brand_btn .el-button:nth-child(2){
+
+  .add_commodity_brand_btn .el-button:nth-child(2) {
     float: right;
     margin-right: 30%;
+  }
+
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #20a0ff;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>

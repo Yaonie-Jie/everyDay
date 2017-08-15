@@ -8,19 +8,20 @@ import routeConfig from './router-config'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import globals from './components/Global.vue'
-Vue.prototype.GLOBAL =globals
+
+Vue.use(VueResource)
+Vue.http.options.emulateJSON = true;
+
+Vue.prototype.GLOBAL =globals;
 Vue.use(Element)
 
 
 //加载路由中间件
 Vue.use(VueRouter)
-Vue.use(VueResource)
-
-
-//定义路由
 const router = new VueRouter({
   routes: routeConfig
 })
+
 
 new Vue({
   router,
