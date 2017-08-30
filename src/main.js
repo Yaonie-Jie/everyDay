@@ -1,26 +1,28 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
-import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
-import routeConfig from './router-config'
-import Element from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-import globals from './components/Global.vue'
+import Vue from 'vue';
+import App from './App';
+import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
+import routeConfig from './router-config';
+import Element from 'element-ui';
+import 'element-ui/lib/theme-default/index.css';
+import globals from './components/Global.vue';
 
-Vue.use(VueResource)
+
+Vue.use(VueResource);
 Vue.http.options.emulateJSON = true;
 
 Vue.prototype.GLOBAL =globals;
-Vue.use(Element)
+Vue.use(Element);
 
 
 //加载路由中间件
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 const router = new VueRouter({
   routes: routeConfig
-})
+});
+
 
 
 new Vue({
@@ -29,3 +31,5 @@ new Vue({
   el: "#app",
   render: h => h(App)
 })
+
+export default app;

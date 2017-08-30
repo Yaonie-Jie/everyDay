@@ -19,12 +19,26 @@
               </el-date-picker>
             </div>
           </div>
+          <div style="width: 250px;float: left;line-height: 32px">
+            订单号:
+            <div class="block" style="float: right;">
+              <el-input v-model="orderNum"></el-input>
+            </div>
+          </div>
+          <div style="width: 260px;float: left;line-height: 32px;margin-left: 20px">
+            用户账号:
+            <div class="block" style="float: right;">
+              <el-input v-model="userAccount"></el-input>
+            </div>
+          </div>
           <div class="apply_information">
             订单状态：
-
-
-            <el-input v-model="input8" ></el-input>
-            <el-button type="success">搜索</el-button>
+            <select name="" id="orderState" @change="stateChange" v-model="orderState">
+              <option v-for="option in options" v-bind:value="option.value">
+                {{ option.text }}
+              </option>
+            </select>
+            <el-button type="success" @click="findOrder">搜索</el-button>
           </div>
         </div>
         <ul class="order-list">
@@ -113,12 +127,6 @@
         :total="count11">
       </el-pagination>
     </div>
-    <el-select v-model="currentType" clearable placeholder="请选择活动分类">
-      <el-option
-        v-for="type in types"
-        :value="type">
-      </el-option>
-    </el-select>
 
   </div>
 
@@ -288,9 +296,7 @@
     width: 75%;
     float: left;
   }
-  .el-input__inner{
-    width:200px;
-  }
+
 </style>
 
 <script>
@@ -298,17 +304,23 @@
   export default{
     data(){
       return {
-
-        currentType: '全部',
-        selectItems:[],
-        types: ['全部','测试活动','免费活动','收费活动'],
         dataList: '',
         price: '',       //改价的订单价格
         orderNum: '',    //订单号
         time: '',         //选择时间搜索
         currentPage: 1,
         count11: 1,
-        input8:'565'
+        userAccount:'',   //用户账户
+        orderState:'',    //订单状态
+        options: [
+          { text: '全部', value: '' },
+          { text: '待付款', value: '0' },
+          { text: '待发货', value: '1' },
+          { text: '待收货', value: '2' },
+          { text: '已完成', value: '3' },
+          { text: '已退款', value: '4' },
+          { text: '已超时', value: '5' }
+        ]
       }
     },
     created() {
@@ -445,8 +457,44 @@
         this.currentPage = val;
         this.getList()
       },
-      add(){
-          alert(5)
+      //搜索订单
+      findOrder(){
+
+        var paddNum = function(num){    //如果是一位数就补一个0
+          num += "";
+          return num.replace(/^(\d)$/,"0$1");
+        }
+        function FormatDate (strTime) {
+            if(strTime){
+              var date = new Date(strTime);
+              return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
+            }else {
+                return ''
+            }
+        }
+        let url = http.apiMap.findOrder;
+        let data = {
+          orderNum: this.orderNum,
+          userAccount: this.userAccount,
+          common: this.GLOBAL.common,
+          size:10,
+          nowpage:this.currentPage,
+          startTime:FormatDate(this.time[0]),
+          endTime:FormatDate(this.time[1]),
+          orderState:$("#orderState :selected").attr('value')
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              let data = res.body.data.orderList;
+              this.dataList = data;
+            }
+          }
+        );
+      },
+      stateChange(){
+
       }
     }
   }

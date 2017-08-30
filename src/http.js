@@ -1,5 +1,5 @@
 const hosts = {
-  api: 'http://192.168.3.176:8083/'
+  api: 'http://192.168.0.137:8083/'
 }
 
 const apiMap={
@@ -11,14 +11,21 @@ const apiMap={
   'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
 
 
-
-
-
   'getList':hosts.api+'order/findOrder',    //获取订单列表
   'updataOrderNum':hosts.api+'order/modifyOrderPriceByOrderNum',    //订单改价
   'removeOrder':hosts.api+'order/removeOrder',    //取消订单
   'showOrder':hosts.api+'order/findOrderByOrderNum',    //订单详情
   'returnOrderList':hosts.api+'order/findOrderRefundList',    //退款中订单列表
+  'findOrder':hosts.api+'order/findOrder',    //搜索订单
+
+
+  'addFreight':hosts.api+'freightTemplate/addFreightTemplate',    //添加运费模板
+  'freightList':hosts.api+'freightTemplate/findfreightTemplateList',    //运费模板列表
+  'updataFreight':hosts.api+'freightTemplate/modifyfreightTemplate',    //修改运费模板
+
+
+  'teamData':hosts.api+'teamNumLimit/findTeamNum',    //查询团队人数限制
+  'updataTeamData':hosts.api+'teamNumLimit/modifyTeamNumById',    //修改团队人数限制
 }
 
 export default{

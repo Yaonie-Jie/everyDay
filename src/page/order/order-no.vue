@@ -67,86 +67,13 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button @click="DisplayBlock(listData.orderNum)">改价</el-button>
-                <el-button>发货</el-button>
+                <el-button @click="DisplayBlock(listData.orderNum)">订单改价</el-button>
                 <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
 
               </div>
             </div>
           </li>
         </ul>
-      </div>
-      <div class="apply_">
-
-        <div class="order-list order-lists">
-          <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
-            <ul class="left width100">
-              <div class="titlee">退款信息</div>
-              <li class="marginTopLeft">申请退款时间：<span>2017-12-22   12：00:00</span></li>
-              <li class="marginTopLeft">退款类型：退货退款</li>
-              <li class="marginTopLeft">退款金额：￥21323.00</li>
-              <li class="marginTopLeft">用户备注：-----</li>
-              <li class="marginTopLeft">用户支付宝/微信账号：132231321232</li>
-            </ul>
-
-          </div>
-          <div class="TopTitle NoPadding NoBorderBottom">
-            <ul class="left width100">
-              <div class="titlee">退款记录</div>
-              <ul style="overflow: auto;">
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-              </ul>
-
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="apply_">
-
-        <div class="order-list order-lists">
-          <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
-            <div class=" width100  NoBorderBottom">
-              <div class="titlee">物流信息</div>
-              <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>百世快递</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>3222222233343</span></li>
-                <li class="marginTopLeft">物流电话：<span>暂无</span></li>
-              </ul>
-              <div class="right imgNum">
-                <div class="imgBOXs">
-                  <img
-                    src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"
-                    alt="">
-                </div>
-                <div class="shopNUMs">共 <span>20</span>件商品</div>
-              </div>
-            </div>
-            <div class=" width100  NoBorderBottom">
-              <div class="jt">
-                <img src="" alt="">
-              </div>
-              <ul class="wlxq">
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>您的订单已导入，快递公司正在取件</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="mask"></div>
@@ -264,7 +191,6 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
-              console.log(data)
               this.listData = data
 
             }

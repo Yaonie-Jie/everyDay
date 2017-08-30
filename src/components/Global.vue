@@ -1,6 +1,8 @@
+
 <script type="text/javascript">
-  const baseUrl='http://192.168.3.176:8083/'
-  const common=2
+  import http from '../http'
+  const baseUrl=http.hosts.api;
+  const common=2;
   export default
   {
     baseUrl,
