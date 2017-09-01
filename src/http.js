@@ -1,5 +1,5 @@
 const hosts = {
-  api: 'http://192.168.0.137:8083/'
+  api: 'http://test.sunxung.cn:3083/'
 }
 
 const apiMap={
