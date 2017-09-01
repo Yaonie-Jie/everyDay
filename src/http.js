@@ -26,6 +26,16 @@ const apiMap={
 
   'teamData':hosts.api+'teamNumLimit/findTeamNum',    //查询团队人数限制
   'updataTeamData':hosts.api+'teamNumLimit/modifyTeamNumById',    //修改团队人数限制
+  'commissionData':hosts.api+'royalty/findlist',   //查询系统默认提成(店主管理)
+  'updateCommissionData':hosts.api+'royalty/modifyRoyaltyById',  //修改系统默认提成(店主管理)
+  'shopmanData':hosts.api+'ownerApplication/findApplyMessageList',   //店主申请管理表(店主管理)
+  'searchShopmanData':hosts.api+'ownerApplication/findApplication',   //搜索店主申请管理表(店主管理)
+  'rejectShopmanData':hosts.api+'ownerManage/rejectAudit',   //驳回店主申请(店主管理)
+  'passShopmanData':hosts.api+'ownerManage/passOwnerAudit',   //通过店主申请(店主管理)
+  'OwnerShopmanData':hosts.api+'ownerTeamManage/findOwnerManageList',   //店主列表(店主管理)
+  'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主管理)
+  'modifyToHighOwnerLevel':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主管理)
+  'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
 }
 
 export default{

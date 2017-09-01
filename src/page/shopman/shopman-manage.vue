@@ -38,13 +38,13 @@
               label="何时升级到此级别店主">
             </el-table-column>
             <el-table-column
-              prop="apply_account"
+              prop="current_level"
               label="店主级别">
             </el-table-column>
             <el-table-column
-              prop="current_level"
+              prop="apply_account"
               label="账号" inline-template>
-              <el-button type="text" size="mini"  @click="shows()">222</el-button>
+              <el-button type="text" size="mini"  @click="shows(row)"></el-button>
             </el-table-column>
             <el-table-column
               prop="accumulated_sales"
@@ -58,7 +58,8 @@
               fixed="right"
               label="操作">
               <template scope="scope">
-                <el-button type="text" size="small" @click="open2()">升级</el-button>
+                <el-button type="text" size="small" @click="open2(scope.$index)">升级</el-button>
+                <el-button type="text" size="small" @click="shows(scope.$index)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -219,24 +220,135 @@
 </style>
 
 <script>
+  import http from '../../http'
+
   export default{
+    data() {
+      return {
+        modifyMessage:"升级到公司店主",
+        options: [
+          {
+            value: '选项1',
+            label: '个人店主'
+          }, 
+          {
+            value: '选项2',
+            label: '公司店主'
+          }, 
+          {
+            value: '选项3',
+            label: '高级店主'
+          }
+        ],
+        value: '',
+        tableData: [
+        {
+          apply_time:1,
+                    apply_account:2,
+                    current_level:3,
+                    accumulated_sales:4,
+                    subordinate_team:5
+        }],
+        shopmanMessage:{
+
+        }
+      }
+    },
+    created(){
+      this.getData()
+    },
     methods: {
-      open2() {
+      getData(){
+        let url = http.apiMap.OwnerShopmanData;
+        let data = {
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url,data).then(
+          function (res) {
+            if (res.body.result) {
+              this.tableData = [];
+               for(let i=0;i<res.body.data.ownerManageList.length;i++){
+                  let tableDataObj = {
+                    apply_time:res.body.data.ownerManageList[i].modifiedOn,
+                    apply_account:res.body.data.ownerManageList[i].account,
+                    current_level:res.body.data.ownerManageList[i].level,
+                    accumulated_sales:res.body.data.ownerManageList[i].account,
+                    subordinate_team:res.body.data.ownerManageList[i].totalMoney
+                  };
+                  this.tableData.push(tableDataObj);
+               }
+            }
+          }
+        );
+      },
+      open2(index) {
         this.$confirm('此操作将升级该账号, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '升级成功!'
-          });
+          if( this.tableData[index].current_level==0 ){
+            this.getShopmanMessage(this.tableData[index].apply_account);
+            let modifyurl = http.apiMap.modifyToCompanyLevel;
+            let modifydata = {
+              common: this.GLOBAL.common,
+              account:this.tableData[index].apply_account,
+              companyName:this.shopmanMessage.companyName,
+              companyNum:this.shopmanMessage.companyNum,
+              pictureUrl:this.shopmanMessage.pictureUrl
+            };
+            this.modifyMessage = "升级到公司店主";
+          };
+          if( this.tableData[index].current_level==1 ){
+            let modifyurl = http.apiMap.modifyToHighOwnerLevel;
+            let modifydata = {
+              common: this.GLOBAL.common,
+              account:this.tableData[index].apply_account
+            }
+            this.modifyMessage = "升级到高级店主";
+          };
+          this.$http.post(modifyurl,modifydata).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message:  this.modifyMessage+"成功!"
+                });
+              }else{
+                this.$message({
+                  type: 'error',
+                  message:  this.modifyMessage+"失败!"
+                });
+              }
+            }
+          );
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消升级'
           });
         });
+      },
+      getShopmanMessage(account){
+        let ShopmanNewsUrl = http.apiMap.findOwnerMessage;
+        let ShopmanNewsData = {
+          common: this.GLOBAL.common,
+          account:account
+        };
+        this.$http.post(ShopmanNewsUrl,ShopmanNewsData).then(
+          function (res) {
+            if (res.body.result) {
+              this.shopmanMessage.companyName = res.body.data.user.companyName,
+              this.shopmanMessage.companyNum = res.body.data.user.companyNum,
+              this.shopmanMessage.pictureUrl = res.body.data.user.companyLicence
+            }else{
+              this.$message({
+                type: 'error',
+                message:  "获取店主资料失败!"
+              });
+            }
+          }
+        );
       },
       DisplayBlock:function(){
         $('.mask').css('display','block');
@@ -247,54 +359,12 @@
         $('.mask').css('display','none');
         $('.add_shopman').css('display','none');
       },
-      shows:function(){
+      shows:function(index){
+        this.getShopmanMessage(this.tableData[index].apply_account);
         this.$router.push('/ShopmanManageShow');
       }
-    },
-    data() {
-      return {
-        options: [{
-          value: '选项1',
-          label: '个人店主'
-        }, {
-          value: '选项2',
-          label: '公司店主'
-        }, {
-          value: '选项3',
-          label: '高级店主'
-        }],
-        value: '',
-        tableData: [{
-          apply_time:'2017-02-15',
-          apply_account: '店长',
-          current_level:'当前级别',
-          accumulated_sales:'累计销售金',
-          subordinate_team:'所属团队',
-          inpofmation_detail: '商品管理'
-        }, {
-          apply_time:'2017-02-15',
-          apply_account: '店长',
-          current_level:'当前级别',
-          accumulated_sales:'累计销售金',
-          subordinate_team:'所属团队',
-          inpofmation_detail: '商品管理'
-        }, {
-          apply_time:'2017-02-15',
-          apply_account: '店长',
-          current_level:'当前级别',
-          accumulated_sales:'累计销售金',
-          subordinate_team:'所属团队',
-          inpofmation_detail: '商品管理'
-        }, {
-          apply_time:'2017-02-15',
-          apply_account: '店长',
-          current_level:'当前级别',
-          accumulated_sales:'累计销售金',
-          subordinate_team:'所属团队',
-          inpofmation_detail: '商品管理'
-        }]
-      }
     }
+
   }
 </script>
 
