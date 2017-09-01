@@ -241,6 +241,7 @@
 
 <script>
   export default{
+
     methods: {
       DisplayBlock:function(){
         $('.mask').css('display','block');

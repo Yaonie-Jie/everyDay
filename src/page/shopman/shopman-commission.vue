@@ -110,6 +110,7 @@
         $('.change_ticheng').css('display','none');
       },
       updateYes:function(){
+
         let updatedataArray=[];
         for(let i=0;i<this.tableData.length;i++){
           if( i==this.clickIndex ){
@@ -142,9 +143,9 @@
         );
       }
     }
-    
-    
-    
+
+
+
   }
 </script>
 <style>
