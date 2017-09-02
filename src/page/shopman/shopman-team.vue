@@ -14,15 +14,16 @@
             </div>
           </div>
           <div class="apply_information">
-            <input type="text" placeholder="输入团长账号搜索团队" style="padding:0 10px;" />
-            <el-button type="success">搜索</el-button>
+            <input type="text" v-model="teamAccount" placeholder="输入团长账号搜索团队" style="padding:0 10px;" />
+            <el-button type="success" @click="findTeam">搜索</el-button>
           </div>
         </div>
-        <div class="apply_form">
+        <div class="apply_form" v-for="i in ">
           <el-table
             :data="tableData"
             border
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               prop="id"
               label="团队级别" inline-template>
@@ -42,7 +43,7 @@
             </el-table-column>
             <el-table-column
               label="操作" inline-template>
-              <el-button type="text" size="mini"  @click="shows()">查看团队信息</el-button>
+              <el-button type="text" size="mini"  @click="shows(i.teamAccount)">查看团队信息</el-button>
             </el-table-column>
           </el-table>
         </div>
@@ -80,7 +81,8 @@
       <div class="add_small_title">下级团员---公司团员添加</div>
       <div class="add_team_search">
         <div class="add_team_search_title">团长：</div>
-        <el-input placeholder="输入团长账号（需是无团队的高级店主或公司店主）"></el-input>
+        <el-input placeholder="输入团长账号（需是无团队的高级店主或公司店主）" v-model="teamAccount
+"></el-input>
         <el-button type="primary">查询</el-button>
       </div>
       <p class="add_team_search_tip"><i>此账号不符合此层级团员的条件</i><i>此账号已属于团队</i></p>
@@ -107,6 +109,119 @@
   </div>
 </template>
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
+<script>
+  import http from '../../http'
+  export default{
+    data() {
+      return {
+<<<<<<< HEAD
+        tableData: []
+      }
+    },
+      created(){
+         this.getTeamList()
+      },
+    methods: {
+      getTeamList(){
+          let url=http.apiMap.getTeamList
+          let data={
+              common:2
+          }
+         this.$http.post(url,data).then(
+              function(res){
+                  if(res.body.result){
+                      this.tableData=res.body.data.ownerTeamManageList.module
+                  }
+              }
+          )
+      },
+      DisplayBlock:function(){
+        $('.mask').css('display','block');
+        $('.add_team').css('display','block');
+      },
+
+      DisplayBlock2:function(){
+        $('.mask').css('display','block');
+        $('.add_team').css('display','none');
+        $('.add_team2').css('display','block');
+      },
+
+      DisplayNone:function(){
+        $('.mask').css('display','none');
+        $('.add_team2').css('display','none');
+      },
+      shows:function(){
+        this.$router.push('/ShopmanTeamShow');
+=======
+        tableData: [],
+        teamAccount: ''
+      }
+    },
+    created(){
+      this.getTeamList()
+    },
+    methods: {
+      getTeamList(){
+        let url = http.apiMap.getTeamList
+        let data = {
+          common: 2
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              console.log(res.body.data.ownerTeamManageList.module)
+              this.tableData = res.body.data.ownerTeamManageList.module
+            }
+          }
+        )
+      },
+      findTeam(){
+        let url = http.apiMap.findTeam
+        let data = {
+          teamAccount: this.teamAccount,
+          common: 2
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let arr = []
+              arr.push(res.body.data.ownerTeamManage)
+              this.tableData = arr
+            }
+          }
+        )
+      },
+      DisplayBlock: function () {
+        $('.mask').css('display', 'block');
+        $('.add_team').css('display', 'block');
+      },
+
+      DisplayBlock2: function () {
+        $('.mask').css('display', 'block');
+        $('.add_team').css('display', 'none');
+        $('.add_team2').css('display', 'block');
+      },
+
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.add_team2').css('display', 'none');
+      },
+      shows: function (teamAccount) {
+        this.$router.push('/ShopmanTeam/' + teamAccount + '');
+>>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
+      }
+    }
+  }
+</script>
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
 <style>
   .add_team_search{
     width: 80%;
@@ -220,53 +335,5 @@
     margin-right: 10%;
   }
 </style>
-
-<script>
-  import http from '../../http'
-  export default{
-    data() {
-      return {
-        tableData: []
-      }
-    },
-      created(){
-         this.getTeamList()
-      },
-    methods: {
-      getTeamList(){
-          let url=http.apiMap.getTeamList
-          let data={
-              common:2
-          }
-         this.$http.post(url,data).then(
-              function(res){
-                  if(res.body.result){
-                      this.tableData=res.body.data.ownerTeamManageList.module
-                  }
-              }
-          )
-      },
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','block');
-      },
-
-      DisplayBlock2:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','none');
-        $('.add_team2').css('display','block');
-      },
-
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_team2').css('display','none');
-      },
-      shows:function(){
-        this.$router.push('/ShopmanTeamShow');
-      }
-    }
-  }
-</script>
-
 
 

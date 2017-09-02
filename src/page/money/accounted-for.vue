@@ -54,6 +54,7 @@
   </div>
 </template>
 
+
 <style>
   .accounted_for{
     width: 80%;

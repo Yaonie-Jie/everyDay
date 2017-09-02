@@ -39,9 +39,14 @@ const apiMap={
   'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
 
   'getTeamList':hosts.api+'ownerTeamManage/findOwnerTeamManageList',   //获取店主团队信息（店主管理）
+<<<<<<< HEAD
 
 }
+=======
+  'findTeam':hosts.api+'ownerTeamManage/findOwnerTeamManage',  //搜索
+>>>>>>> 44a762bdd7b63fdcbc807852d5ffd4a38a137a59
 
+}
 export default{
   apiMap,
   hosts
