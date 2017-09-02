@@ -131,173 +131,7 @@
   </div>
 
 </template>
-<style>
-  .zt {
-    line-height: 60px;
-  }
 
-  .TopTitle {
-    border-top: 1px solid #838383;
-    border-bottom: 1px solid #838383;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .TopTitle li:nth-child(1) {
-    margin-bottom: 20px;
-  }
-
-  .TopTitle li span {
-    margin-right: 20px;
-  }
-
-  .pink {
-    color: #ff3366;
-  }
-
-  .Bottom {
-    border-bottom: 1px solid #838383;
-    overflow: hidden;
-  }
-
-  .ShopShowList {
-    border-right: 1px solid #838383;
-    width: 80%;
-    box-sizing: border-box;
-  }
-
-  .ShopShowList div {
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .shopList {
-    display: flex;
-    border-bottom: 1px solid #838383;
-  }
-
-  .shopList .shopImgBox {
-    width: 20%;
-    overflow: hidden;
-  }
-
-  .shopList .shopImgBox img {
-    width: 100%;
-  }
-
-  .shopList .shopMessage {
-    width: 60%;
-    overflow: hidden;
-  }
-
-  .shopList .shopPic {
-    width: 25%;
-    overflow: hidden;
-  }
-
-  .shopList div p {
-    margin-bottom: 20px;
-  }
-
-  .AddPic {
-    width: 20%;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .AddPic p {
-    margin-bottom: 10px;
-  }
-
-  .AddPic button {
-    margin-left: 0 !important;
-    margin-bottom: 10px;
-  }
-
-  .order-list li {
-    margin-bottom: 20px;
-  }
-
-  .deliver_remind {
-    width: 100%;
-    height: 50px;
-    font-size: 14px;
-    text-align: center;
-    line-height: 50px;
-    overflow: hidden;
-  }
-
-  .deliver_goods_btns {
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-
-  .deliver_goods_btns .el-button:nth-child(1) {
-    float: left;
-    margin-left: 25%;
-  }
-
-  .deliver_goods_btns .el-button:nth-child(2) {
-    float: right;
-    margin-right: 25%;
-  }
-
-  .change_nowprice {
-    width: 80%;
-    margin: 0 auto;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    overflow: hidden;
-  }
-
-  .change_nowprice_title {
-    float: left;
-    line-height: 36px;
-  }
-
-  .change_price .el-input {
-    width: 70%;
-    float: right;
-  }
-
-  .order_number,
-  .logistics_company,
-  .logistics_company_phone {
-    width: 80%;
-    margin: 0 auto;
-    overflow: hidden;
-    margin-top: 30px;
-  }
-
-  .order_number_title,
-  .logistics_company_title,
-  .logistics_company_phone_title {
-    width: 25%;
-    float: left;
-    text-align: left;
-    line-height: 36px;
-  }
-
-  .order_number .el-input {
-    width: 55%;
-    float: left;
-  }
-
-  .order_number .el-button {
-    float: right;
-    margin-right: 0;
-  }
-
-  .logistics_company .el-input,
-  .logistics_company_phone .el-input {
-    width: 75%;
-    float: left;
-  }
-
-</style>
 
 <script>
   import http from '../../http'
@@ -499,5 +333,171 @@
     }
   }
 </script>
+<style>
+  .zt {
+    line-height: 60px;
+  }
 
+  .TopTitle {
+    border-top: 1px solid #838383;
+    border-bottom: 1px solid #838383;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .TopTitle li:nth-child(1) {
+    margin-bottom: 20px;
+  }
+
+  .TopTitle li span {
+    margin-right: 20px;
+  }
+
+  .pink {
+    color: #ff3366;
+  }
+
+  .Bottom {
+    border-bottom: 1px solid #838383;
+    overflow: hidden;
+  }
+
+  .ShopShowList {
+    border-right: 1px solid #838383;
+    width: 80%;
+    box-sizing: border-box;
+  }
+
+  .ShopShowList div {
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .shopList {
+    display: flex;
+    border-bottom: 1px solid #838383;
+  }
+
+  .shopList .shopImgBox {
+    width: 20%;
+    overflow: hidden;
+  }
+
+  .shopList .shopImgBox img {
+    width: 100%;
+  }
+
+  .shopList .shopMessage {
+    width: 60%;
+    overflow: hidden;
+  }
+
+  .shopList .shopPic {
+    width: 25%;
+    overflow: hidden;
+  }
+
+  .shopList div p {
+    margin-bottom: 20px;
+  }
+
+  .AddPic {
+    width: 20%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .AddPic p {
+    margin-bottom: 10px;
+  }
+
+  .AddPic button {
+    margin-left: 0 !important;
+    margin-bottom: 10px;
+  }
+
+  .order-list li {
+    margin-bottom: 20px;
+  }
+
+  .deliver_remind {
+    width: 100%;
+    height: 50px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 50px;
+    overflow: hidden;
+  }
+
+  .deliver_goods_btns {
+    margin: 0 auto;
+    margin-top: 40px;
+  }
+
+  .deliver_goods_btns .el-button:nth-child(1) {
+    float: left;
+    margin-left: 25%;
+  }
+
+  .deliver_goods_btns .el-button:nth-child(2) {
+    float: right;
+    margin-right: 25%;
+  }
+
+  .change_nowprice {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+
+  .change_nowprice_title {
+    float: left;
+    line-height: 36px;
+  }
+
+  .change_price .el-input {
+    width: 70%;
+    float: right;
+  }
+
+  .order_number,
+  .logistics_company,
+  .logistics_company_phone {
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+    margin-top: 30px;
+  }
+
+  .order_number_title,
+  .logistics_company_title,
+  .logistics_company_phone_title {
+    width: 25%;
+    float: left;
+    text-align: left;
+    line-height: 36px;
+  }
+
+  .order_number .el-input {
+    width: 55%;
+    float: left;
+  }
+
+  .order_number .el-button {
+    float: right;
+    margin-right: 0;
+  }
+
+  .logistics_company .el-input,
+  .logistics_company_phone .el-input {
+    width: 75%;
+    float: left;
+  }
+
+</style>
 

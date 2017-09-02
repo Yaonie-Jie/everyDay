@@ -106,6 +106,37 @@
   </div>
 </template>
 
+
+<script>
+  export default{
+     data(){
+
+  },
+    methods: {
+      DisplayBlock:function(){
+        $('.mask').css('display','block');
+        $('.add_junior_member').css('display','block');
+      },
+
+      DisplayNone:function(){
+        $('.mask').css('display','none');
+        $('.add_junior_member').css('display','none');
+      },
+      Show1:function(){
+        this.$router.push('/ShopmanTeamShow');
+      },
+      Show2:function(){
+        this.$router.push('/ShopmanTeamShow2');
+      },
+      Show3:function(){
+        this.$router.push('/ShopmanTeamShow3');
+      }
+
+    }
+  }
+</script>
+
+
 <style>
   .team_information{
     margin: 30px 0;
@@ -238,30 +269,3 @@
     margin-right: 25%;
   }
 </style>
-
-<script>
-  export default{
-
-    methods: {
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_junior_member').css('display','block');
-      },
-
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_junior_member').css('display','none');
-      },
-      Show1:function(){
-        this.$router.push('/ShopmanTeamShow');
-      },
-      Show2:function(){
-        this.$router.push('/ShopmanTeamShow2');
-      },
-      Show3:function(){
-        this.$router.push('/ShopmanTeamShow3');
-      }
-
-    }
-  }
-</script>
