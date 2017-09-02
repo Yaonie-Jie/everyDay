@@ -107,6 +107,54 @@
   </div>
 </template>
 
+
+<script>
+  import http from '../../http'
+  export default{
+    data() {
+      return {
+        tableData: []
+      }
+    },
+      created(){
+         this.getTeamList()
+      },
+    methods: {
+      getTeamList(){
+          let url=http.apiMap.getTeamList
+          let data={
+              common:2
+          }
+         this.$http.post(url,data).then(
+              function(res){
+                  if(res.body.result){
+                      this.tableData=res.body.data.ownerTeamManageList.module
+                  }
+              }
+          )
+      },
+      DisplayBlock:function(){
+        $('.mask').css('display','block');
+        $('.add_team').css('display','block');
+      },
+
+      DisplayBlock2:function(){
+        $('.mask').css('display','block');
+        $('.add_team').css('display','none');
+        $('.add_team2').css('display','block');
+      },
+
+      DisplayNone:function(){
+        $('.mask').css('display','none');
+        $('.add_team2').css('display','none');
+      },
+      shows:function(){
+        this.$router.push('/ShopmanTeamShow');
+      }
+    }
+  }
+</script>
+
 <style>
   .add_team_search{
     width: 80%;
@@ -220,53 +268,5 @@
     margin-right: 10%;
   }
 </style>
-
-<script>
-  import http from '../../http'
-  export default{
-    data() {
-      return {
-        tableData: []
-      }
-    },
-      created(){
-         this.getTeamList()
-      },
-    methods: {
-      getTeamList(){
-          let url=http.apiMap.getTeamList
-          let data={
-              common:2
-          }
-         this.$http.post(url,data).then(
-              function(res){
-                  if(res.body.result){
-                      this.tableData=res.body.data.ownerTeamManageList.module
-                  }
-              }
-          )
-      },
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','block');
-      },
-
-      DisplayBlock2:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','none');
-        $('.add_team2').css('display','block');
-      },
-
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_team2').css('display','none');
-      },
-      shows:function(){
-        this.$router.push('/ShopmanTeamShow');
-      }
-    }
-  }
-</script>
-
 
 
