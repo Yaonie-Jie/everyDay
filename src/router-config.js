@@ -59,7 +59,6 @@ import  ShopmanTeamShow3 from './page/shopman/shopman-team-show3.vue'
 import  User from './page/user/user.vue'
 import ChangePass from './page/user/changepassword.vue'
 import userManage from './page/user/userManage.vue'
-import login from './components/login.vue'
 
 export default [
   {

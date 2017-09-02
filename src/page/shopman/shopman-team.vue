@@ -109,54 +109,11 @@
   </div>
 </template>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
 <script>
   import http from '../../http'
   export default{
     data() {
       return {
-<<<<<<< HEAD
-        tableData: []
-      }
-    },
-      created(){
-         this.getTeamList()
-      },
-    methods: {
-      getTeamList(){
-          let url=http.apiMap.getTeamList
-          let data={
-              common:2
-          }
-         this.$http.post(url,data).then(
-              function(res){
-                  if(res.body.result){
-                      this.tableData=res.body.data.ownerTeamManageList.module
-                  }
-              }
-          )
-      },
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','block');
-      },
-
-      DisplayBlock2:function(){
-        $('.mask').css('display','block');
-        $('.add_team').css('display','none');
-        $('.add_team2').css('display','block');
-      },
-
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_team2').css('display','none');
-      },
-      shows:function(){
-        this.$router.push('/ShopmanTeamShow');
-=======
         tableData: [],
         teamAccount: ''
       }
@@ -212,16 +169,12 @@
       },
       shows: function (teamAccount) {
         this.$router.push('/ShopmanTeam/' + teamAccount + '');
->>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
       }
     }
   }
 </script>
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 22f0c34727af087c1b40c668f311bfd8bb7568d5
 <style>
   .add_team_search{
     width: 80%;
