@@ -198,7 +198,6 @@
       },
       //跳转详情页
       shows: function (num, state) {
-        console.log(state)
         if (state == 0) {
           this.$router.push('/OrderNo/' + num + '');
         } else if (state == 1) {

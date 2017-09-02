@@ -13,10 +13,10 @@
       <div class="goods_search">
         <div class="left">
           <i style="margin-top: 10px;">搜索</i>
-          <select name="" style="margin-top: 10px;" >
+          <select name="" style="margin-top: 10px;">
             <option value="">一级分类</option>
           </select>
-          <select name=""  style="margin-top: 10px;">
+          <select name="" style="margin-top: 10px;">
             <option value="">二级分类</option>
           </select>
         </div>
@@ -28,15 +28,15 @@
       <div class="add_goods_form">
         <el-table
           border
-          :data="tableData"
+          :data="dataList"
           style="width: 100%">
           <el-table-column
-            prop="serial_number"
+            prop="num"
             :span="1"
             label="序号">
           </el-table-column>
           <el-table-column
-            prop="goods_name"
+            prop="name"
             :span="2"
             label="商品名称">
           </el-table-column>
@@ -47,7 +47,7 @@
           </el-table-column>
           <el-table-column
             :span="2"
-            prop="freight_template"
+            prop="freightName"
             label="运费模板">
           </el-table-column>
           <el-table-column
@@ -99,65 +99,64 @@
         <el-button type="primary">确定</el-button>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
-<style>
-  .add_goods{
-    width:100%;
-    margin: 30px 0;
-    overflow: hidden;
-  }
-
-  .add_goods button{
-    float: right;
-    margin-right: 10%;
-  }
-
-  .goods_search{
-    width: 80%;
-    overflow: hidden;
-    margin: 0 0 30px 10%;
-  }
-
-  .goods_search i{
-    float: left;
-    margin-left: 10px;
-    line-height: 32px;
-  }
-
-  .goods_search select{
-    float: left;
-    height: 36px;
-    margin-left: 10px;
-  }
-
-  .goods_search .el-input{
-    float: left;
-    margin-left: 10px;
-  }
-
-  .goods_search .el-button{
-    margin-left: 10px;
-  }
-
-  .add_goods_form{
-    width: 80%;
-    margin-left: 10%;
-  }
-
-  .add_goods_form table tr td{
-    text-align: center;
-  }
-
-  .add_goods_form table tr th{
-    text-align: center;
-  }
-</style>
 
 <script>
+  import http from '../../http'
+
   export default {
-    methods:{
+    data() {
+      return {
+        count11: 1,
+        currentPage: 1,
+        dataList:[]
+      }
+    },
+    created() {
+      this.getList()
+    },
+    methods: {
+      getList(){
+        let url = http.apiMap.findShop;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              let data = res.body.data.productList;
+              let arr = [];
+              let num=0;
+              for (let i = 0; i < data.length; i++) {
+//                if (data[i].mode == 1) {
+//                  data[i].mode = '商品详情'
+//                } else {
+//                  data[i].mode = '图文推荐'
+//                }
+                num+=1;
+                data[i].num=num;
+                arr.push(data[i])
+              }
+              this.dataList = arr;
+            }
+          }
+        );
+      },
       open2() {
         this.$confirm('此操作将删除该商品信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -175,44 +174,76 @@
           });
         });
       },
-      shows:function(){
+      shows: function () {
         this.$router.push('/AddGoods');
       },
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.change_brand_information').css('display','block');
+      DisplayBlock: function () {
+        $('.mask').css('display', 'block');
+        $('.change_brand_information').css('display', 'block');
       },
 
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.change_brand_information').css('display','none');
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.change_brand_information').css('display', 'none');
+      },
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getList()
       },
     },
-    data() {
-      return {
-        input: '',
-        tableData: [{
-          serial_number: '1',
-          goods_name: '商品名称',
-          stock: '111',
-          freight_template: '运费模板'
-        }, {
-          serial_number: '2',
-          goods_name: '商品名称',
-          stock: '222',
-          freight_template: '运费模板'
-        }, {
-          serial_number: '3',
-          goods_name: '商品名称',
-          stock: '333',
-          freight_template: '运费模板'
-        }, {
-          serial_number: '4',
-          goods_name: '商品名称',
-          stock: '444',
-          freight_template: '运费模板'
-        }]
-      }
-    }
+
   }
 </script>
+<style>
+  .add_goods {
+    width: 100%;
+    margin: 30px 0;
+    overflow: hidden;
+  }
+
+  .add_goods button {
+    float: right;
+    margin-right: 10%;
+  }
+
+  .goods_search {
+    width: 80%;
+    overflow: hidden;
+    margin: 0 0 30px 10%;
+  }
+
+  .goods_search i {
+    float: left;
+    margin-left: 10px;
+    line-height: 32px;
+  }
+
+  .goods_search select {
+    float: left;
+    height: 36px;
+    margin-left: 10px;
+  }
+
+  .goods_search .el-input {
+    float: left;
+    margin-left: 10px;
+  }
+
+  .goods_search .el-button {
+    margin-left: 10px;
+  }
+
+  .add_goods_form {
+    width: 80%;
+    margin-left: 10%;
+  }
+
+  .add_goods_form table tr td {
+    text-align: center;
+  }
+
+  .add_goods_form table tr th {
+    text-align: center;
+  }
+</style>

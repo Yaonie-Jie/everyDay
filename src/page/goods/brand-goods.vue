@@ -55,9 +55,7 @@
       </div>
     </div>
     <div class="mask"></div>
-    <div class="edit-area">
-      <ueditor v-bind:value=defaultMsg v-bind:config=config  ></ueditor>
-    </div>
+
     <div class="add_commodity_brand popup">
       <div class="add_commodity_brands_title popup_title">添加商品品牌</div>
       <div class="brand_logo">
@@ -142,12 +140,9 @@
 
 <script>
   import http from '../../http'
-  import ueditor from '../../components/ue.vue'
 
   export default {
-    components: {
-      ueditor,
-    },
+
     data() {
       return {
         tableData: [],
@@ -168,11 +163,6 @@
         updataName: '',
         updataDetails: '',
         id:'',
-        defaultMsg: '初始文本',
-        config: {
-          initialFrameWidth: null,
-          initialFrameHeight: 320,
-        },
       }
     },
     created: function () {

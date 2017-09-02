@@ -1,116 +1,97 @@
 <template>
   <div id="box">
+
     <div class="box">
-      <div class="add_goods_title mid">添加商品</div>
+      <el-row>
+        <el-col :span="24">
+          <div class="add_goods_title mid">添加商品</div>
 
-      <div class="add_goods_img">
-        <div class="add_goods_img_title">商品图片</div>
-        <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
-          <div class="labe el-icon-plus" @click="labe"></div>
-          <input class="input-loc-img imgLocal"  name="pictureUrl" type='file' accept="image/*"
-                 @change="selectChange"/>
-        </form>
-        <div class="imgurl" v-for="(i,index) in images">
-          <img :src="i" alt="">
-          <span @click="deletes" class="">{{index}}</span>
-        </div>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-        <!--<el-upload-->
-        <!--:action="baseUrl"-->
-        <!--ref="upload"-->
-        <!--:data={common:2}-->
-        <!--list-type="picture-card"-->
-        <!--:on-preview="handlePictureCardPreview"-->
-        <!--:auto-upload="false"-->
-        <!--:on-remove="handleRemove">-->
-        <!--<i class="el-icon-plus"></i>-->
-        <!--</el-upload>-->
-        <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-        <!--<img width="100%" :src="dialogImageUrl" alt="">-->
-        <!--</el-dialog>-->
+          <div class="add_goods_img">
+            <div class="add_goods_img_title" style="width: 10%;">商品图片</div>
+            <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
+              <div class="labe el-icon-plus" @click="labe"></div>
+              <input class="input-loc-img imgLocal" name="pictureUrl" type='file' accept="image/*"
+                     @change="selectChange"/>
+            </form>
+            <div class="imgurl" v-for="(i,index) in images">
+              <img :src="i" alt="">
+              <span @click="deletes" class="">{{index}}</span>
+            </div>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_name">
+            <div class="add_goods_name_title">商品名称</div>
+            <el-input v-model="name"></el-input>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_saleprice">
+            <div class="add_goods_saleprice_title">商品销售价</div>
+            <el-input v-model="price"></el-input>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_costprice">
+            <div class="add_goods_costprice_title">商品成本价</div>
+            <el-input v-model="cose" placeholder=""></el-input>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_stock">
+            <div class="add_goods_stock_title">商品库存</div>
+            <el-input v-model="stock" placeholder=""></el-input>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_classify">
+            <div class="add_goods_classify_title">商品分类</div>
+            <select name="" class="select" id="oneType" @change="OneTypeListChange">
+              <option v-for="option in OneTypeList" v-bind:value="option.id">
+                {{ option.name }}
+              </option>
+            </select>
+            <select name="" class="select" id="TwoType" @change="TwoTypeListChange" v-model="typeId">
+              <option v-for="option in TwoypeList" v-bind:value="option.id">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_brands">
+            <div class="add_goods_brands_title">商品品牌</div>
+            <select name="" class="select" id="BrandList" v-model="brandId">
+              <option v-for="option in BrandList" v-bind:value="option.id">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+        </el-col>
+        <el-col :span="24" style="margin-top: 20px">
+          <div class="add_goods_stock_title" style="width: 7%">商品详情</div>
+          <div class="edit_container">
+            <quill-editor v-model="content"
+                          ref="myQuillEditor"
+                          class="editer"
+                          :options="editorOption"
+                          @ready="onEditorReady($event)">
+            </quill-editor>
+          </div>
+        </el-col>
 
-      </div>
-      <!--<div class="add_goods_name">-->
-      <!--<div class="add_goods_name_title">商品名称</div>-->
-      <!--<el-input v-model="input" placeholder=""></el-input>-->
-      <!--</div>-->
+        <el-col :span="24" style="margin-top: 20px">
 
-      <!--<div class="add_goods_saleprice">-->
-      <!--<div class="add_goods_saleprice_title">商品销售价</div>-->
-      <!--<el-input v-model="input" placeholder=""></el-input>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_costprice">-->
-      <!--<div class="add_goods_costprice_title">商品成本价</div>-->
-      <!--<el-input v-model="input" placeholder=""></el-input>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_stock">-->
-      <!--<div class="add_goods_stock_title">商品库存</div>-->
-      <!--<el-input v-model="input" placeholder=""></el-input>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_classify">-->
-      <!--<div class="add_goods_classify_title">商品分类</div>-->
-      <!--<el-select v-model="value" placeholder="请选择">-->
-      <!--<el-option-->
-      <!--v-for="item in options"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value">-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-      <!--<el-select v-model="value" placeholder="请选择">-->
-      <!--<el-option-->
-      <!--v-for="item in options"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value">-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_brands">-->
-      <!--<div class="add_goods_brands_title">商品品牌</div>-->
-      <!--<el-select v-model="value" placeholder="请选择">-->
-      <!--<el-option-->
-      <!--v-for="item in options"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value">-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_words">-->
-      <!--<div class="add_goods_words_title">商品详情</div>-->
-      <!--<el-input-->
-      <!--type="textarea"-->
-      <!--:rows="2"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="textarea">-->
-      <!--</el-input>-->
-      <!--<el-input-->
-      <!--type="textarea"-->
-      <!--:rows="2"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="textarea">-->
-      <!--</el-input>-->
-      <!--<el-input-->
-      <!--type="textarea"-->
-      <!--:rows="2"-->
-      <!--placeholder="请输入内容"-->
-      <!--v-model="textarea">-->
-      <!--</el-input>-->
-      <!--</div>-->
-
-      <!--<div class="add_goods_specifications">-->
-      <!--<div class="add_goods_specifications_title">用户可选规格：</div>-->
-      <!--<div class="add_goods_specifications_btn">-->
-      <!--<el-button type="primary" @click="DisplayBlock">添加规格</el-button>-->
-      <!--<el-button type="warning" @click="DisplayBlock2">修改、删除规格</el-button>-->
-      <!--</div>-->
-      <!--</div>-->
+          <div class="add_goods_specifications">
+            <div class="add_goods_specifications_title">规格：</div>
+            <div class="add_goods_specifications_btn">
+              <el-button type="primary" @click="DisplayBlock">添加规格</el-button>
+              <el-button type="warning" @click="DisplayBlock2">修改、删除规格</el-button>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
 
       <!--<div class="add_goods_commission">-->
       <!--<div class="add_goods_commission_title">店主可得提成金</div>-->
@@ -157,41 +138,41 @@
       <!--</div>-->
       <!--</div>-->
 
-      <!--<div class="mask"></div>-->
+      <div class="mask"></div>
 
-      <!--<div class="add_specifications popup">-->
-      <!--<div class="popup_form">-->
-      <!--<div class="popup_form_title">规格名称</div>-->
-      <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
+      <div class="add_specifications popup">
+        <div class="popup_form">
+          <div class="popup_form_title">规格名称</div>
+          <el-input v-model="input" placeholder="请输入内容"></el-input>
+        </div>
 
-      <!--<div class="add_choose_specifications">-->
-      <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
-      <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
-      <!--</div>-->
+        <div class="add_choose_specifications">
+          <el-checkbox v-model="checked">红色</el-checkbox>
+          <el-checkbox v-model="checked">黄色</el-checkbox>
+        </div>
 
-      <!--<div class="add_specifications_btn">-->
-      <!--<el-button @click="DisplayNone">取消</el-button>-->
-      <!--<el-button type="primary">确定</el-button>-->
-      <!--</div>-->
-      <!--</div>-->
+        <div class="add_specifications_btn">
+          <el-button @click="DisplayNone">取消</el-button>
+          <el-button type="primary">确定</el-button>
+        </div>
+      </div>
 
-      <!--<div class="modify_specifications popup">-->
-      <!--<div class="popup_form">-->
-      <!--<div class="popup_form_title">规格名称</div>-->
-      <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
+      <div class="modify_specifications popup">
+        <div class="popup_form">
+          <div class="popup_form_title">规格名称</div>
+          <el-input v-model="input" placeholder="请输入内容"></el-input>
+        </div>
 
-      <!--<div class="add_choose_specifications">-->
-      <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
-      <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
-      <!--</div>-->
+        <div class="add_choose_specifications">
+          <el-checkbox v-model="checked">红色</el-checkbox>
+          <el-checkbox v-model="checked">黄色</el-checkbox>
+        </div>
 
-      <!--<div class="popup_btn">-->
-      <!--<el-button @click="open3">删除此规格</el-button>-->
-      <!--<el-button type="primary" @click="DisplayNone2">修改</el-button>-->
-      <!--</div>-->
-      <!--</div>-->
+        <div class="popup_btn">
+          <el-button @click="open3">删除此规格</el-button>
+          <el-button type="primary" @click="DisplayNone2">修改</el-button>
+        </div>
+      </div>
 
 
     </div>
@@ -199,37 +180,92 @@
 
 <script>
   import http from '../../http'
+  import {quillEditor} from 'vue-quill-editor'
 
   export default {
+    components: {
+      quillEditor,
+    },
+    computed: {
+      editor() {
+        return this.$refs.myQuillEditor.quill
+      }
+    },
     data() {
       return {
         images: [],     //展示用的图片路径
         imgFiles: [],   //上传文件图片
         baseUrl: http.apiMap.getList,
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        name: '',        //商品名称
+        price: '',       //商品售价
+        cose: '',        //成本价
+        stock: '',       //库存
+        OneTypeList: [],
+        TwoypeList: [],
+        BrandList: [],//商品品牌列表
+        typeId: '',
         value: '',
+        brandId: '',
+        content: '',
+        editorOption: {}
       };
     },
     created() {
-
+      this.findTypeList();
+      this.findBrandList()
     },
     methods: {
+      onEditorReady(editor) {
+        console.log('editor ready!', editor)
+      },
 
+
+      findTypeList(){//查询一级分类列表
+        let url = http.apiMap.findTypeList;
+        this.$http.post(url, {common: 1}).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.findProductOneTypeList;
+              this.OneTypeList = data;
+            }
+          }
+        );
+      },
+      OneTypeListChange(){//一级分类改变
+        let url = http.apiMap.findTypeListTwo;
+        let data = {
+          pId: $("#oneType :selected").attr('value'),
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.ProductTwoTypeList;
+              this.TwoypeList = data;
+            }
+          }
+        );
+      },
+      TwoTypeListChange(){//二级分类改变
+        this.typeId = $("#TwoType :selected").attr('value')
+        console.log(this.typeId)
+      },
+      findBrandList(){//查询商品品牌分类
+        let url = http.apiMap.findBrandList;
+        let data = {
+          nowpage: 1,
+          size: 100,
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.productBrandList;
+              this.BrandList = data;
+            }
+          }
+        );
+      },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -256,7 +292,7 @@
         $('.modify_specifications').css('display', 'none');
       },
       labe(){
-          $(".imgLocal").click()
+        $(".imgLocal").click()
       },
       deletes(e){
         let el = e.target;
@@ -275,7 +311,7 @@
           }
         }
         this.images = arrUrl;
-        this.imgFiles=arrimg;
+        this.imgFiles = arrimg;
       },
       submitUpload(){
         let url = http.apiMap.addShop;
@@ -288,6 +324,12 @@
           formData.append('pictureUrl', arr[i]);
         }
         formData.append('common', '2');
+        formData.append('typeId', this.typeId);
+        formData.append('name', this.name);
+        formData.append('price', this.price * 100);
+        formData.append('brandId', this.brandId);
+        formData.append('details', this.content);
+
         this.$http.post(url, formData, {
           method: 'post',
           headers: {'Content-Type': 'multipart/form-data'}
@@ -380,7 +422,6 @@
   .add_goods_freight,
   .add_goods_commission_tip {
     width: 40%;
-    margin: 0 auto;
     margin-top: 30px;
     overflow: hidden;
   }
@@ -405,7 +446,7 @@
     float: left;
     line-height: 36px;
     text-align: left;
-    width: 15%;
+    width: 17%;
     font-size: 16px;
   }
 
@@ -544,15 +585,16 @@
     border-radius: 5px;
   }
 
-  .labe{
-    width:100px;
-    height:100px;
+  .labe {
+    width: 100px;
+    height: 100px;
     font-size: 30px;
     text-align: center;
     line-height: 100px;
-    border:1px dashed #000;
+    border: 1px dashed #000;
     margin-right: 10px;
   }
+
   .imgurl {
     float: left;
   }
@@ -562,12 +604,27 @@
     height: 100px;
     margin-right: 10px;
   }
-  #imgForm{
+
+  #imgForm {
     float: left;
   }
-  .imgLocal{
+
+  .imgLocal {
     display: none;
   }
 
+  .select {
+    height: 35px;
+  }
+
+  .edit_container {
+    margin-bottom: 40px;
+    float: left;
+  }
+
+  .editer {
+    height: 350px;
+    width: 800px;
+  }
 </style>
 

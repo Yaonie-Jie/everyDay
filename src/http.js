@@ -3,6 +3,7 @@ const hosts = {
 }
 
 const apiMap={
+  'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
   'listSystemRecommend':hosts.api+'systemRecommend/findSystemRecommendList',    //系统推荐列表
@@ -10,6 +11,9 @@ const apiMap={
   'deleteSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品删除
   'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
   'addShop':hosts.api+'product/addProduct',    //添加商品
+  'findShop':hosts.api+'product/findProductList',    //查询所有商品
+  'findTypeList':hosts.api+'productType/findProductOneTypeList',    //查询一级分类
+  'findTypeListTwo':hosts.api+'productType/findProductTwoTypeList',    //查询二级分类
 
 
   'getList':hosts.api+'order/findOrder',    //获取订单列表
