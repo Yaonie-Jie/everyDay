@@ -9,6 +9,7 @@ const apiMap={
   'moveSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommendPosition',    //系统推荐列表上移下移
   'deleteSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品删除
   'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
+  'addShop':hosts.api+'product/addProduct',    //添加商品
 
 
   'getList':hosts.api+'order/findOrder',    //获取订单列表
