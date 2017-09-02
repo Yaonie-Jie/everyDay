@@ -38,7 +38,7 @@
       }
     },
     created: function () {
-      this.$router.push('/BrandGoods');
+//      this.$router.push('/BrandGoods');
     }
   }
 </script>

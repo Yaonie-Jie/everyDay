@@ -6,192 +6,195 @@
       <div class="add_goods_img">
         <div class="add_goods_img_title">商品图片</div>
         <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
-          <input class="input-loc-img" multiple name="imgLocal" id="imgLocal" type='file' accept="image/*" @change="selectChange" />
+          <div class="labe el-icon-plus" @click="labe"></div>
+          <input class="input-loc-img imgLocal"  name="pictureUrl" type='file' accept="image/*"
+                 @change="selectChange"/>
         </form>
-        <div v-for="i in images">
+        <div class="imgurl" v-for="(i,index) in images">
           <img :src="i" alt="">
+          <span @click="deletes" class="">{{index}}</span>
         </div>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
         <!--<el-upload-->
-          <!--:action="baseUrl"-->
-          <!--ref="upload"-->
-          <!--:data={common:2}-->
-          <!--list-type="picture-card"-->
-          <!--:on-preview="handlePictureCardPreview"-->
-          <!--:auto-upload="false"-->
-          <!--:on-remove="handleRemove">-->
-          <!--<i class="el-icon-plus"></i>-->
+        <!--:action="baseUrl"-->
+        <!--ref="upload"-->
+        <!--:data={common:2}-->
+        <!--list-type="picture-card"-->
+        <!--:on-preview="handlePictureCardPreview"-->
+        <!--:auto-upload="false"-->
+        <!--:on-remove="handleRemove">-->
+        <!--<i class="el-icon-plus"></i>-->
         <!--</el-upload>-->
         <!--<el-dialog v-model="dialogVisible" size="tiny">-->
-          <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+        <!--<img width="100%" :src="dialogImageUrl" alt="">-->
         <!--</el-dialog>-->
 
       </div>
       <!--<div class="add_goods_name">-->
-        <!--<div class="add_goods_name_title">商品名称</div>-->
-        <!--<el-input v-model="input" placeholder=""></el-input>-->
+      <!--<div class="add_goods_name_title">商品名称</div>-->
+      <!--<el-input v-model="input" placeholder=""></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_goods_saleprice">-->
-        <!--<div class="add_goods_saleprice_title">商品销售价</div>-->
-        <!--<el-input v-model="input" placeholder=""></el-input>-->
+      <!--<div class="add_goods_saleprice_title">商品销售价</div>-->
+      <!--<el-input v-model="input" placeholder=""></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_goods_costprice">-->
-        <!--<div class="add_goods_costprice_title">商品成本价</div>-->
-        <!--<el-input v-model="input" placeholder=""></el-input>-->
+      <!--<div class="add_goods_costprice_title">商品成本价</div>-->
+      <!--<el-input v-model="input" placeholder=""></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_goods_stock">-->
-        <!--<div class="add_goods_stock_title">商品库存</div>-->
-        <!--<el-input v-model="input" placeholder=""></el-input>-->
+      <!--<div class="add_goods_stock_title">商品库存</div>-->
+      <!--<el-input v-model="input" placeholder=""></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_goods_classify">-->
-        <!--<div class="add_goods_classify_title">商品分类</div>-->
-        <!--<el-select v-model="value" placeholder="请选择">-->
-          <!--<el-option-->
-            <!--v-for="item in options"-->
-            <!--:key="item.value"-->
-            <!--:label="item.label"-->
-            <!--:value="item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
-        <!--<el-select v-model="value" placeholder="请选择">-->
-          <!--<el-option-->
-            <!--v-for="item in options"-->
-            <!--:key="item.value"-->
-            <!--:label="item.label"-->
-            <!--:value="item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
+      <!--<div class="add_goods_classify_title">商品分类</div>-->
+      <!--<el-select v-model="value" placeholder="请选择">-->
+      <!--<el-option-->
+      <!--v-for="item in options"-->
+      <!--:key="item.value"-->
+      <!--:label="item.label"-->
+      <!--:value="item.value">-->
+      <!--</el-option>-->
+      <!--</el-select>-->
+      <!--<el-select v-model="value" placeholder="请选择">-->
+      <!--<el-option-->
+      <!--v-for="item in options"-->
+      <!--:key="item.value"-->
+      <!--:label="item.label"-->
+      <!--:value="item.value">-->
+      <!--</el-option>-->
+      <!--</el-select>-->
       <!--</div>-->
 
       <!--<div class="add_goods_brands">-->
-        <!--<div class="add_goods_brands_title">商品品牌</div>-->
-        <!--<el-select v-model="value" placeholder="请选择">-->
-          <!--<el-option-->
-            <!--v-for="item in options"-->
-            <!--:key="item.value"-->
-            <!--:label="item.label"-->
-            <!--:value="item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
+      <!--<div class="add_goods_brands_title">商品品牌</div>-->
+      <!--<el-select v-model="value" placeholder="请选择">-->
+      <!--<el-option-->
+      <!--v-for="item in options"-->
+      <!--:key="item.value"-->
+      <!--:label="item.label"-->
+      <!--:value="item.value">-->
+      <!--</el-option>-->
+      <!--</el-select>-->
       <!--</div>-->
 
       <!--<div class="add_goods_words">-->
-        <!--<div class="add_goods_words_title">商品详情</div>-->
-        <!--<el-input-->
-          <!--type="textarea"-->
-          <!--:rows="2"-->
-          <!--placeholder="请输入内容"-->
-          <!--v-model="textarea">-->
-        <!--</el-input>-->
-        <!--<el-input-->
-          <!--type="textarea"-->
-          <!--:rows="2"-->
-          <!--placeholder="请输入内容"-->
-          <!--v-model="textarea">-->
-        <!--</el-input>-->
-        <!--<el-input-->
-          <!--type="textarea"-->
-          <!--:rows="2"-->
-          <!--placeholder="请输入内容"-->
-          <!--v-model="textarea">-->
-        <!--</el-input>-->
+      <!--<div class="add_goods_words_title">商品详情</div>-->
+      <!--<el-input-->
+      <!--type="textarea"-->
+      <!--:rows="2"-->
+      <!--placeholder="请输入内容"-->
+      <!--v-model="textarea">-->
+      <!--</el-input>-->
+      <!--<el-input-->
+      <!--type="textarea"-->
+      <!--:rows="2"-->
+      <!--placeholder="请输入内容"-->
+      <!--v-model="textarea">-->
+      <!--</el-input>-->
+      <!--<el-input-->
+      <!--type="textarea"-->
+      <!--:rows="2"-->
+      <!--placeholder="请输入内容"-->
+      <!--v-model="textarea">-->
+      <!--</el-input>-->
       <!--</div>-->
 
       <!--<div class="add_goods_specifications">-->
-        <!--<div class="add_goods_specifications_title">用户可选规格：</div>-->
-        <!--<div class="add_goods_specifications_btn">-->
-          <!--<el-button type="primary" @click="DisplayBlock">添加规格</el-button>-->
-          <!--<el-button type="warning" @click="DisplayBlock2">修改、删除规格</el-button>-->
-        <!--</div>-->
+      <!--<div class="add_goods_specifications_title">用户可选规格：</div>-->
+      <!--<div class="add_goods_specifications_btn">-->
+      <!--<el-button type="primary" @click="DisplayBlock">添加规格</el-button>-->
+      <!--<el-button type="warning" @click="DisplayBlock2">修改、删除规格</el-button>-->
+      <!--</div>-->
       <!--</div>-->
 
       <!--<div class="add_goods_commission">-->
-        <!--<div class="add_goods_commission_title">店主可得提成金</div>-->
-        <!--<div class="add_goods_commission_ipt">-->
-          <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-          <!--*（销售价-成本价）-->
-        <!--</div>-->
+      <!--<div class="add_goods_commission_title">店主可得提成金</div>-->
+      <!--<div class="add_goods_commission_ipt">-->
+      <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
+      <!--*（销售价-成本价）-->
+      <!--</div>-->
 
       <!--</div>-->
 
       <!--<p class="add_goods_commission_tip">所有店主最多可分得提成金20.21元</p>-->
 
       <!--<div class="add_goods_hierarchycommission">-->
-        <!--<div class="add_goods_hierarchycommission_title">店主层级提成</div>-->
-        <!--<table class="add_goods_hierarchycommission_table" border="1" cellpadding="0" cellspacing="0">-->
-          <!--<tr>-->
-            <!--<td>个人店主</td>-->
-            <!--<td>公司店主</td>-->
-            <!--<td>高级店主 </td>-->
-          <!--</tr>-->
-          <!--<tr>-->
-            <!--<td>50%</td>-->
-            <!--<td>30%</td>-->
-            <!--<td>20% </td>-->
-          <!--</tr>-->
-        <!--</table>-->
+      <!--<div class="add_goods_hierarchycommission_title">店主层级提成</div>-->
+      <!--<table class="add_goods_hierarchycommission_table" border="1" cellpadding="0" cellspacing="0">-->
+      <!--<tr>-->
+      <!--<td>个人店主</td>-->
+      <!--<td>公司店主</td>-->
+      <!--<td>高级店主 </td>-->
+      <!--</tr>-->
+      <!--<tr>-->
+      <!--<td>50%</td>-->
+      <!--<td>30%</td>-->
+      <!--<td>20% </td>-->
+      <!--</tr>-->
+      <!--</table>-->
       <!--</div>-->
 
       <!--<div class="add_goods_freight">-->
-        <!--<div class="add_goods_freight_title">运费模板</div>-->
-        <!--<el-select v-model="value" placeholder="请选择">-->
-          <!--<el-option-->
-            <!--v-for="item in options"-->
-            <!--:key="item.value"-->
-            <!--:label="item.label"-->
-            <!--:value="item.value">-->
-          <!--</el-option>-->
-        <!--</el-select>-->
+      <!--<div class="add_goods_freight_title">运费模板</div>-->
+      <!--<el-select v-model="value" placeholder="请选择">-->
+      <!--<el-option-->
+      <!--v-for="item in options"-->
+      <!--:key="item.value"-->
+      <!--:label="item.label"-->
+      <!--:value="item.value">-->
+      <!--</el-option>-->
+      <!--</el-select>-->
       <!--</div>-->
 
       <!--<div class="add_goods_btn">-->
-        <!--<el-button>取消</el-button>-->
-        <!--<el-button type="primary" @click="addshop()">确定</el-button>-->
+      <!--<el-button>取消</el-button>-->
+      <!--<el-button type="primary" @click="addshop()">确定</el-button>-->
       <!--</div>-->
-    <!--</div>-->
+      <!--</div>-->
 
-    <!--<div class="mask"></div>-->
+      <!--<div class="mask"></div>-->
 
-    <!--<div class="add_specifications popup">-->
+      <!--<div class="add_specifications popup">-->
       <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title">规格名称</div>-->
-        <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
+      <!--<div class="popup_form_title">规格名称</div>-->
+      <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_choose_specifications">-->
-        <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
-        <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
+      <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
+      <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
       <!--</div>-->
 
       <!--<div class="add_specifications_btn">-->
-        <!--<el-button @click="DisplayNone">取消</el-button>-->
-        <!--<el-button type="primary">确定</el-button>-->
+      <!--<el-button @click="DisplayNone">取消</el-button>-->
+      <!--<el-button type="primary">确定</el-button>-->
       <!--</div>-->
-    <!--</div>-->
+      <!--</div>-->
 
-    <!--<div class="modify_specifications popup">-->
+      <!--<div class="modify_specifications popup">-->
       <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title">规格名称</div>-->
-        <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
+      <!--<div class="popup_form_title">规格名称</div>-->
+      <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
       <!--</div>-->
 
       <!--<div class="add_choose_specifications">-->
-        <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
-        <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
+      <!--<el-checkbox v-model="checked">红色</el-checkbox>-->
+      <!--<el-checkbox v-model="checked">黄色</el-checkbox>-->
       <!--</div>-->
 
       <!--<div class="popup_btn">-->
-        <!--<el-button @click="open3">删除此规格</el-button>-->
-        <!--<el-button type="primary" @click="DisplayNone2">修改</el-button>-->
+      <!--<el-button @click="open3">删除此规格</el-button>-->
+      <!--<el-button type="primary" @click="DisplayNone2">修改</el-button>-->
       <!--</div>-->
-    <!--</div>-->
+      <!--</div>-->
 
 
-  </div>
+    </div>
 </template>
 
 <script>
@@ -200,7 +203,8 @@
   export default {
     data() {
       return {
-        images: [],
+        images: [],     //展示用的图片路径
+        imgFiles: [],   //上传文件图片
         baseUrl: http.apiMap.getList,
         options: [{
           value: '选项1',
@@ -225,9 +229,7 @@
 
     },
     methods: {
-      submitUpload() {
-        this.$refs.upload.submit();
-      },
+
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -253,22 +255,45 @@
         $('.mask').css('display', 'none');
         $('.modify_specifications').css('display', 'none');
       },
+      labe(){
+          $(".imgLocal").click()
+      },
+      deletes(e){
+        let el = e.target;
+        let arrUrl = [];
+        let arrimg = [];
+        for (let i = 0; i < this.images.length; i++) {
+          if ($(el).prev().attr('src') == this.images[i]) {
+
+          } else {
+            arrUrl.push(this.images[i])
+          }
+          if ($(el).text() == i) {
+
+          } else {
+            arrimg.push(this.imgFiles[i])
+          }
+        }
+        this.images = arrUrl;
+        this.imgFiles=arrimg;
+      },
       submitUpload(){
         let url = http.apiMap.addShop;
-
-        let form=document.getElementById('imgLocal');
-        let imgFile = $(this.$el).find('#imgLocal')[0].files;//取到上传的图片
-        let formData=new FormData();//通过formdata上传
-        console.log(imgFile)
-        for (var i=0;i<imgFile.length;i++){
-          formData.append('file',imgFile[i]);
+        let formData = new FormData();//通过formdata上传
+        let arr = []
+        for (let i = 0; i < this.imgFiles.length; i++) {
+          if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
+            arr.push(this.imgFiles[i])
+          }
+          formData.append('pictureUrl', arr[i]);
         }
-        this.$http.post(url,formData,{
+        formData.append('common', '2');
+        this.$http.post(url, formData, {
           method: 'post',
           headers: {'Content-Type': 'multipart/form-data'}
         }).then(function (res) {
           console.log(res.data);
-        }).catch(function(error){
+        }).catch(function (error) {
           console.log(error);
         })
       },
@@ -278,20 +303,25 @@
         this.createImage(files);
       },
       createImage(file) {
-        if(typeof FileReader==='undefined'){
+        if (typeof FileReader === 'undefined') {
           alert('您的浏览器不支持图片上传，请升级您的浏览器');
           return false;
         }
         var image = new Image();
         var vm = this;
-        var leng=file.length;
-        for(var i=0;i<leng;i++){
+        var leng = file.length;
+        let arr = []
+        for (var i = 0; i < leng; i++) {
           var reader = new FileReader();
           reader.readAsDataURL(file[i]);
-          reader.onload =function(e){
+          reader.onload = function (e) {
             vm.images.push(e.target.result);
+            for (var i = 0; i < $('.imgLocal')[0].files.length; i++) {
+              vm.imgFiles.push($('.imgLocal')[0].files[i])
+            }
           };
         }
+//        vm.imgFiles = arr
       },
       //添加商品
       addshop() {
@@ -375,7 +405,7 @@
     float: left;
     line-height: 36px;
     text-align: left;
-    width: 25%;
+    width: 15%;
     font-size: 16px;
   }
 
@@ -512,6 +542,31 @@
     box-sizing: border-box;
     border: 1px solid #dddddd;
     border-radius: 5px;
+  }
+
+  .labe{
+    width:100px;
+    height:100px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 100px;
+    border:1px dashed #000;
+    margin-right: 10px;
+  }
+  .imgurl {
+    float: left;
+  }
+
+  .imgurl img {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+  }
+  #imgForm{
+    float: left;
+  }
+  .imgLocal{
+    display: none;
   }
 
 </style>
