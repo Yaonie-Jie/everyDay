@@ -11,6 +11,8 @@ const apiMap={
   'deleteSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品删除
   'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
   'addShop':hosts.api+'product/addProduct',    //添加商品
+  'findById':hosts.api+'product/findProductById',    //查看商品详情
+  'deleteShop':hosts.api+'product/removeProductByIdL',    //删除商品
   'findShop':hosts.api+'product/findProductList',    //查询所有商品
   'findTypeList':hosts.api+'productType/findProductOneTypeList',    //查询一级分类
   'findTypeListTwo':hosts.api+'productType/findProductTwoTypeList',    //查询二级分类
@@ -41,13 +43,13 @@ const apiMap={
   'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主管理)
   'modifyToHighOwnerLevel':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主管理)
   'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
-
-
   'getTeamList':hosts.api+'ownerTeamManage/findOwnerTeamManageList',   //获取店主团队信息（店主管理）
 
 
-
   'findTeam':hosts.api+'ownerTeamManage/findOwnerTeamManage', //搜索
+  'findInFinance':hosts.api+'finance/findInFinance', //入账记录
+  'findOutFinance':hosts.api+'finance/findOutFinance', //出账记录
+  'findWithdrawals':hosts.api+'withdrawals/findWithdrawalsList', //提现申请
 
 }
 export default{

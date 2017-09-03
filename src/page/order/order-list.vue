@@ -78,7 +78,7 @@
               <div class="right AddPic">
                 <p>订单总额：<span>{{i.price}}</span></p>
                 <p>包含运费：<span>{{i.freigh}}</span></p>
-                <el-button @click="DisplayBlock(i.orderNum)">改价</el-button>
+                <el-button @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
                 <el-button @click="open2(i.orderNum)">取消订单</el-button>
                 <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
@@ -176,8 +176,9 @@
           return '已超时'
         }
       },
-      DisplayBlock: function (orderNum) {
+      DisplayBlock: function (orderNum,price) {
         this.orderNum = orderNum;
+        this.price=price
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },

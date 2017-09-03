@@ -10,9 +10,11 @@
         <i>操作时间：</i>
         <div class="block">
           <el-date-picker
+            v-model="time"
             type="daterange"
             placeholder="选择日期范围">
           </el-date-picker>
+          <el-button type="success" @click="findOrder">搜索</el-button>
         </div>
 
         <i>发生原因：</i>
@@ -25,24 +27,31 @@
 
       <div class="out_account_form">
         <el-table
+          :data=" tableData"
           border
           style="width: 100%">
           <el-table-column
+            prop="modifiedOn"
             label="操作时间">
           </el-table-column>
           <el-table-column
+            prop="reason"
             label="发生原因">
           </el-table-column>
           <el-table-column
+            prop="outMent"
             label="出款方式">
           </el-table-column>
           <el-table-column
+            prop="incomeAccount"
             label="财务出款账号">
           </el-table-column>
           <el-table-column
+            prop="userAccount"
             label="用户账号">
           </el-table-column>
           <el-table-column
+            prop="outMoney"
             label="出账金额">
           </el-table-column>
         </el-table>
@@ -52,9 +61,94 @@
         当前后台余额:￥<span>10086</span>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
+
   </div>
 </template>
 
+<script>
+  import http from '../../http'
+  export default {
+    data() {
+      return {
+        currentPage:1,
+        count11:1,
+        tableData: [],
+        time:'',  //时间搜索
+        value6: '',
+        value7: ''
+      }
+    },
+    created(){
+      this.getOutfinance()
+    },
+    methods:{
+      getOutfinance(){
+        let url = http.apiMap.findOutFinance;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: 2
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count
+              console.log(res.body.data.list)
+              this.tableData = res.body.data.list
+            }
+          }
+        );
+      },
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getOutfinance()
+      },
+      //搜索订单
+      findOrder(){
+        var paddNum = function(num){    //如果是一位数就补一个0
+          num += "";
+          return num.replace(/^(\d)$/,"0$1");
+        }
+        function FormatDate (strTime) {
+          if(strTime){
+            var date = new Date(strTime);
+            return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
+          }else {
+            return ''
+          }
+        }
+        let url = http.apiMap.findOrder;
+        let data = {
+          common: 1,
+          size:10,
+          nowpage:this.currentPage,
+          startTime:FormatDate(this.time[0]),
+          endTime:FormatDate(this.time[1]),
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              let data = res.body.data.orderList;
+              this.dataList = data;
+            }
+          }
+        );
+      },
+    }
+  }
+</script>
 <style>
   .operation_time{
     width: 80%;
@@ -96,43 +190,3 @@
     color: #000000;
   }
 </style>
-
-<script>
-  export default {
-    data() {
-      return {
-        tableData: [{
-          operating_time: '操作时间',
-          occurrence_cause: '操作时间',
-          payment: '出款方式',
-          finance_account: '财务出款账号',
-          user_account: '用户账号',
-          amount_account: '出账金额'
-        }, {
-          operating_time: '操作时间',
-          occurrence_cause: '操作时间',
-          payment: '出款方式',
-          finance_account: '财务出款账号',
-          user_account: '用户账号',
-          amount_account: '出账金额'
-        }, {
-          operating_time: '操作时间',
-          occurrence_cause: '操作时间',
-          payment: '出款方式',
-          finance_account: '财务出款账号',
-          user_account: '用户账号',
-          amount_account: '出账金额'
-        }, {
-          operating_time: '操作时间',
-          occurrence_cause: '操作时间',
-          payment: '出款方式',
-          finance_account: '财务出款账号',
-          user_account: '用户账号',
-          amount_account: '出账金额'
-        }],
-        value6: '',
-        value7: ''
-      }
-    }
-  }
-</script>

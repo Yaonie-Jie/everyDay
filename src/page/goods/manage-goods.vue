@@ -13,11 +13,17 @@
       <div class="goods_search">
         <div class="left">
           <i style="margin-top: 10px;">搜索</i>
-          <select name="" style="margin-top: 10px;">
+          <select name="" class="select" id="oneType" @change="OneTypeListChange">
             <option value="">一级分类</option>
+            <option v-for="option in OneTypeList" v-bind:value="option.id">
+              {{ option.name }}
+            </option>
           </select>
-          <select name="" style="margin-top: 10px;">
+          <select name="" class="select" id="TwoType"  v-model="typeId">
             <option value="">二级分类</option>
+            <option v-for="option in TwoypeList" v-bind:value="option.id">
+              {{ option.name }}
+            </option>
           </select>
         </div>
         <div class="right">
@@ -59,8 +65,8 @@
               <el-button type="text" size="small">下移</el-button>
               <el-button type="text" size="small">置顶</el-button>
               <el-button type="text" size="small">置底</el-button>
-              <el-button type="text" size="small" @click="DisplayBlock">修改</el-button>
-              <el-button type="text" size="small" @click="open2()">删除</el-button>
+              <el-button type="text" size="small" @click="DisplayBlock(scope.row)">修改</el-button>
+              <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -68,37 +74,6 @@
     </div>
 
     <div class="mask"></div>
-
-    <div class="change_brand_information popup">
-      <div class="popup_title">修改商品信息</div>
-
-      <div class="popup_form">
-        <div class="popup_form_title">商品名称</div>
-        <el-input v-model="input" placeholder=""></el-input>
-      </div>
-
-      <div class="popup_form">
-        <div class="popup_form_title">商品库存</div>
-        <el-input v-model="input" placeholder=""></el-input>
-      </div>
-
-      <div class="popup_form">
-        <div class="popup_form_title">运费模板</div>
-        <el-select v-model="value" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
-
-      <div class="popup_btn">
-        <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary">确定</el-button>
-      </div>
-    </div>
 
     <div class="block">
       <el-pagination
@@ -121,14 +96,18 @@
       return {
         count11: 1,
         currentPage: 1,
-        dataList:[]
+        dataList: [],
+        OneTypeList:[],
+        TwoypeList:[],
+        typeId:''
       }
     },
     created() {
-      this.getList()
+      this.getList();
+      this.findTypeList()
     },
     methods: {
-      getList(){
+      getList() {
         let url = http.apiMap.findShop;
         let data = {
           nowpage: this.currentPage,
@@ -141,15 +120,15 @@
               this.count11 = res.body.data.count;
               let data = res.body.data.productList;
               let arr = [];
-              let num=0;
+              let num = 0;
               for (let i = 0; i < data.length; i++) {
 //                if (data[i].mode == 1) {
 //                  data[i].mode = '商品详情'
 //                } else {
 //                  data[i].mode = '图文推荐'
 //                }
-                num+=1;
-                data[i].num=num;
+                num += 1;
+                data[i].num = num;
                 arr.push(data[i])
               }
               this.dataList = arr;
@@ -157,16 +136,34 @@
           }
         );
       },
-      open2() {
+      open2(row) {
         this.$confirm('此操作将删除该商品信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          let url = http.apiMap.deleteShop;
+          let data = {
+            id: row.id,
+            common: 1
+          }
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.getList()
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -177,9 +174,8 @@
       shows: function () {
         this.$router.push('/AddGoods');
       },
-      DisplayBlock: function () {
-        $('.mask').css('display', 'block');
-        $('.change_brand_information').css('display', 'block');
+      DisplayBlock(row) {
+        this.$router.push('/updataGoods/' + row.id);
       },
 
       DisplayNone: function () {
@@ -190,6 +186,32 @@
       handleCurrentChange(val) {
         this.currentPage = val;
         this.getList()
+      },
+      OneTypeListChange() {//一级分类改变
+        let url = http.apiMap.findTypeListTwo;
+        let data = {
+          pId: $("#oneType :selected").attr('value'),
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.ProductTwoTypeList;
+              this.TwoypeList = data;
+            }
+          }
+        );
+      },
+      findTypeList() {//查询一级分类列表
+        let url = http.apiMap.findTypeList;
+        this.$http.post(url, {common: 1}).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.findProductOneTypeList;
+              this.OneTypeList = data;
+            }
+          }
+        );
       },
     },
 

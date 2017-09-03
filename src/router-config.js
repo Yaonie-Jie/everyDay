@@ -24,6 +24,7 @@ import ManageGoods from './page/goods/manage-goods.vue'
 import RecommendGoods from './page/goods/recommend-goods.vue'
 import RecommendGoodsLike from './page/goods/recommend-goods-like.vue'
 import tagGoods from './page/goods/tag-goods.vue'
+import updataGoods from './page/goods/updata-goods.vue'
 
 import AccountedFor from './page/money/accounted-for.vue'
 import OutOf from './page/money/out-of-account.vue'
@@ -147,6 +148,9 @@ export default [
   },
   {
     path: '/OrderNo/:orderNum', component: OrderNo,
+  },
+  {
+    path: '/updataGoods/:id', component: updataGoods,
   },
   {
     path: '/OrderDeliver/:orderNum', component: OrderDeliver,   //待发货订单详情

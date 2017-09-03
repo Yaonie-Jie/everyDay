@@ -4,7 +4,7 @@
     <div class="box">
       <el-row>
         <el-col :span="24">
-          <div class="add_goods_title mid">添加商品</div>
+          <div class="add_goods_title mid">修改商品</div>
 
           <div class="add_goods_img">
             <div class="add_goods_img_title" style="width: 10%;">商品图片</div>
@@ -233,7 +233,6 @@
       <!--<el-button type="primary" @click="addshop()">确定</el-button>-->
       <!--</div>-->
       <!--</div>-->
-      <span @click="aaa">获取富文本内容</span>
 
     </div>
   </div>
@@ -254,9 +253,9 @@
     },
     data() {
       return {
+        id:'',
         images: [],     //展示用的图片路径
         imgFiles: [],   //上传文件图片
-        baseUrl: http.apiMap.getList,
         name: '',        //商品名称
         price: '',       //商品售价
         cose: '',        //成本价
@@ -280,13 +279,37 @@
       };
     },
     created() {
+      this.id = this.$route.params.id;
       this.findTypeList();
       this.findBrandList();
       this.findFeightList();
+      this.findById();
     },
     methods: {
-      aaa() {
-        console.log(this.content)
+    //查询商品详情
+      findById(){
+        let url = http.apiMap.findById;
+        let data = {
+          id: this.id,
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.product;
+              this.name=data.name;
+              this.price=data.price;
+              this.stock=data.stock;
+              this.cose=data.cose;
+              this.paramlist=data.parameters;
+              this.brandId=data.brandId;
+              this.typeId=data.typeId;
+              this.freightId=data.freightId;
+              this.royalty=data.royalty;
+              console.log(data.parameters[0].paramName)
+            }
+          }
+        );
       },
       //运费模版
       findFeightList() {
@@ -311,6 +334,8 @@
       },
 
       showInput() {
+        this.paramName = '';
+        this.dynamicTags = [];
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
