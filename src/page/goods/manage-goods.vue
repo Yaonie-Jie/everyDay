@@ -27,8 +27,8 @@
           </select>
         </div>
         <div class="right">
-          <input placeholder="输入商品名称搜索" style="height:30px;"></input>
-          <el-button type="success" style="margin-top: 0px;!important;">搜索</el-button>
+          <input placeholder="输入商品名称搜索" style="height:30px;" v-model="name"></input>
+          <el-button type="success" style="margin-top: 0px;!important;" @click="find">搜索</el-button>
         </div>
       </div>
       <div class="add_goods_form">
@@ -61,10 +61,10 @@
             fixed="right"
             label="操作">
             <template scope="scope">
-              <el-button type="text" size="small">上移</el-button>
+            <!--  <el-button type="text" size="small">上移</el-button>
               <el-button type="text" size="small">下移</el-button>
               <el-button type="text" size="small">置顶</el-button>
-              <el-button type="text" size="small">置底</el-button>
+              <el-button type="text" size="small">置底</el-button>-->
               <el-button type="text" size="small" @click="DisplayBlock(scope.row)">修改</el-button>
               <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
             </template>
@@ -99,7 +99,8 @@
         dataList: [],
         OneTypeList:[],
         TwoypeList:[],
-        typeId:''
+        typeId:'',
+        name:''
       }
     },
     created() {
@@ -107,8 +108,27 @@
       this.findTypeList()
     },
     methods: {
-      getList() {
+      find(){
         let url = http.apiMap.findShop;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          name:this.name,
+          typeId:this.typeId,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.productList;
+
+              this.dataList = data;
+            }
+          }
+        );
+      },
+      getList() {
+        let url = http.apiMap.findShopList;
         let data = {
           nowpage: this.currentPage,
           size: 10,
@@ -256,10 +276,6 @@
     margin-left: 10px;
   }
 
-  .add_goods_form {
-    width: 80%;
-    margin-left: 10%;
-  }
 
   .add_goods_form table tr td {
     text-align: center;

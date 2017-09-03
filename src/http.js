@@ -13,7 +13,9 @@ const apiMap={
   'addShop':hosts.api+'product/addProduct',    //添加商品
   'findById':hosts.api+'product/findProductById',    //查看商品详情
   'deleteShop':hosts.api+'product/removeProductByIdL',    //删除商品
-  'findShop':hosts.api+'product/findProductList',    //查询所有商品
+  'updataShop':hosts.api+'product/modifyProduct',    //修改商品
+  'findShop':hosts.api+'product/findProductListByCondition',    //查询商品
+  'findShopList':hosts.api+'product/findProductList',    //商品列表
   'findTypeList':hosts.api+'productType/findProductOneTypeList',    //查询一级分类
   'findTypeListTwo':hosts.api+'productType/findProductTwoTypeList',    //查询二级分类
 

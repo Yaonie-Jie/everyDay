@@ -40,26 +40,28 @@ import OrderDeliver from './page/order/order-deliver-goods.vue'
 import OrderReceived from './page/order/order-received-goods.vue'
 import OrderMoney from './page/order/order-refund-money.vue'
 
-import  BillDemo from './page/order-service/bill-demo.vue'
-import  FreightManage from './page/order-service/freight-manage.vue'
+import BillDemo from './page/order-service/bill-demo.vue'
+import FreightManage from './page/order-service/freight-manage.vue'
 
-import  Phone from './page/phone/phone.vue'
+import Phone from './page/phone/phone.vue'
 
-import  PersonNum from './page/shopman/person-num.vue'
-import  ShopmanApply from './page/shopman/shopman-apply.vue'
-import  ShopmanApplyShow from './page/shopman/shopman-apply-show.vue'
-import  ShopmanCommission from './page/shopman/shopman-commission.vue'
-import  ShopmanManage from './page/shopman/shopman-manage.vue'
-import  ShopmanManageShow from './page/shopman/shopman-manage-show.vue'
-import  ShopmanTeam from './page/shopman/shopman-team.vue'
-import  ShopmanTeamShow from './page/shopman/shopman-team-show.vue'
-import  ShopmanTeamShow2 from './page/shopman/shopman-team-show2.vue'
-import  ShopmanTeamShow3 from './page/shopman/shopman-team-show3.vue'
+import PersonNum from './page/shopman/person-num.vue'
+import ShopmanApply from './page/shopman/shopman-apply.vue'
+import ShopmanApplyShow from './page/shopman/shopman-apply-show.vue'
+import ShopmanCommission from './page/shopman/shopman-commission.vue'
+import ShopmanManage from './page/shopman/shopman-manage.vue'
+import ShopmanManageShow from './page/shopman/shopman-manage-show.vue'
+import ShopmanTeam from './page/shopman/shopman-team.vue'
+import ShopmanTeamShow from './page/shopman/shopman-team-show.vue'
+import ShopmanTeamShow2 from './page/shopman/shopman-team-show2.vue'
+import ShopmanTeamShow3 from './page/shopman/shopman-team-show3.vue'
 
 
-import  User from './page/user/user.vue'
+import User from './page/user/user.vue'
 import ChangePass from './page/user/changepassword.vue'
 import userManage from './page/user/userManage.vue'
+import login from './components/login.vue'
+import home from './home.vue'
 
 export default [
   {
@@ -89,138 +91,142 @@ export default [
       },
     ]
   },
+
+
   {
-    path: '/activePublic', component: activePublic,
+    path: '/login', component: login,
+  },
+  {
+    path: '/', component: home,
     children: [
-      {path: '', component: step1},
-      {path: 'step1', component: step1},
-      {path: 'step2', component: step2},
-      {path: 'step3', component: step3},
-      {path: 'step4', component: step4}
+
+      {
+        path: '/Jurisdiction', component: Jurisdiction,
+      },
+      {
+        path: '/ManageAccount', component: ManageAccount,
+      },
+      {
+        path: '/RecordAccount', component: RecordAccount,
+      },
+      {
+        path: '/BrandGoods', component: BrandGoods,
+      },
+      {
+        path: '/Classify', component: Classify,
+      },
+      {
+        path: '/ManageGoods', component: ManageGoods,
+        //children:[{ path:'/AddGoods',component:AddGoods}]
+      },
+      {
+        path: '/AddGoods', component: AddGoods},
+      {
+        path: '/RecommendGoods', component: RecommendGoods,
+      },
+      {
+        path: '/RecommendGoodsLike', component: RecommendGoodsLike,
+      },
+      {
+        path: '/TagGoods', component: tagGoods,
+      },
+      {
+        path: '/AccountedFor', component: AccountedFor,
+      },
+      {
+        path: '/OutOf', component: OutOf,
+      },
+      {
+        path: '/UserWithdrawApply', component: UserWithdrawApply,
+      },
+      {
+        path: '/OrderDeliverGoods', component: OrderDeliverGoods,
+      },
+      {
+        path: '/OrderEnd', component: OrderEnd,
+      },
+      {
+        path: '/OrderList', component: OrderList,
+      },
+      {
+        path: '/OrderNo/:orderNum', component: OrderNo,
+      },
+      {
+        path: '/updataGoods/:id', component: updataGoods,
+      },
+      {
+        path: '/OrderDeliver/:orderNum', component: OrderDeliver,   //待发货订单详情
+      },
+      {
+        path: '/OrderReceived/:orderNum', component: OrderReceived,   //待收货订单详情
+      },
+      {
+        path: '/OrderEnd/:orderNum', component: OrderEnd,     //已完成订单详情
+      },
+      {
+        path: '/OrderRefund', component: OrderRefund,
+      },
+      {
+        path: '/OrderMoney/:orderNum', component: OrderMoney, //已退款订单详情
+      },
+      {
+        path: '/OrderRefundShow', component: OrderRefundShow,
+      },
+      {
+        path: '/BillDemo', component: BillDemo,
+      },
+      {
+        path: '/FreightManage', component: FreightManage,
+      },
+      {
+        path: '/Phone', component: Phone,
+      },
+      {
+        path: '/PersonNum', component: PersonNum,
+      },
+      {
+        path: '/ShopmanApply', component: ShopmanApply,
+
+      },
+      {
+        path: '/ShopmanApplyShow',
+        component: ShopmanApplyShow
+      },
+      {
+        path: '/ShopmanManage', component: ShopmanManage,
+      },
+      {
+        path: '/ShopmanManageShow', component: ShopmanManageShow
+      },
+      {
+        path: '/ShopmanTeam', component: ShopmanTeam,
+        //children:[{path:'/ShopmanTeamShow',component:ShopmanTeamShow}]
+      },
+      {
+        path: '/ShopmanTeamShow', component: ShopmanTeamShow
+      },
+      {
+        path: '/ShopmanTeamShow2', component: ShopmanTeamShow2
+      },
+      {
+        path: '/ShopmanTeamShow3', component: ShopmanTeamShow3
+      },
+      {
+        path: '/ShopmanCommission', component: ShopmanCommission,
+      },
+      {
+        path: '/User', component: User,
+      },
+      {
+        path: '/ChangePass', component: ChangePass,
+      }
+      ,
+      {
+        path: '/userManage', component: userManage,
+      }
     ]
   },
-  {
-    path: '/Jurisdiction', component: Jurisdiction,
-  },
-  {
-    path: '/ManageAccount', component: ManageAccount,
-  },
-  {
-    path: '/RecordAccount', component: RecordAccount,
-  },
-  {
-    path: '/BrandGoods', component: BrandGoods,
-  },
-  {
-    path: '/Classify', component: Classify,
-  },
-  {
-    path: '/ManageGoods', component: ManageGoods,
-    //children:[{ path:'/AddGoods',component:AddGoods}]
-  },
-  {path: '/AddGoods', component: AddGoods},
-  {
-    path: '/RecommendGoods', component: RecommendGoods,
-  },
-  {
-    path: '/RecommendGoodsLike', component: RecommendGoodsLike,
-  },
-  {
-    path: '/TagGoods', component: tagGoods,
-  },
-  {
-    path: '/AccountedFor', component: AccountedFor,
-  },
-  {
-    path: '/OutOf', component: OutOf,
-  },
-  {
-    path: '/UserWithdrawApply', component: UserWithdrawApply,
-  },
-  {
-    path: '/OrderDeliverGoods', component: OrderDeliverGoods,
-  },
-  {
-    path: '/OrderEnd', component: OrderEnd,
-  },
-  {
-    path: '/OrderList', component: OrderList,
-  },
-  {
-    path: '/OrderNo/:orderNum', component: OrderNo,
-  },
-  {
-    path: '/updataGoods/:id', component: updataGoods,
-  },
-  {
-    path: '/OrderDeliver/:orderNum', component: OrderDeliver,   //待发货订单详情
-  },
-  {
-    path: '/OrderReceived/:orderNum', component: OrderReceived,   //待收货订单详情
-  },
-  {
-    path: '/OrderEnd/:orderNum', component: OrderEnd,     //已完成订单详情
-  },
-  {
-    path: '/OrderRefund', component: OrderRefund,
-  },
-  {
-    path: '/OrderMoney/:orderNum', component: OrderMoney, //已退款订单详情
-  },
-  {
-    path: '/OrderRefundShow', component: OrderRefundShow,
-  },
-  {
-    path: '/BillDemo', component: BillDemo,
-  },
-  {
-    path: '/FreightManage', component: FreightManage,
-  },
-  {
-    path: '/Phone', component: Phone,
-  },
-  {
-    path: '/PersonNum', component: PersonNum,
-  },
-  {
-    path: '/ShopmanApply', component: ShopmanApply,
 
-  },
-  {
-    path: '/ShopmanApplyShow',
-    component: ShopmanApplyShow
-  },
-  {
-    path: '/ShopmanManage', component: ShopmanManage,
-  },
-  {
-    path: '/ShopmanManageShow', component: ShopmanManageShow
-  },
-  {
-    path: '/ShopmanTeam', component: ShopmanTeam,
-    //children:[{path:'/ShopmanTeamShow',component:ShopmanTeamShow}]
-  },
-  {
-    path: '/ShopmanTeamShow', component: ShopmanTeamShow
-  },
-  {
-    path: '/ShopmanTeamShow2', component: ShopmanTeamShow2
-  },
-  {
-    path: '/ShopmanTeamShow3', component: ShopmanTeamShow3
-  },
-  {
-    path: '/ShopmanCommission', component: ShopmanCommission,
-  },
-  {
-    path: '/User', component: User,
-  },
-  {
-    path: '/ChangePass', component: ChangePass,
-  }
-  ,
-  {
-    path: '/userManage', component: userManage,
-  }
+
 
 ]

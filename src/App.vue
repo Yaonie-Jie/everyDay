@@ -1,19 +1,8 @@
 <template>
   <div id="app">
-    <!-- 头部导航 -->
-    <Heads></Heads>
-    <main>
-      <!-- 左侧导航 -->
-      <div class="main-left">
-        <NavBar></NavBar>
-      </div>
-      <!-- 右侧主内容区 -->
-      <div class="main-right">
-        <transition name="fade">
-          <router-view class="view"></router-view>
-        </transition>
-      </div>
-    </main>
+
+    <router-view></router-view>
+
   </div>
 </template>
 
@@ -136,12 +125,14 @@
     -webkit-box-flex: 0;
     -ms-flex: 0 0 285px;
     flex: 0 0 285px;
-    height:800px;
+    height: 800px;
     overflow-y: scroll;
   }
-  main .main-left::-webkit-scrollbar{
-   background: transparent;
+
+  main .main-left::-webkit-scrollbar {
+    background: transparent;
   }
+
   main .main-right {
     -webkit-box-flex: 1;
     -ms-flex: 1;

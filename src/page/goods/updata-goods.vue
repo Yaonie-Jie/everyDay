@@ -226,7 +226,7 @@
         </select>
       </div>
       <el-col :span="24" style="margin-top: 20px;text-align: center">
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">添加商品</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">修改商品</el-button>
       </el-col>
       <!--<div class="add_goods_btn">-->
       <!--<el-button>取消</el-button>-->
@@ -253,7 +253,7 @@
     },
     data() {
       return {
-        id:'',
+        id: '',
         images: [],     //展示用的图片路径
         imgFiles: [],   //上传文件图片
         name: '',        //商品名称
@@ -286,8 +286,8 @@
       this.findById();
     },
     methods: {
-    //查询商品详情
-      findById(){
+      //查询商品详情
+      findById() {
         let url = http.apiMap.findById;
         let data = {
           id: this.id,
@@ -297,16 +297,17 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.product;
-              this.name=data.name;
-              this.price=data.price;
-              this.stock=data.stock;
-              this.cose=data.cose;
-              this.paramlist=data.parameters;
-              this.brandId=data.brandId;
-              this.typeId=data.typeId;
-              this.freightId=data.freightId;
-              this.royalty=data.royalty;
-              console.log(data.parameters[0].paramName)
+              this.name = data.name;
+              this.price = data.price;
+              this.stock = data.stock;
+              this.cose = data.cose;
+              this.paramlist = data.parameters;
+              this.brandId = data.brandId;
+              this.typeId = data.typeId;
+              this.freightId = data.freightId;
+              this.royalty = data.royalty;
+              this.images = data.picture.split(',');
+              console.log(data.picture.split(','))
             }
           }
         );
@@ -478,7 +479,7 @@
         this.imgFiles = arrimg;
       },
       submitUpload() {
-        let url = http.apiMap.addShop;
+        let url = http.apiMap.updataShop;
         let formData = new FormData();//通过formdata上传
         let arr = []
         for (let i = 0; i < this.imgFiles.length; i++) {
@@ -487,6 +488,7 @@
           }
           formData.append('pictureUrl', arr[i]);
         }
+        formData.append('id', this.id);
         formData.append('common', '2');
         formData.append('typeId', this.typeId);
         formData.append('stock', this.stock);
@@ -495,7 +497,6 @@
         formData.append('price', this.price * 100);
         formData.append('brandId', this.brandId);
         formData.append('details', JSON.stringify(this.content));
-        formData.append('royalty', this.royalty);
         formData.append('parameters', JSON.stringify(this.paramlist));
         formData.append('freightId', this.freightId);
 
