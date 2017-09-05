@@ -119,14 +119,14 @@
     </div>
 
     <div class="block">
-      <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
-        :page-size="10"
-        layout="prev, pager, next, jumper"
-        :total="count11">
-      </el-pagination>
-    </div>
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="10"
+      layout="prev, pager, next, jumper"
+      :total="count11">
+    </el-pagination>
+  </div>
 
   </div>
 
@@ -230,7 +230,6 @@
                   type: 'success',
                   message: '取消订单成功!'
                 });
-
                 this.getList()
               } else {
                 this.$message({

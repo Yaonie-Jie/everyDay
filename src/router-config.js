@@ -203,7 +203,7 @@ export default [
         //children:[{path:'/ShopmanTeamShow',component:ShopmanTeamShow}]
       },
       {
-        path: '/ShopmanTeamShow', component: ShopmanTeamShow
+        path: '/ShopmanTeamShow/:id', component: ShopmanTeamShow
       },
       {
         path: '/ShopmanTeamShow2', component: ShopmanTeamShow2

@@ -87,7 +87,8 @@
         let data = {
           nowpage: this.currentPage,
           size: 10,
-          common: 2
+          common: 2,
+          time:''
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -113,7 +114,7 @@
             return ''
           }
         }
-        let url = http.apiMap.findOrder;
+        let url = http.apiMap.findWithdrawals;
         let data = {
           common: 1,
           size:10,
@@ -125,8 +126,9 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              let data = res.body.data.orderList;
-              this.dataList = data;
+              console.log(res.body.data)
+              let data = res.body.data.list;
+              this.tableData = data;
             }
           }
         );
