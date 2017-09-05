@@ -7,29 +7,17 @@
       </el-breadcrumb>
 
       <div class="team_information">
-        <div class="team_operation_btn">
-          <el-button type="primary" @click="Show1()">公司店主团队--美日美C团队</el-button>
-          <el-button type="primary" @click="Show2()">高级店主团队</el-button>
-          <el-button type="primary" @click="Show3()">公司店主团队</el-button>
-        </div>
-
         <p class="team_information_title">团队信息</p>
         <div class="team_data">
           <div class="team_data_title">团队资料</div>
-          <div class="team_level">团队级别：<span>公司店主团队</span></div>
-          <div class="team_number">团队人数（算团长）：<span>61</span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人</div>
+          <div class="team_level">团队级别：<span>{{data1}}</span></div>
+          <div class="team_number">团队人数（算团长）：<span>{{teamLastMoney}}</span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人</div>
           <div class="team_total_money">团队累计销售金：<span>￥2332312.00</span></div>
           <div class="team_month_money">团队上月销售金：<span>￥123123.00</span></div>
         </div>
         <div class="team_structure">
-          <div class="team_structure_title">团队结构</div>
           <table class="form_head">
             <tr>
-              <td>团长账号：美日美c</td>
-              <td>团长昵称：-------</td>
-              <td>级别：公司店主</td>
-              <td>累计销售金:￥122232.23</td>
-              <td>上月销售金：￥2434.23</td>
               <td><i @click="DisplayBlock">添加下级团员</i></td>
             </tr>
           </table>
@@ -40,32 +28,32 @@
               border
               style="width: 100%">
               <el-table-column
-                prop="date"
-                label="日期">
+                prop="companyAccount"
+                label="团员账号">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名">
+                label="团员昵称">
+              </el-table-column>
+              <el-table-column
+                prop="level"
+                label="团员级别">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址">
+                label="累计销售金">
+              </el-table-column>
+              <el-table-column
+                prop="lastMonthMoney"
+                label="上月销售金">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址">
+                label="下级团员">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="地址">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="地址">
+                label="操作">
               </el-table-column>
             </el-table>
           </div>
@@ -108,9 +96,21 @@
 
 
 <script>
+  import http from '../../http'
+
   export default{
      data(){
-
+      return{
+        id:'',
+        tableData:'',
+        teamLevel:'',   //团队等级
+        teamLastMoney:'' , //上月累计销售金
+        data1:''
+      }
+  },
+    created(){
+    this.id = this.$route.params.id;
+    this.showId()
   },
     methods: {
       DisplayBlock:function(){
@@ -122,14 +122,39 @@
         $('.mask').css('display','none');
         $('.add_junior_member').css('display','none');
       },
-      Show1:function(){
-        this.$router.push('/ShopmanTeamShow');
-      },
-      Show2:function(){
-        this.$router.push('/ShopmanTeamShow2');
-      },
-      Show3:function(){
-        this.$router.push('/ShopmanTeamShow3');
+      showId(){
+        let url = http.apiMap.getTeamMessage
+        let data = {
+          account: this.id,
+          common: 2
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            console.log(res)
+            if (res.body.result) {
+              let data = res.body.data;
+              console.log(data)
+              this.tableData=data.list
+              //console.log(data.headManage)
+              //this.teamLevel=data.headManage.level
+              this.teamLastMoney=data.headManage.lastMonthMoney
+
+
+              let data1=data.headManage.level;
+                if (data1 == 0) {
+                  data1 = '公司店主团队_美日美C'
+                } else if(data1 == 1){
+                  data1 = '公司店主团队'
+                }else if(data1 == 2){
+                  data1 = '高级店主团队'
+                }
+
+              console.log(data1)
+
+
+            }
+          }
+        );
       }
 
     }

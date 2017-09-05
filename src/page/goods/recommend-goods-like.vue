@@ -12,18 +12,18 @@
           border>
           <el-table-column
             label="排序"
-            prop="date">
+            prop="age">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="title"
             label="商品">
           </el-table-column>
           <el-table-column
-            prop="province"
+            prop="mode"
             label="推荐模式">
           </el-table-column>
           <el-table-column
-            prop="addTime"
+            prop="createOn"
             label="添加时间">
           </el-table-column>
           <el-table-column
@@ -172,41 +172,36 @@
 </style>
 
 <script>
+  import http from '../../http'
   export default {
     data() {
       return {
-        tableData: [
-          {
-            date:'1',
-            name: '品牌logo',
-            province: '品牌名称',
-            addTime: '品牌介绍',
-            operation: '操作'
-          },
-          {
-            date:'2',
-            name: '品牌logo',
-            province: '品牌名称',
-            addTime: '品牌介绍',
-            operation: '操作'
-          },
-          {
-            date:'3',
-            name: '品牌logo',
-            province: '品牌名称',
-            addTime: '品牌介绍',
-            operation: '操作'
-          },
-          {
-            date:'4',
-            name: '品牌logo',
-            province: '品牌名称',
-            addTime: '品牌介绍',
-            operation: '操作'
-          }]
+        tableData: [],
+        count11:1,
+        currentPage: 1
       }
     },
+    created(){
+      this.findProList()
+    },
     methods: {
+      findProList(){
+        let url=http.apiMap.findProductList;
+        let data={
+             common:2,
+             size:10,
+             nowpage:this.currentPage
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              this.count11 = res.body.data.count;
+              console.log(res.body.data.list)
+              this.tableDate=res.body.data.list
+            }
+          }
+        )
+      },
       open2() {
         this.$confirm('此操作将添加此商品, 是否继续?', '提示', {
           confirmButtonText: '确定',

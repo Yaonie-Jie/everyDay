@@ -27,7 +27,7 @@
 
       <div class="out_account_form">
         <el-table
-          :data=" tableData"
+          :data="tableData"
           border
           style="width: 100%">
           <el-table-column
@@ -97,7 +97,9 @@
         let data = {
           nowpage: this.currentPage,
           size: 10,
-          common: 2
+          common: 2,
+          startTime:'',
+          endTime:''
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -121,27 +123,29 @@
           return num.replace(/^(\d)$/,"0$1");
         }
         function FormatDate (strTime) {
-          if(strTime){
+            if(strTime){
             var date = new Date(strTime);
             return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
           }else {
             return ''
           }
         }
-        let url = http.apiMap.findOrder;
+        let url = http.apiMap.findOutFinance;
         let data = {
           common: 1,
           size:10,
           nowpage:this.currentPage,
           startTime:FormatDate(this.time[0]),
-          endTime:FormatDate(this.time[1]),
+          endTime:FormatDate(this.time[1])
+
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              let data = res.body.data.orderList;
-              this.dataList = data;
+              console.log(res.body.data)
+              let data = res.body.data.list;
+              this.tableData = data;
             }
           }
         );

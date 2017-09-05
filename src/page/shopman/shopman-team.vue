@@ -18,32 +18,38 @@
             <el-button type="success" @click="findTeam">搜索</el-button>
           </div>
         </div>
-        <div class="apply_form" v-for="i in ">
+        <div class="apply_form">
           <el-table
-            :data="tableData"
             border
-            style="width: 100%"
-          >
+            :data="tableData"
+            style="width: 100%">
             <el-table-column
-              prop="id"
-              label="团队级别" inline-template>
-              <el-button type="text" size="mini"  @click="shows()">222</el-button>
+              prop="teamLevel"
+              :span="1"
+              label="团队级别">
             </el-table-column>
             <el-table-column
               prop="createOn"
+              :span="2"
               label="团队生成时间">
             </el-table-column>
             <el-table-column
               prop="teamAccount"
+              :span="1"
               label="团长账号">
             </el-table-column>
             <el-table-column
+              :span="2"
               prop="teamNum"
               label="团队人数">
             </el-table-column>
             <el-table-column
-              label="操作" inline-template>
-              <el-button type="text" size="mini"  @click="shows(i.teamAccount)">查看团队信息</el-button>
+              :span="5"
+              fixed="right"
+              label="操作">
+              <template scope="scope">
+                <el-button type="text" size="small" @click="shows(scope.row)">查看团队信息</el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -115,7 +121,8 @@
     data() {
       return {
         tableData: [],
-        teamAccount: ''
+        teamAccount: '',
+        id:''
       }
     },
     created(){
@@ -130,6 +137,19 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              let data=res.body.data.ownerTeamManageList.module;
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].teamLevel == 0) {
+                  data[i].teamLevel = '公司店主团队_美日美C'
+                } else if(data[i].teamLevel == 1){
+                  data[i].teamLevel = '公司店主团队'
+                }else if(data[i].teamLevel == 2){
+                  data[i].teamLevel = '高级店主团队'
+                }
+                arr.push(data[i])
+              }
+              this.dataList = arr;
               console.log(res.body.data.ownerTeamManageList.module)
               this.tableData = res.body.data.ownerTeamManageList.module
             }
@@ -167,8 +187,9 @@
         $('.mask').css('display', 'none');
         $('.add_team2').css('display', 'none');
       },
-      shows: function (teamAccount) {
-        this.$router.push('/ShopmanTeam/' + teamAccount + '');
+      shows (row) {
+        console.log(row)
+       this.$router.push('/ShopmanTeamShow/' + row.teamAccount );
       }
     }
   }

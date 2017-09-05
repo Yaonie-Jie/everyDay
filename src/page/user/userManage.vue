@@ -1,6 +1,7 @@
 <template>
   <div class="userManage">
     <div class="box">
+
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>用户信息处理</el-breadcrumb-item>
         <el-breadcrumb-item>用户信息查看</el-breadcrumb-item>
@@ -12,14 +13,14 @@
           <div class="right"><el-button type="success" icon="icon-plus" @click="DisplayBlock">添加普通用户</el-button></div>
         </div>
         <div class="item2">
-          <el-table   border style="max-width:900px;margin:0 auto;">
-            <el-table-column prop="username" label="账号（手机号）"  :span='3' align="center" header-align="center"></el-table-column>
-            <el-table-column prop="restime" label="注册时间" align="center" :span='2' header-align="center"></el-table-column>
-            <el-table-column prop="logintime" label="上次登录时间"  align="center"  :span='3' header-align="center"></el-table-column>
-            <el-table-column prop="UserType" label="用户层级"  align="center":span='1' header-align="center"></el-table-column>
-            <el-table-column prop="number" label="下单总数"  align="center" :span='1' header-align="center"></el-table-column>
-            <el-table-column prop="money" label="下单总额" align="center" :span='1'  header-align="center"></el-table-column>
-            <el-table-column prop="moneys" label="用户当前奖励金"align="center" header-align="center" :span='3'></el-table-column>
+          <el-table  border style="max-width:900px;margin:0 auto;" :data="tableData">
+            <el-table-column prop="account" label="账号（手机号）"  :span='3' align="center" header-align="center"></el-table-column>
+            <el-table-column prop="createOn" label="注册时间" align="center" :span='2' header-align="center"></el-table-column>
+            <el-table-column prop="loginTime" label="上次登录时间"  align="center"  :span='3' header-align="center"></el-table-column>
+            <el-table-column prop="level" label="用户层级"  align="center":span='1' header-align="center"></el-table-column>
+            <el-table-column prop="sumOrder" label="下单总数"  align="center" :span='1' header-align="center"></el-table-column>
+            <el-table-column prop="sumPrice" label="下单总额" align="center" :span='1'  header-align="center"></el-table-column>
+            <el-table-column prop="sumBonus" label="用户当前奖励金"align="center" header-align="center" :span='3'></el-table-column>
           </el-table>
         </div>
       </div>
@@ -41,17 +42,59 @@
         </div>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
+
   </div>
 </template>
 <script>
   import Vue from 'vue'
   import Element from 'element-ui'
   import 'element-ui/lib/theme-default/index.css'
-
-  Vue.use(Element)
+  import http from '../../http'
+ // Vue.use(Element)
   export default {
     name: 'userManage',
+    data() {
+      return {
+        tableData: [],
+        currentPage:1,
+        count11:1
+      }
+    },
+    created(){
+        this.getUserManage()
+    },
     methods: {
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getUserManage()  //页面 加载数据
+      },
+      getUserManage(){
+        let url=http.apiMap.findUserManage;
+        let data={
+          common:2,
+          size:10,
+          nowpage:this.currentPage
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              console.log(res.body.data.userList)
+              this.tableData=res.body.data.userList
+            }
+          }
+        );
+      },
       DisplayBlock:function(){
         $('.mask').css('display','block');
         $('.add_regular_users').css('display','block');
@@ -62,47 +105,7 @@
         $('.add_regular_users').css('display','none');
       }
     },
-    data() {
-      return {
-        tableData: [{
-          username:'17696018825',
-          restime:'2016-05-20  20:50',
-          logintime:'2016-05-20  20:50',
-          UserType:'普通用户',
-          number:'123',
-          money:'￥123.00',
-          moneys:'142.00'
-        },
-          {
-            username:'17696018825',
-            restime:'2016-05-20  20:50',
-            logintime:'2016-05-20  20:50',
-            UserType:'个人店主',
-            number:'123',
-            money:'￥123.00',
-            moneys:'142.00'
-          },
-          {
-            username:'17696018825',
-            restime:'2016-05-20  20:50',
-            logintime:'2016-05-20  20:50',
-            UserType:'普通用户',
-            number:'123',
-            money:'￥123.00',
-            moneys:'142.00'
-          },
-          {
-            username:'17696018825',
-            restime:'2016-05-20  20:50',
-            logintime:'2016-05-20  20:50',
-            UserType:'普通用户',
-            number:'123',
-            money:'￥123.00',
-            moneys:'142.00'
-          }
-        ]
-      }
-    }
+
   }
 
 </script>

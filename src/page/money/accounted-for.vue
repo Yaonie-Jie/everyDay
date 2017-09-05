@@ -86,7 +86,7 @@
           time:'',  //时间搜索
           startTime:'',
           endTime:''
-        }
+      }
       },
       created(){
         this.getInfinance()
@@ -97,11 +97,12 @@
           let data = {
             nowpage: this.currentPage,
             size: 10,
-            common: 2
+            common: 2,
           };
           this.$http.post(url, data).then(
             function (res) {
               if (res.body.result) {
+                console.log(res)
                 this.count11 = res.body.data.count
                 console.log(this.count11)
                  console.log(res.body.data.list)
@@ -113,7 +114,7 @@
         //分页跳转
         handleCurrentChange(val) {
           this.currentPage = val;
-          this.getInfinance()
+          this.getInfinance()  //页面 加载数据
         },
         //搜索订单
         findOrder(){
@@ -121,7 +122,7 @@
             num += "";
             return num.replace(/^(\d)$/,"0$1");
           }
-          function FormatDate (strTime) {
+          function FormatDate (strTime) {  //转换时间格式
             if(strTime){
               var date = new Date(strTime);
               return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
@@ -129,7 +130,7 @@
               return ''
             }
           }
-          let url = http.apiMap.findOrder;
+          let url = http.apiMap.findInFinance;
           let data = {
             common: 1,
             size:10,
@@ -141,9 +142,10 @@
             function (res) {
               if (res.body.result) {
                 this.count11 = res.body.data.count;
-                let data = res.body.data.orderList;
-                this.dataList = data;
-              }
+                let data = res.body.data.list;
+                console.log(data)
+                this.tableData = data;
+            }
             }
           );
         },
