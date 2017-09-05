@@ -9,7 +9,7 @@
             <el-menu-item index="/User">登录信息</el-menu-item>
             <el-menu-item index="/ChangePass">修改密码</el-menu-item>
           </el-submenu>
-          <el-menu-item index="1" class="out-login">退出登录</el-menu-item>
+          <el-menu-item index="/login" class="out-login" @click="loginout">退出登录</el-menu-item>
         </el-menu>
       </div>
     </header>
@@ -23,6 +23,11 @@
   Vue.use(Element)
 
   export default {
-    name: 'Header'
+    name: 'Header',
+    methods:{
+      loginout(){
+        sessionStorage.removeItem('account')
+      }
+    }
   }
 </script>

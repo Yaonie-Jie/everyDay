@@ -14,7 +14,7 @@
                      @change="selectChange"/>
             </form>
             <div class="imgurl" v-for="(i,index) in images">
-              <img :src="i" alt="">
+              <img :src="i">
               <span @click="deletes" :index="index">删除</span>
             </div>
           </div>
@@ -46,7 +46,7 @@
         <el-col :span="24">
           <div class="add_goods_classify">
             <div class="add_goods_classify_title">商品分类</div>
-            <select name="" class="select" id="oneType" @change="OneTypeListChange">
+            <select name="" class="select" id="oneType" @change="OneTypeListChange" v-model="typeIdOne">
               <option value="">请选择</option>
               <option v-for="option in OneTypeList" v-bind:value="option.id">
                 {{ option.name }}
@@ -276,6 +276,9 @@
         royalty: '',   //店主可的提成
         feightList: [],
         freightId: '',//运费模版Id
+        typeIdOne: '',
+        pic: [],//存放已有图片路径
+        typeId_two: ''
       };
     },
     created() {
@@ -298,20 +301,42 @@
             if (res.body.result) {
               let data = res.body.data.product;
               this.name = data.name;
-              this.price = data.price;
+              this.price = data.price / 100;
               this.stock = data.stock;
-              this.cose = data.cose;
+              this.cose = data.cose / 100;
               this.paramlist = data.parameters;
               this.brandId = data.brandId;
               this.typeId = data.typeId;
+              this.typeId_two = data.typeId;
               this.freightId = data.freightId;
-              this.royalty = data.royalty;
+              this.royalty = data.royalty / 100;
               this.images = data.picture.split(',');
-              console.log(data.picture.split(','))
+              this.pic = data.picture.split(',');
+              for (let i = 0; i < data.picture.split(',').length; i++) {
+                let o = new Object();
+                o.name = data.picture.split(',')[i];
+                this.imgFiles.push(o);
+              }
+              this.content = JSON.parse(data.details);
+              let url = http.apiMap.findtTypeByTwoId;
+              let data1 = {
+                common: 1,
+                id: data.typeId
+              };
+              this.$http.post(url, data1).then(
+                function (res) {
+                  if (res.body.result) {
+                    this.typeIdOne = res.body.data.names.pId;
+                    this.OneTypeListChange()
+
+                  }
+                }
+              );
             }
           }
         );
       },
+
       //运费模版
       findFeightList() {
         let url = http.apiMap.freightList;
@@ -335,8 +360,8 @@
       },
 
       showInput() {
-        this.paramName = '';
-        this.dynamicTags = [];
+        //this.paramName = '';
+       // this.dynamicTags = [];
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
@@ -377,10 +402,6 @@
         $('.modify_specifications').css('display', 'none');
       },
 
-      onEditorReady(editor) {
-        console.log('editor ready!', editor)
-      },
-
       //查询分类
       findTypeList() {//查询一级分类列表
         let url = http.apiMap.findTypeList;
@@ -393,10 +414,14 @@
           }
         );
       },
+      //根据二级分类查询一级分类
+      findtTypeByTwoId() {
+
+      },
       OneTypeListChange() {//一级分类改变
         let url = http.apiMap.findTypeListTwo;
         let data = {
-          pId: $("#oneType :selected").attr('value'),
+          pId: this.typeIdOne,
           common: 1
         }
         this.$http.post(url, data).then(
@@ -404,13 +429,13 @@
             if (res.body.result) {
               let data = res.body.data.ProductTwoTypeList;
               this.TwoypeList = data;
+              this.typeId = this.typeId_two
             }
           }
         );
       },
       TwoTypeListChange() {//二级分类改变
         this.typeId = $("#TwoType :selected").attr('value')
-        console.log(this.typeId)
       },
       findBrandList() {//查询商品品牌分类
         let url = http.apiMap.findBrandList;
@@ -427,6 +452,9 @@
             }
           }
         );
+      },
+      onEditorReady(editor) {
+        console.log('editor ready!', editor)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -459,56 +487,6 @@
         $(".imgLocal").click()
       },
       //上传图片
-      deletes(e) {
-        let el = e.target;
-        let arrUrl = [];
-        let arrimg = [];
-        for (let i = 0; i < this.images.length; i++) {
-          if ($(el).prev().attr('src') == this.images[i]) {
-
-          } else {
-            arrUrl.push(this.images[i])
-          }
-          if ($(el).attr('index') == i) {
-
-          } else {
-            arrimg.push(this.imgFiles[i])
-          }
-        }
-        this.images = arrUrl;
-        this.imgFiles = arrimg;
-      },
-      submitUpload() {
-        let url = http.apiMap.updataShop;
-        let formData = new FormData();//通过formdata上传
-        let arr = []
-        for (let i = 0; i < this.imgFiles.length; i++) {
-          if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
-            arr.push(this.imgFiles[i])
-          }
-          formData.append('pictureUrl', arr[i]);
-        }
-        formData.append('id', this.id);
-        formData.append('common', '2');
-        formData.append('typeId', this.typeId);
-        formData.append('stock', this.stock);
-        formData.append('cose', this.cose);
-        formData.append('name', this.name);
-        formData.append('price', this.price * 100);
-        formData.append('brandId', this.brandId);
-        formData.append('details', JSON.stringify(this.content));
-        formData.append('parameters', JSON.stringify(this.paramlist));
-        formData.append('freightId', this.freightId);
-
-        this.$http.post(url, formData, {
-          method: 'post',
-          headers: {'Content-Type': 'multipart/form-data'}
-        }).then(function (res) {
-          console.log(res.data);
-        }).catch(function (error) {
-          console.log(error);
-        })
-      },
       selectChange(e) {
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
@@ -519,10 +497,8 @@
           alert('您的浏览器不支持图片上传，请升级您的浏览器');
           return false;
         }
-        var image = new Image();
         var vm = this;
         var leng = file.length;
-        let arr = []
         for (var i = 0; i < leng; i++) {
           var reader = new FileReader();
           reader.readAsDataURL(file[i]);
@@ -533,48 +509,110 @@
             }
           };
         }
-//        vm.imgFiles = arr
+        console.log(this.imgFiles)
       },
-      //添加商品
-      addshop() {
-
-
-
-//        this.$confirm('此操作将添加此商品, 是否继续?', '提示', {
-//          confirmButtonText: '确定',
-//          cancelButtonText: '取消',
-//          type: 'warning'
-//        }).then(() => {
-//          this.$message({
-//            type: 'success',
-//            message: '添加成功!'
-//          });
-//        }).catch(() => {
-//          this.$message({
-//            type: 'info',
-//            message: '已取消操作'
-//          });
-//        });
+      deletes(e) {
+        console.log(this.images);
+        let el = e.target;
+        let tmpi = 0;
+        for (let i = 0; i < this.images.length; i++) {
+          if ($(el).prev().attr('src') == this.images[i]) {
+            tmpi = i;
+            break;
+          }
+        }
+        this.images.splice(tmpi, 1);
+        this.imgFiles.splice(tmpi, 1);
+        for (let i = 0; i < this.pic.length; i++) {
+          if ($(el).prev().attr('src') == this.pic[i]) {
+            tmpi = i;
+            break;
+          }
+        }
+        this.pic.splice(tmpi, 1);
       },
-      open3() {
-        this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
+      submitUpload() {
+        this.$confirm('是否修改商品?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          let url = http.apiMap.updataShop;
+          let formData = new FormData();//通过formdata上传
+          let arr = []
+          for (let i = 0; i < this.imgFiles.length; i++) {
+            if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
+              if (this.imgFiles[i].name.indexOf('http') != 0) {
+                arr.push(this.imgFiles[i])
+                console.log(this.imgFiles[i])
+
+                formData.append('pictureUrl', this.imgFiles[i])
+              }
+            }
+          }
+          formData.append('id', this.id);
+          formData.append('common', '2');
+          formData.append('typeId', this.typeId);
+          formData.append('stock', this.stock);
+          formData.append('cose', this.cose * 100);
+          formData.append('royalty', this.royalty * 100);
+          formData.append('name', this.name);
+          formData.append('price', this.price * 100);
+          formData.append('brandId', this.brandId);
+          formData.append('details', JSON.stringify(this.content));
+          formData.append('parameters', JSON.stringify(this.paramlist));
+          formData.append('freightId', this.freightId);
+          formData.append('pictureOriginal', this.pic.join(','));
+
+          this.$http.post(url, formData, {
+            method: 'post',
+            headers: {'Content-Type': 'multipart/form-data'}
+          }).then(function (res) {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            });
+          }).catch(function (error) {
+            this.$message({
+              type: 'info',
+              message: '修改失败'
+            });
+            console.log(error);
+          })
+
+
+
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '已取消修改'
           });
         });
+
+
       },
 
-    }
+
+    },
+    open3() {
+      this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+
+
   }
 </script>
 

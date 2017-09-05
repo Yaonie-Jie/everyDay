@@ -3,6 +3,9 @@ const hosts = {
 }
 
 const apiMap={
+  'login':hosts.api+'account/login',   //登陆
+
+
   'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
@@ -18,6 +21,7 @@ const apiMap={
   'findShopList':hosts.api+'product/findProductList',    //商品列表
   'findTypeList':hosts.api+'productType/findProductOneTypeList',    //查询一级分类
   'findTypeListTwo':hosts.api+'productType/findProductTwoTypeList',    //查询二级分类
+  'findtTypeByTwoId':hosts.api+'productType/findProductTypeByTwoId',    //根据二级分类id查询一级分类
 
 
   'getList':hosts.api+'order/findOrder',    //获取订单列表

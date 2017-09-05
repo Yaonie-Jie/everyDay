@@ -226,16 +226,10 @@
         </select>
       </div>
       <el-col :span="24" style="margin-top: 20px;text-align: center">
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">添加商品</el-button>
+        <el-button style="margin-left: 10px;" size="large" type="success" @click="submitUpload">添加商品</el-button>
       </el-col>
-      <!--<div class="add_goods_btn">-->
-      <!--<el-button>取消</el-button>-->
-      <!--<el-button type="primary" @click="addshop()">确定</el-button>-->
-      <!--</div>-->
-      <!--</div>-->
-      <span @click="aaa">获取富文本内容</span>
-
     </div>
+    <span @click="aaa">ssss</span>
   </div>
 </template>
 
@@ -453,35 +447,62 @@
         this.imgFiles = arrimg;
       },
       submitUpload() {
-        let url = http.apiMap.addShop;
-        let formData = new FormData();//通过formdata上传
-        let arr = []
-        for (let i = 0; i < this.imgFiles.length; i++) {
-          if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
-            arr.push(this.imgFiles[i])
+        this.$confirm('是否继续添加商品?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.addShop;
+          let formData = new FormData();//通过formdata上传
+          let arr = []
+          for (let i = 0; i < this.imgFiles.length; i++) {
+            if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
+              arr.push(this.imgFiles[i])
+            }
+            formData.append('pictureUrl', arr[i]);
           }
-          formData.append('pictureUrl', arr[i]);
-        }
-        formData.append('common', '2');
-        formData.append('typeId', this.typeId);
-        formData.append('stock', this.stock);
-        formData.append('cose', this.cose);
-        formData.append('name', this.name);
-        formData.append('price', this.price * 100);
-        formData.append('brandId', this.brandId);
-        formData.append('details', JSON.stringify(this.content));
-        formData.append('royalty', this.royalty);
-        formData.append('parameters', JSON.stringify(this.paramlist));
-        formData.append('freightId', this.freightId);
+          formData.append('common', '2');
+          formData.append('typeId', this.typeId);
+          formData.append('stock', this.stock);
+          formData.append('cose', this.cose * 100);
+          formData.append('name', this.name);
+          formData.append('price', this.price * 100);
+          formData.append('brandId', this.brandId);
+          formData.append('details', this.content);
+          formData.append('royalty', this.royalty * 100);
+          formData.append('parameters', JSON.stringify(this.paramlist));
+          formData.append('freightId', this.freightId);
 
-        this.$http.post(url, formData, {
-          method: 'post',
-          headers: {'Content-Type': 'multipart/form-data'}
-        }).then(function (res) {
-          console.log(res.data);
-        }).catch(function (error) {
-          console.log(error);
-        })
+          this.$http.post(url, formData, {
+            method: 'post',
+            headers: {'Content-Type': 'multipart/form-data'}
+          }).then(function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+              this.$router.push('/ManageGoods');
+            } else {
+              this.$message({
+                type: 'warning',
+                message: '添加失败'
+              });
+            }
+          }).catch(function (error) {
+            this.$message({
+              type: 'warning',
+              message: '添加失败'
+            });
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
       },
       selectChange(e) {
         var files = e.target.files || e.dataTransfer.files;
@@ -509,27 +530,7 @@
         }
 //        vm.imgFiles = arr
       },
-      //添加商品
-      addshop() {
 
-
-
-//        this.$confirm('此操作将添加此商品, 是否继续?', '提示', {
-//          confirmButtonText: '确定',
-//          cancelButtonText: '取消',
-//          type: 'warning'
-//        }).then(() => {
-//          this.$message({
-//            type: 'success',
-//            message: '添加成功!'
-//          });
-//        }).catch(() => {
-//          this.$message({
-//            type: 'info',
-//            message: '已取消操作'
-//          });
-//        });
-      },
       open3() {
         this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
           confirmButtonText: '确定',

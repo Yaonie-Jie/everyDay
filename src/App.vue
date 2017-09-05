@@ -26,8 +26,16 @@
         headerFixed: true
       }
     },
-    created: function () {
-//      this.$router.push('/BrandGoods');
+    created() {
+      this.getAccount();
+    },
+    methods:{
+      getAccount() {
+        if(sessionStorage.getItem('account')){
+        }else {
+          this.$router.push('/login');
+        }
+      },
     }
   }
 </script>
@@ -44,6 +52,7 @@
 
   body {
     margin: 0;
+    height:100%;
   }
 
   #app {
