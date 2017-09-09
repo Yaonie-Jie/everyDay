@@ -1,19 +1,37 @@
 const hosts = {
-  api: 'http://test.sunxung.cn:3083/'
+  // api: 'http://test.sunxung.cn:3083/'
+  api: 'http://192.168.0.137:8083/'
 }
 
 const apiMap={
   'login':hosts.api+'account/login',   //登陆
 
 
+
+  'addProductType':hosts.api+'productType/addProductType',   //添加商品分类
+  'updataProductType':hosts.api+'productType/modifyProductType',   //修改商品分类
+  'deleteProductType':hosts.api+'productType/removeTwoProductType',   //删除分类
+  'numProductType':hosts.api+'productType/modifyProductTypePosition',   //移动分类
+
   'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
+
   'listSystemRecommend':hosts.api+'systemRecommend/findSystemRecommendList',    //系统推荐列表
+  'addInterestRecommend':hosts.api+'interestRecommend/addInterestRecommend',    //添加商品到系统推荐列表商品详情
+  'updataInterestRecommend':hosts.api+'interestRecommend/modifyInterestRecommend',    //修改商品到系统推荐列表商品详情
   'moveSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommendPosition',    //系统推荐列表上移下移
   'deleteSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品删除
+  'findTagList':hosts.api+'productTagInterest/findProductTagInterestList',    //商品标签列表
   'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
   'findProductList':hosts.api+'interestRecommend/findInterestRecommendList',    //兴趣列表
+  'findProductNum':hosts.api+'interestRecommend/findRecommendAmount',    //兴趣推荐数量查询
+  'updataProductNum':hosts.api+'interestRecommend/modifyInterestRecommendProAmount',    //修改人气爆款推荐数量
+  'updataProductNumpop':hosts.api+'interestRecommend/modifyInterestRecommendAmount',    //修改商品详情推荐数量
+  'deleteProductList':hosts.api+'interestRecommend/removeInterestRecommendL',    //删除兴趣推荐商品
+  'InterestRecommendBottom':hosts.api+'interestRecommend/modifyInterestRecommendBottom',    //置底根据客户兴趣列表商品
+  'InterestRecommendTop':hosts.api+'interestRecommend/modifyInterestRecommendTop',    //置顶根据客户兴趣列表商品
+
   'addShop':hosts.api+'product/addProduct',    //添加商品
   'findById':hosts.api+'product/findProductById',    //查看商品详情
   'deleteShop':hosts.api+'product/removeProductByIdL',    //删除商品
