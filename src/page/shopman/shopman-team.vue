@@ -112,6 +112,17 @@
         <el-button type="primary">完成，去团队信息页继续添加团员</el-button>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
+
   </div>
 </template>
 
@@ -122,22 +133,31 @@
       return {
         tableData: [],
         teamAccount: '',
-        id:''
+        id:'',
+        currentPage:1,
+        count11:1,
       }
     },
     created(){
       this.getTeamList()
     },
     methods: {
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getInfinance()  //页面 加载数据
+      },
       getTeamList(){
         let url = http.apiMap.getTeamList
         let data = {
-          common: 2
+          common: 2,
+          size:10,
+          nowpage:this.currentPage,
         }
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              let data=res.body.data.ownerTeamManageList.module;
+              let data=res.body.data.ownerTeamManageList;
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].teamLevel == 0) {
@@ -149,9 +169,8 @@
                 }
                 arr.push(data[i])
               }
-              this.dataList = arr;
-              console.log(res.body.data.ownerTeamManageList.module)
-              this.tableData = res.body.data.ownerTeamManageList.module
+              //this.dataList = arr;
+              this.tableData = arr
             }
           }
         )
@@ -172,6 +191,9 @@
           }
         )
       },
+
+
+
       DisplayBlock: function () {
         $('.mask').css('display', 'block');
         $('.add_team').css('display', 'block');
@@ -187,6 +209,9 @@
         $('.mask').css('display', 'none');
         $('.add_team2').css('display', 'none');
       },
+
+
+
       shows (row) {
         console.log(row)
        this.$router.push('/ShopmanTeamShow/' + row.teamAccount );
