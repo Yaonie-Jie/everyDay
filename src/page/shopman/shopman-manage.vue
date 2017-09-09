@@ -17,14 +17,12 @@
           </div>
           <div class="apply_information">
             筛选：
-            <select name="">
-              <option value="">全部</option>
-              <option value="">有团队店主</option>
-              <option value="">无团队店主</option>
+            <select name="" id="shopManState" v-model="teamState">
+              <option value="" v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
             </select>
 
-            <input type="text" placeholder="输入账号（手机号）查找店主" style="padding:0 10px;" />
-            <el-button type="success">查找</el-button>
+            <input type="text" placeholder="输入账号（手机号）查找店主" style="padding:0 10px;"  v-model="account"/>
+            <el-button type="success" @click="checkShopman">查找</el-button>
           </div>
         </div>
 
@@ -34,32 +32,30 @@
             :data="tableData"
             style="width: 100%">
             <el-table-column
-              prop="apply_time"
+              prop="createOn"
               label="何时升级到此级别店主">
             </el-table-column>
             <el-table-column
-              prop="current_level"
+              prop="level"
               label="店主级别">
             </el-table-column>
             <el-table-column
-              prop="apply_account"
-              label="账号" inline-template>
-              <el-button type="text" size="mini"  @click="shows(row)"></el-button>
+              prop="account"
+              label="账号">
             </el-table-column>
             <el-table-column
-              prop="accumulated_sales"
+              prop="account"
               label="所属团队--团长账号">
             </el-table-column>
             <el-table-column
-              prop="subordinate_team"
+              prop="totalMoney"
               label="累计销售金额">
             </el-table-column>
             <el-table-column
               fixed="right"
               label="操作">
               <template scope="scope">
-                <el-button type="text" size="small" @click="open2(scope.$index)">升级</el-button>
-                <el-button type="text" size="small" @click="shows(scope.$index)">查看</el-button>
+                <el-button type="text" size="small" @click="shows(scope.row.account,scope.row.level)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -72,7 +68,7 @@
       <div class="add_shopman_title popup_title">添加店主</div>
       <div class="add_shopman_account">
         <div class="add_shopman_account_title">账号</div>
-        <el-input placeholder=""></el-input>
+        <el-input placeholder="请输入一个账号" v-model="shopmanAccount"></el-input>
       </div>
       <div class="add_level">
         <div class="add_level_title">分配级别</div>
@@ -87,33 +83,71 @@
       </div>
       <div class="add_s_title">添加个人店主</div>
       <div class="required_">必填个人店主资料</div>
-      <div class="true_name">
+      <div class="true_name" >
         <div class="true_name_title">真实姓名</div>
-        <el-input placeholder="请填写真实姓名"></el-input>
+        <el-input placeholder="请填写真实姓名" v-model="relName"></el-input>
       </div>
       <div class="id_num">
         <div class="id_num_title">身份证号</div>
-        <el-input placeholder="请填写身份证号"></el-input>
+        <el-input placeholder="请填写身份证号" v-model="idNumber"></el-input>
       </div>
       <div class="id_img_title">身份证照片</div>
+
+      <!--正面-->
       <div class="id_img_upload">
-        <div>请上传身份证正面图片</div>
-        <div>请上传身份证反面图片</div>
+        <div @click="postPho" class="showPho">请上传身份证正面图片</div>
+        <input type="file" class="postFilepho" @change="selectChange">
+        <div class="imgUrl" style="float:right;">
+          <img :src="images" style="text-align:center;">
+        </div>
       </div>
+
+      <!--反面-->
+      <div class="id_img_upload">
+        <div @click="postPhof" class="showPho phof">请上传身份证反面图片</div>
+        <input type="file" class="postFilephof" @change="selectChangef" style="display:none;">
+        <div class="imgUrl" style="float:right;">
+          <img :src="imagesf" style="text-align:center;">
+        </div>
+      </div>
+
+      <!--公司营业执照-->
+      <div class="id_img_upload">
+        <div @click="postPhofs" class="showPho phof">请上传公司营业执照</div>
+        <input type="file" class="postFilephofs" @change="selectChangefs" style="display:none;">
+        <div class="imgUrl" style="float:right;">
+          <img :src="imagesfs" style="text-align:center;">
+        </div>
+      </div>
+
+
+
+
       <div class="optional_">必填个人店主资料</div>
       <div class="zfb_account">
         <div class="zfb_account_title">支付宝账号</div>
-        <el-input placeholder="请填写支付宝账号"></el-input>
+        <el-input placeholder="请填写支付宝账号" v-model="alipay"></el-input>
       </div>
       <div class="wx_account">
         <div class="wx_account_title">微信支付账号</div>
-        <el-input placeholder="请填写微信支付账号"></el-input>
+        <el-input placeholder="请填写微信支付账号" v-model="weChat"></el-input>
       </div>
       <div class="add_shopman_btns">
         <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary">添加</el-button>
+        <el-button type="primary" @click="addShopman">添加</el-button>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
+
   </div>
 </template>
 
@@ -191,13 +225,36 @@
     overflow: hidden;
     margin: 0 auto;
   }
-  .id_img_upload div{
+  /*.id_img_upload div{*/
+    /*width: 150px;*/
+    /*height: 80px;*/
+    /*border:dotted 5px #aaa;*/
+    /*float:left;*/
+    /*margin:30px;*/
+    /*z-index:0;*/
+    /*text-align: center;*/
+    /*line-height: 80px;*/
+    /*color: #FFFFFF;*/
+  /*}*/
+  .showPho{
     width: 150px;
     height: 80px;
-    background: #cccccc;
+    border:dotted 5px #aaa;
+    float:left;
+    margin:10px;
+    z-index:0;
     text-align: center;
     line-height: 80px;
     color: #FFFFFF;
+  }
+  .phof{
+    width: 150px;
+    height: 80px;
+    border:dotted 5px #aaa;
+    margin-top:20px;
+  }
+  .postFilepho{
+    display:none;
   }
   .id_img_upload div:nth-child(1){
     float: left;
@@ -225,131 +282,160 @@
   export default{
     data() {
       return {
+        tableData:[],
         modifyMessage:"升级到公司店主",
-        options: [
-          {
-            value: '选项1',
-            label: '个人店主'
-          },
-          {
-            value: '选项2',
-            label: '公司店主'
-          },
-          {
-            value: '选项3',
-            label: '高级店主'
-          }
-        ],
         value: '',
-        tableData: [
-        {
-          apply_time:1,
-                    apply_account:2,
-                    current_level:3,
-                    accumulated_sales:4,
-                    subordinate_team:5
-        }],
-        shopmanMessage:{
+        teamState:'',
+        shopmanMessage:{},
+        currentPage:1,
+        count11:1,
+        options:[
+          {text:'全部',value:''},
+          {text:'有团队店主',value:'1'},
+          {text:'无团队店主',value:'2'}
+        ],
+        account:'',
+        relName:'', //真实姓名
+        shopmanAccount:'',//账号
+        idNumber:'',//身份证号码
+        alipay:'',//支付宝
+        weChat:'',//微信
+        images:'',
+        imgFiles:'',
+        imagesf:'',
+        imgFilesf:'',
+        imagesfs:'',
+        imgFilesfs:''
 
-        }
       }
     },
+
     created(){
       this.getData()
     },
     methods: {
+      //添加身份证正面
+      selectChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files);
+      },
+      createImage(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.images = e.target.result;
+            vm.imgFiles = $('.postFilepho')[0].files[0];
+          };
+        }
+      },
+
+    //添加身份证反面
+      selectChangef(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImagef(files);
+      },
+      createImagef(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.imagesf = e.target.result;
+            vm.imgFilesf = $('.postFilephof')[0].files[0];
+          };
+        }
+      },
+
+      //添加公司营业执照
+      selectChangefs(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImagefs(files);
+      },
+      createImagefs(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.imagesfs = e.target.result;
+            vm.imgFilesfs = $('.postFilephofs')[0].files[0];
+          };
+        }
+      },
+
+
+
+      postPho(){
+        $(".postFilepho").click()
+      },
+      postPhof(){
+        $(".postFilephof").click()
+      },
+      postPhofs(){
+        $(".postFilephofs").click()
+      },
+      //查看
+      shows:function (account,level) {
+        console.log(level)
+        if(level=='个人店主'){
+          this.$router.push('/ShopmanManageShow/' + account);
+        }else if(level=='公司店主'){
+          this.$router.push('/ShopmanManageShow1/' + account);
+        }else if(level=='高级店主'){
+          this.$router.push('/ShopmanManageShow2/'+ account);
+        }
+      },
+
+
       getData(){
         let url = http.apiMap.OwnerShopmanData;
-        let data = {
-          common: this.GLOBAL.common
-        };
-        this.$http.post(url,data).then(
-          function (res) {
-            if (res.body.result) {
-              this.tableData = [];
-               for(let i=0;i<res.body.data.ownerManageList.length;i++){
-                  let tableDataObj = {
-                    apply_time:res.body.data.ownerManageList[i].modifiedOn,
-                    apply_account:res.body.data.ownerManageList[i].account,
-                    current_level:res.body.data.ownerManageList[i].level,
-                    accumulated_sales:res.body.data.ownerManageList[i].account,
-                    subordinate_team:res.body.data.ownerManageList[i].totalMoney
-                  };
-                  this.tableData.push(tableDataObj);
-               }
-            }
-          }
-        );
-      },
-      open2(index) {
-        this.$confirm('此操作将升级该账号, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if( this.tableData[index].current_level==0 ){
-            this.getShopmanMessage(this.tableData[index].apply_account);
-            let modifyurl = http.apiMap.modifyToCompanyLevel;
-            let modifydata = {
-              common: this.GLOBAL.common,
-              account:this.tableData[index].apply_account,
-              companyName:this.shopmanMessage.companyName,
-              companyNum:this.shopmanMessage.companyNum,
-              pictureUrl:this.shopmanMessage.pictureUrl
-            };
-            this.modifyMessage = "升级到公司店主";
-          };
-          if( this.tableData[index].current_level==1 ){
-            let modifyurl = http.apiMap.modifyToHighOwnerLevel;
-            let modifydata = {
-              common: this.GLOBAL.common,
-              account:this.tableData[index].apply_account
-            }
-            this.modifyMessage = "升级到高级店主";
-          };
-          this.$http.post(modifyurl,modifydata).then(
-            function (res) {
-              if (res.body.result) {
-                this.$message({
-                  type: 'success',
-                  message:  this.modifyMessage+"成功!"
-                });
-              }else{
-                this.$message({
-                  type: 'error',
-                  message:  this.modifyMessage+"失败!"
-                });
+              let data = {
+                common: 1,
+                size:10,
+                nowpage:this.currentPage,
+              };
+              this.$http.post(url,data).then(
+                function (res) {
+                  if (res.body.result) {
+              this.tableData = res.body.data.userVoList
+
+              //店主级别
+              let data1 = res.body.data.userVoList
+              let arr = [];
+              for (let i = 0; i < data1.length; i++) {
+                if (data1[i].level == 1) {
+                  data1[i].level = '个人店主'
+                } else if (data1[i].level == 2) {
+                  data1[i].level = '公司店主'
+                } else if (data1[i].level == 3) {
+                  data1[i].level = '高级店主'
+                }
+                arr.push(data1[i])
               }
-            }
-          );
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消升级'
-          });
-        });
-      },
-      getShopmanMessage(account){
-        let ShopmanNewsUrl = http.apiMap.findOwnerMessage;
-        let ShopmanNewsData = {
-          common: this.GLOBAL.common,
-          account:account
-        };
-        this.$http.post(ShopmanNewsUrl,ShopmanNewsData).then(
-          function (res) {
-            if (res.body.result) {
-              this.shopmanMessage.companyName = res.body.data.user.companyName,
-              this.shopmanMessage.companyNum = res.body.data.user.companyNum,
-              this.shopmanMessage.pictureUrl = res.body.data.user.companyLicence
-            }else{
-              this.$message({
-                type: 'error',
-                message:  "获取店主资料失败!"
-              });
-            }
-          }
-        );
-      },
+
+            }})},
+
+
       DisplayBlock:function(){
         $('.mask').css('display','block');
         $('.add_shopman').css('display','block');
@@ -359,13 +445,73 @@
         $('.mask').css('display','none');
         $('.add_shopman').css('display','none');
       },
-      shows:function(index){
-        this.getShopmanMessage(this.tableData[index].apply_account);
-        this.$router.push('/ShopmanManageShow');
-      }
+
+
+      checkShopman(){
+        let url=http.apiMap.findShopmanData
+        let data={
+          common:2,
+          account:this.account,
+          teamState:$("#shopManState :selected").attr('value')
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              let data=res.body.data.userVO
+              console.log(data)
+              this.tableData=data
+//              let dataAccount=res.body.data.userVO
+//              let arr=[]
+//              arr.push(dataAccount)
+//              this.tableData=arr
+
+            }
+          }
+        )
+      },
+
+      addShopman(){
+        console.log(this.imgFiles)
+        let url=http.apiMap.addShopman;
+        let formData=new FormData();
+        formData.append('common',1)
+         formData.append('account',this.shopmanAccount)
+         formData.append('level',this.value)
+         formData.append('realName',this.relName)
+         formData.append('idNumber',this.idNumber)
+        formData.append('pictureUrl',this.imgFiles)
+        formData.append('pictureUrl1',this.imgFilesf)
+        formData.append('pictureUrl2',this.imgFilesfs)
+        formData.append('alipay',this.alipay)
+        formData.append('weChat',this.weChat)
+        this.$http.post(url,formData).then(
+          function(res){
+            if(res.body.result){
+              this.DisplayNone()
+              this.$message({
+                type: 'info',
+                message: '添加成功'
+              })
+            }else{
+              this.$message({
+                type: 'error',
+                message: '添加失败'
+              })
+            }
+          }
+        )
+        },
+
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getData()  //页面 加载数据
+      },
+      },
+
     }
 
-  }
+
 </script>
 
 

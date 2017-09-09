@@ -18,11 +18,12 @@
         </div>
 
         <i>发生原因：</i>
-        <select name="" id="">
-          <option value="">全部</option>
-          <option value="">退款</option>
-          <option value="">体现</option>
+        <select name="" id="orderState" v-model="reason">
+          <option value="" v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
         </select>
+        <el-button type="success" @click="findOrder">搜索</el-button>
       </div>
 
       <div class="out_account_form">
@@ -58,7 +59,7 @@
       </div>
 
       <div class="accumulated_account">
-        当前后台余额:￥<span>10086</span>
+        当前后台余额:￥<span>{{OutMoney}}</span>
       </div>
     </div>
 
@@ -85,7 +86,14 @@
         tableData: [],
         time:'',  //时间搜索
         value6: '',
-        value7: ''
+        value7: '',
+        OutMoney:'',
+        reason:'',    //发生原因
+        options: [
+        { text: '全部', value: '' },
+        { text: '退款', value: '1' },
+        { text: '提现', value: '2' }
+      ]
       }
     },
     created(){
@@ -99,7 +107,8 @@
           size: 10,
           common: 2,
           startTime:'',
-          endTime:''
+          endTime:'',
+//          orderState:''
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -107,6 +116,34 @@
               this.count11 = res.body.data.count
               console.log(res.body.data.list)
               this.tableData = res.body.data.list
+               this.OutMoney=res.body.data.sumInFinance
+              //出账原因
+              let data=res.body.data.list
+              console.log(data)
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].reason == 1) {
+                  data[i].reason = '退款'
+                } else if(data[i].reason == 2){
+                  data[i].reason = '提现'
+                }
+                arr.push(data[i])
+                console.log(arr)
+              }
+            //出款方式
+              let data1=res.body.data.list
+              console.log(data1)
+              let arr1 = [];
+              for (let i = 0; i < data1.length; i++) {
+                if (data1[i].outMent == 1) {
+                  data1[i].reason = '支付宝'
+                } else if(data1[i].outMent == 2){
+                  data1[i].reason = '微信'
+                }
+                arr1.push(data1[i])
+                console.log(arr)
+              }
+
             }
           }
         );
@@ -136,8 +173,8 @@
           size:10,
           nowpage:this.currentPage,
           startTime:FormatDate(this.time[0]),
-          endTime:FormatDate(this.time[1])
-
+          endTime:FormatDate(this.time[1]),
+          reason:$("#orderState :selected").attr('value')
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -146,6 +183,22 @@
               console.log(res.body.data)
               let data = res.body.data.list;
               this.tableData = data;
+
+              //出账原因
+              //let data=res.body.data.list
+              console.log(data)
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].reason == 1) {
+                  data[i].reason = '退款'
+                } else if(data[i].reason == 2){
+                  data[i].reason = '提现'
+                }
+                arr.push(data[i])
+                console.log(arr)
+              }
+
+
             }
           }
         );

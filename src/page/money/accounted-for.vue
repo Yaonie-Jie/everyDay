@@ -57,7 +57,7 @@
       </div>
 
       <div class="current_balance">
-        当前后台余额:￥<span>10086</span>
+        当前后台余额:￥<span>{{OutMoney}}</span>
       </div>
     </div>
 
@@ -85,7 +85,8 @@
           count11:1,
           time:'',  //时间搜索
           startTime:'',
-          endTime:''
+          endTime:'',
+          OutMoney:''
       }
       },
       created(){
@@ -107,6 +108,21 @@
                 console.log(this.count11)
                  console.log(res.body.data.list)
                 this.tableData = res.body.data.list
+                this.OutMoney= res.body.data.sumInFinance
+
+                //发生原因
+                let data=res.body.data.list
+                console.log(data)
+                let arr = [];
+                for (let i = 0; i < data.length; i++) {
+                  if (data[i].reason == 1) {
+                    data[i].reason = '付款'
+                  }
+                  arr.push(data[i])
+                  console.log(arr)
+                }
+
+
               }
             }
           );
@@ -145,6 +161,20 @@
                 let data = res.body.data.list;
                 console.log(data)
                 this.tableData = data;
+
+                //发生原因
+                //let data=res.body.data.list
+                //console.log(data)
+                let arr = [];
+                for (let i = 0; i < data.length; i++) {
+                  if (data[i].reason == 1) {
+                    data[i].reason = '付款'
+                  }
+                  arr.push(data[i])
+                  console.log(arr)
+                }
+
+
             }
             }
           );

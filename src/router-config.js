@@ -25,6 +25,8 @@ import RecommendGoods from './page/goods/recommend-goods.vue'
 import RecommendGoodsLike from './page/goods/recommend-goods-like.vue'
 import tagGoods from './page/goods/tag-goods.vue'
 import updataGoods from './page/goods/updata-goods.vue'
+import updatashop from './page/goods/updatashop.vue'
+import updatashoppic from './page/goods/updatashoppic.vue'
 
 import AccountedFor from './page/money/accounted-for.vue'
 import OutOf from './page/money/out-of-account.vue'
@@ -51,6 +53,10 @@ import ShopmanApplyShow from './page/shopman/shopman-apply-show.vue'
 import ShopmanCommission from './page/shopman/shopman-commission.vue'
 import ShopmanManage from './page/shopman/shopman-manage.vue'
 import ShopmanManageShow from './page/shopman/shopman-manage-show.vue'
+import ShopmanManageShow1 from './page/shopman/shopman-manage-show1.vue'
+import ShopmanManageShow2 from './page/shopman/shopman-manage-show2.vue'
+
+
 import ShopmanTeam from './page/shopman/shopman-team.vue'
 import ShopmanTeamShow from './page/shopman/shopman-team-show.vue'
 import ShopmanTeamShow2 from './page/shopman/shopman-team-show2.vue'
@@ -111,6 +117,12 @@ export default [
       },
       {
         path: '/BrandGoods', component: BrandGoods,
+      },
+      {
+        path: '/updatashop/:id', component: updatashop,
+      },
+      {
+        path: '/updatashoppic/:id', component: updatashoppic,
       },
       {
         path: '/Classify', component: Classify,
@@ -189,14 +201,19 @@ export default [
 
       },
       {
-        path: '/ShopmanApplyShow',
-        component: ShopmanApplyShow
+        path: '/ShopmanApplyShow/:account', component: ShopmanApplyShow,
       },
       {
         path: '/ShopmanManage', component: ShopmanManage,
       },
       {
-        path: '/ShopmanManageShow', component: ShopmanManageShow
+        path: '/ShopmanManageShow/:account', component: ShopmanManageShow    //个人店主 查看
+      },
+      {
+        path: '/ShopmanManageShow1/:account', component: ShopmanManageShow1   //公司店主查看
+      },
+      {
+        path: '/ShopmanManageShow2/:account', component: ShopmanManageShow2   //高级店主 查看
       },
       {
         path: '/ShopmanTeam', component: ShopmanTeam,

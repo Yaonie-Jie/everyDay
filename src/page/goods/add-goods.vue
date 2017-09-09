@@ -81,7 +81,17 @@
             </quill-editor>
           </div>
         </el-col>
-
+        <el-col :span="24" style="margin-top: 20px">
+          <div class="add_goods_stock_title">商品参数</div>
+          <div class="edit_container">
+            <quill-editor v-model="contentCan"
+                          ref="myQuillEditorCan"
+                          class="editer"
+                          :options="editorOptionCan"
+                          @ready="onEditorReadyCan($event)">
+            </quill-editor>
+          </div>
+        </el-col>
         <el-col :span="24" style="margin-top: 20px">
           <div class="add_goods_specifications">
             <div class="add_goods_specifications_title">规格：</div>
@@ -263,6 +273,9 @@
         brandId: '',
         content: '',
         editorOption: {},
+
+        contentCan:'',
+        editorOptionCan: {},
         paramlist: [],
         paramName: '', //规格名称
         dynamicTags: [],//单个规格数组
@@ -346,9 +359,11 @@
       },
 
       onEditorReady(editor) {
-        console.log('editor ready!', editor)
+//        console.log('editor ready!', editor)
       },
-
+      onEditorReadyCan(editor) {
+//        console.log('editor ready!', editor)
+      },
       //查询分类
       findTypeList() {//查询一级分类列表
         let url = http.apiMap.findTypeList;
@@ -472,6 +487,7 @@
           formData.append('royalty', this.royalty * 100);
           formData.append('parameters', JSON.stringify(this.paramlist));
           formData.append('freightId', this.freightId);
+          formData.append('parameter', this.contentCan);
 
           this.$http.post(url, formData, {
             method: 'post',
@@ -528,7 +544,6 @@
             }
           };
         }
-//        vm.imgFiles = arr
       },
 
       open3() {
