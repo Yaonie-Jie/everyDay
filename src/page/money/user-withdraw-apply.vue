@@ -24,7 +24,7 @@
           :data="tableData"
           style="width: 100%">
           <el-table-column
-            prop="modifiedOn"
+            prop="createOn"
             label="申请时间">
           </el-table-column>
           <el-table-column
@@ -82,17 +82,21 @@
         this.currentPage = val;
         this.getWithdrawals()
       },
-      getWithdrawals:function(){
+      getWithdrawals(){
         let url = http.apiMap.findWithdrawals;
         let data = {
           nowpage: this.currentPage,
           size: 10,
           common: 2,
-          time:''
+          startTime:'',
+          endTime:''
         };
-        this.$http.post(url, data).then(
+        this.$http.post(url,data).then(
           function (res) {
+            console.log(res)
             if (res.body.result) {
+              console.log(1)
+              console.log(res)
               this.count11 = res.body.data.count
               console.log(res.body.data.list)
               this.tableData = res.body.data.list

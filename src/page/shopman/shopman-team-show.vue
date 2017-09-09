@@ -11,9 +11,9 @@
         <div class="team_data">
           <div class="team_data_title">团队资料</div>
           <div class="team_level">团队级别：<span>{{data1}}</span></div>
-          <div class="team_number">团队人数（算团长）：<span>{{teamLastMoney}}</span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人</div>
-          <div class="team_total_money">团队累计销售金：<span>￥2332312.00</span></div>
-          <div class="team_month_money">团队上月销售金：<span>￥123123.00</span></div>
+          <div class="team_number">团队人数（算团长）：<span></span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人</div>
+          <div class="team_total_money">团队累计销售金：<span>￥{{teamMoney}}</span></div>
+          <div class="team_month_money">团队上月销售金：<span>￥{{teamLastMoney}}</span></div>
         </div>
         <div class="team_structure">
           <table class="form_head">
@@ -104,8 +104,9 @@
         id:'',
         tableData:'',
         teamLevel:'',   //团队等级
-        teamLastMoney:'' , //上月累计销售金
-        data1:''
+        teamLastMoney:'', //上月累计销售金
+        teamMoney:'',     //团队累计销售金
+        data1:''       //团队级别
       }
   },
     created(){
@@ -125,7 +126,7 @@
       showId(){
         let url = http.apiMap.getTeamMessage
         let data = {
-          account: this.id,
+          account: this.id,  //团长账号
           common: 2
         };
         this.$http.post(url, data).then(
@@ -138,13 +139,15 @@
               //console.log(data.headManage)
               //this.teamLevel=data.headManage.level
               this.teamLastMoney=data.headManage.lastMonthMoney
+              this.teamMoney=data.headManage.money
 
 
               let data1=data.headManage.level;
+              console.log(data1)
                 if (data1 == 0) {
                   data1 = '公司店主团队_美日美C'
                 } else if(data1 == 1){
-                  data1 = '公司店主团队'
+                  data1 = '公司店主团队'      //level=3   ???
                 }else if(data1 == 2){
                   data1 = '高级店主团队'
                 }

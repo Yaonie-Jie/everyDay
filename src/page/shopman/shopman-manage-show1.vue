@@ -14,53 +14,50 @@
           <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManage.canLevel}}</span></li>
-          <li><i>升级到公司店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
-          <li><i>所属团队：</i><span></span></li>
+          <li><i>升级到高级店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
+          <li><i>所属团队：</i><span>高级店主团队（有可以点击查看团队详情，没有空）</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.sumPrice}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney}}</span></li>
           <li><i>累计所得奖励：</i><span>{{shopmanManage.sumBonus}}</span></li>
           <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
         </ul>
 
-        <div class="shopman_data2">
-          <div class="data2_title">个人店主资料</div>
-          <div class="data2_name"><i>真实姓名：</i><span>{{shopmanManage.realName}}</span></div>
-          <div class="data2_id"><i>身份证号：</i><span>{{shopmanManage.idNumber}}</span></div>
-          <div class="data2_id_img">
-            <p>身份证照片</p>
-            <div class="positive_img">{{shopmanManage.idCardPhoto}}</div>
-            <div class="opposite_img">{{shopmanManage.idCardPhotoF}}</div>
-          </div>
-          <div class="zfbpay"><i>支付宝账号：</i><span>{{shopmanManage.alipay}}</span></div>
-          <div class="wxpay"><i>微信支付账号：</i><span>{{shopmanManage.weChat}}</span></div>
+        <div class="shopman_data3">
+        <div class="data3_title">公司店主资料</div>
+        <div class="data3_name"><i>公司名称: </i><span>{{shopmanManage.companyName}}</span></div>
+        <div class="data3_number"><i>公司注册号：</i><span>{{shopmanManage.companyNum}}-</span></div>
+        <div class="data3_license">
+        <p class="data3_license_title">公司营业执照</p>
+        <div class="data3_license_img">{{shopmanManage.idCardPhoto}}</div>
         </div>
-
+        </div>
 
         <div class="operation_btn">
-          <el-button type="primary" size="small" @click="DisplayBlock(scope.$index)">修改店主资料</el-button>
-          <el-button type="primary" @click="DisplayBlock">升级到公司店主</el-button>
+          <el-button type="primary">修改公司店主资料</el-button>
+          <el-button type="primary">升级到高级店主</el-button>
         </div>
-
-
       </div>
     </div>
-
-    <!--修改-->
-    <!--<div class="mask"></div>-->
-    <!--<div class="popup change_ticheng">-->
-      <!--<div class="popup_title">修改<span style="font-weight:bold;" v-text="updataText"></span></div>-->
-      <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title"></div>-->
-        <!--<el-input  v-model="updateData" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
-      <!--<div class="popup_btn">-->
-        <!--<el-button @click="DisplayNone">取消</el-button>-->
-        <!--<el-button type="primary" @click="updateYes">确定</el-button>-->
-      <!--</div>-->
-    <!--</div>-->
-
-
-
+    <div class="mask"></div>
+    <div class="supplement_information popup">
+      <div class="supplement_information_title popup_title">请补充下面的店主资料，将此人升级到公司店主</div>
+      <div class="corporate_name">
+        <div class="corporate_name_title">公司名称</div>
+        <el-input placeholder="请填写公司名称"></el-input>
+      </div>
+      <div class="company_number">
+        <div class="company_number_title">公司注册号</div>
+        <el-input placeholder="请填写公司注册号"></el-input>
+      </div>
+      <div class="corporation_license">
+        <div class="corporation_license_title">公司营业执照</div>
+        <div class="corporation_license_upload">上传营业执照图片</div>
+      </div>
+      <div class="supplement_information_btn">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary">补充完毕，升级到公司店主</el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -324,9 +321,6 @@
     data(){
       return{
         shopmanManage:'',
-//        updateData: '',
-//        updataText: '',
-//        clickIndex: '',
         account:''
       }
     },
@@ -347,54 +341,20 @@
               let data=res.body.data.user
               this.account=data.account
               this.shopmanManage=data
+              console.log(this.shopmanManage)
             }
           }
         )
       },
-//      DisplayBlock(index) {
-//        this.updateData = this.tableData[index].invoiceType;
-//        this.clickIndex = index;
-//        $('.mask').css('display', 'block');
-//        $('.change_ticheng').css('display', 'block');
-//      },
-//      DisplayNone() {
-//        $('.mask').css('display', 'none');
-//        $('.change_ticheng').css('display', 'none');
-//      },
-//      updateYes() {
-//        for (let i = 0; i < this.tableData.length; i++) {
-//          if (i == this.clickIndex) {
-//            this.tableData[i].invoiceType = this.updateData;
-//          }
-//        }
-//        let updateurl = http.apiMap.modifyInvoiceList;
-//        let updatedata = {
-//          common: 2,
-//          id: this.tableData[0].id,
-//          invoiceType: this.tableData[0].invoiceType
-//        };
-//        this.$http.post(updateurl, updatedata).then(
-//          function (res) {
-//            if (res.body.result) {
-//              this.$message({
-//                type: 'success',
-//                message: '操作成功!'
-//              });
-//              $('.mask').css('display', 'none');
-//              $('.change_ticheng').css('display', 'none');
-//              this.getData();
-//            } else {
-//              this.$message({
-//                type: 'waring',
-//                message: '修改失败'
-//              });
-//            }
-//            ;
-//            $('.mask').css('display', 'none');
-//            $('.change_ticheng').css('display', 'none');
-//          }
-//        );
-//      },
+      DisplayBlock:function(){
+        $('.mask').css('display','block');
+        $('.supplement_information').css('display','block');
+      },
+
+      DisplayNone:function(){
+        $('.mask').css('display','none');
+        $('.supplement_information').css('display','none');
+      }
     }
   }
 </script>

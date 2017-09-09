@@ -1,5 +1,7 @@
 const hosts = {
-  api: 'http://test.sunxung.cn:3083/'
+  //api: 'http://test.sunxung.cn:3083/'
+  api: 'http://192.168.0.137:8083/'
+
 }
 
 const apiMap={
@@ -43,15 +45,30 @@ const apiMap={
   'commissionData':hosts.api+'royalty/findlist',   //查询系统默认提成(店主管理)
   'updateCommissionData':hosts.api+'royalty/modifyRoyaltyById',  //修改系统默认提成(店主管理)
   'shopmanData':hosts.api+'ownerApplication/findApplyMessageList',   //店主申请管理表(店主管理)
+  'ownerApplyMessage':hosts.api+'ownerApplication/findApplyMessage',   //申请详细信息(店主申请管理)
+  'passAudit':hosts.api+'ownerManage/passOwnerAudit',   //通过申请(店主申请管理)
+  'rejectAudit':hosts.api+'ownerManage/rejectAudit',   //驳回申请(店主申请管理)
+  'addShopman':hosts.api+'ownerManage/addNoTeamOwner',   //添加无店主团队(店主申请管理)
+
+
+
+
+
   'searchShopmanData':hosts.api+'ownerApplication/findApplication',   //搜索店主申请管理表(店主管理)
   'rejectShopmanData':hosts.api+'ownerManage/rejectAudit',   //驳回店主申请(店主管理)
   'passShopmanData':hosts.api+'ownerManage/passOwnerAudit',   //通过店主申请(店主管理)
   'OwnerShopmanData':hosts.api+'ownerTeamManage/findOwnerManageList',   //店主列表(店主管理)
-  'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主管理)
+  'findShopmanData':hosts.api+'ownerTeamManage/findOwnerManageByAccount',   //店主列表(店主管理)
+
+
+
+'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主管理)
   'modifyToHighOwnerLevel':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主管理)
   'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
   'getTeamList':hosts.api+'ownerTeamManage/findOwnerTeamManageList',   //获取店主团队信息（店主管理）
   'getTeamMessage':hosts.api+'ownerTeamManage/findTeamMessage',   //获取店主团队信息（店主管理）
+
+
 
 
   'findTeam':hosts.api+'ownerTeamManage/findOwnerTeamManage', //搜索
@@ -60,6 +77,16 @@ const apiMap={
   'findWithdrawals':hosts.api+'withdrawals/findWithdrawalsList', //提现申请
 
   'findUserManage':hosts.api+'user/userMessageList', //用户管理
+
+  'findInvoiceList':hosts.api+'invoiceType/findInvoiceTypeList', //获取发票列表
+  'modifyInvoiceList':hosts.api+'invoiceType/modifyInvoiceType', //修改发票列表
+  'addInvoiceList':hosts.api+'invoiceType/addInvoiceType', //添加发票列表
+
+
+
+
+
+
 
 }
 export default{

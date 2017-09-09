@@ -7,35 +7,35 @@
         <el-breadcrumb-item>申请信息详情</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <div class="apply_show">
+      <div class="apply_show" v-bind="shopmanApply">
         <div class="apply_show_title">
           申请信息详情
         </div>
         <div class="apply_show_time clear_">
           <div class="left_">申请时间</div>
-          <div class="right_">2016/05/11<span>12:00:09</span></div>
+          <div class="right_">{{shopmanApply.createOn}}</div>
         </div>
         <div class="apply_account_number clear_">
           <div class="left_">申请账号</div>
-          <div class="right_">15029292929</div>
+          <div class="right_">{{shopmanApply.account}}</div>
         </div>
         <div class="current_level clear_">
           <div class="left_">当前级别</div>
-          <div class="right_">普通用户</div>
+          <div class="right_">{{shopmanApply.level}}</div>
         </div>
         <div class="apply_show_information clear_">
           <div class="left_">提交资料</div>
-          <div class="right_">升级到个人店主</div>
+          <div class="right_">{{shopmanApply.message}}</div>
         </div>
         <div class="submited_information clear_">
           <div class="left_">提交资料</div>
           <div class="right_ information">
-            <div>姓名：<span>刘三刀</span></div>
-            <div>身份证号：<span>1234567890123456</span></div>
-            <div class="id_positive_img"></div>
-            <div class="id_opposite_img"></div>
-            <div>支付宝账号：<span>18858594797</span></div>
-            <div>微信支付账号：<span>nch18330821708</span></div>
+            <div>姓名：<span>{{shopmanApply.account}}</span></div>
+            <div>身份证号：<span>{{shopmanApply.account}}</span></div>
+            <div class="id_positive_img">{{shopmanApply.idCardPhoto}}</div>
+            <div class="id_opposite_img">{{shopmanApply.idCardPhotof}}</div>
+            <div>支付宝账号：<span>{{shopmanApply.alipay}}</span></div>
+            <div>微信支付账号：<span>{{shopmanApply.weChat}}</span></div>
           </div>
         </div>
         <div class="accumulated_sales clear_">
@@ -48,13 +48,133 @@
         </div>
 
         <div class="apply_show_btn">
-          <div class="apply_reject_pplication">驳回申请</div>
-          <div class="apply_through">通过申请</div>
+          <el-button type="primary" size="lager" @click="open2(shopmanApply)">通过</el-button>
+          <el-button type="danger" size="lager" @click="open3(shopmanApply)">驳回</el-button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+  import http from '../../http'
+  export default{
+    data(){
+      return{
+        common:1,
+        account:'',
+        shopmanApply:''
+      }
+    },
+    created(){
+      this.account = this.$route.params.account;
+      this.getapplyManage()
+    },
+    methods:{
+      getapplyManage(){
+        let url=http.apiMap.ownerApplyMessage;
+        let data={
+          common:1,
+          account:this.account
+        };
+          this.$http.post(url,data).then(
+            function(res){
+              if(res.body.result){
+                console.log(res.body.data.ownerApplicationVo)
+                this.shopmanApply=res.body.data.ownerApplicationVo
+
+
+                 let level=res.body.data.ownerApplicationVo.level;
+                  if (level == 0) {
+                    level = '普通用户'
+                  } else if (level == 1) {
+                    level = '个人店主'
+                  } else if (level == 2) {
+                    level = '公司店主'
+                  }else if (level == 3) {
+                    level = '高级店主'
+                  }
+                this.shopmanApply.level=level;
+              }
+            }
+          )
+        },
+      open2(row) {
+        this.$confirm('此操作将通过改申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let passurl =  http.apiMap.passAudit;
+          let passdata = {
+            common: 2,
+            account:row.account
+          };
+          this.$http.post(passurl,passdata).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '成功通过审核!'
+                });
+                this.getData();
+              }else {
+                this.$message({
+                  type: 'info',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });
+        });
+      },
+      open3(row) {
+        this.$confirm('此操作将驳回该申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let rejecturl =  http.apiMap.rejectAudit;
+          let rejectdata = {
+            common: 2,
+            account:row.account
+          };
+          this.$http.post(rejecturl,rejectdata).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '驳回成功!'
+                });
+                this.getData();
+              }else{
+                this.$message({
+                  type: 'info',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+      },
+      },
+
+  };
+
+
+
+</script>
+
 
 <style>
   .apply_show{

@@ -51,6 +51,10 @@ import ShopmanApplyShow from './page/shopman/shopman-apply-show.vue'
 import ShopmanCommission from './page/shopman/shopman-commission.vue'
 import ShopmanManage from './page/shopman/shopman-manage.vue'
 import ShopmanManageShow from './page/shopman/shopman-manage-show.vue'
+import ShopmanManageShow1 from './page/shopman/shopman-manage-show1.vue'
+import ShopmanManageShow2 from './page/shopman/shopman-manage-show2.vue'
+
+
 import ShopmanTeam from './page/shopman/shopman-team.vue'
 import ShopmanTeamShow from './page/shopman/shopman-team-show.vue'
 import ShopmanTeamShow2 from './page/shopman/shopman-team-show2.vue'
@@ -189,14 +193,19 @@ export default [
 
       },
       {
-        path: '/ShopmanApplyShow',
-        component: ShopmanApplyShow
+        path: '/ShopmanApplyShow/:account', component: ShopmanApplyShow,
       },
       {
         path: '/ShopmanManage', component: ShopmanManage,
       },
       {
-        path: '/ShopmanManageShow', component: ShopmanManageShow
+        path: '/ShopmanManageShow/:account', component: ShopmanManageShow    //个人店主 查看
+      },
+      {
+        path: '/ShopmanManageShow1/:account', component: ShopmanManageShow1   //公司店主查看
+      },
+      {
+        path: '/ShopmanManageShow2/:account', component: ShopmanManageShow2   //高级店主 查看
       },
       {
         path: '/ShopmanTeam', component: ShopmanTeam,

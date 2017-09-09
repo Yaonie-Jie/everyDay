@@ -8,7 +8,7 @@
       <div class="titlee" style="border:none;">系统推荐列表</div>
       <div class="boxx" style="max-width:800px;margin:0 auto;">
         <el-table
-          :data="tableData"
+          :data="tableDate"
           border>
           <el-table-column
             label="排序"
@@ -176,7 +176,7 @@
   export default {
     data() {
       return {
-        tableData: [],
+        tableDate: [],
         count11:1,
         currentPage: 1
       }
