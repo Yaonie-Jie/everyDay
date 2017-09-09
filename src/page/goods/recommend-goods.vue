@@ -6,6 +6,10 @@
         <el-breadcrumb-item>系统推荐商品</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="titlee" style="border:none;">系统推荐列表</div>
+      <div style="margin-bottom: 20px;padding-bottom: 20px">
+        <el-button type="success" class="right">添加到商品详情</el-button>
+        <el-button type="success" class="right">添加到图文详情</el-button>
+      </div>
       <div class="boxx" style="max-width:880px;margin:0 auto;">
         <el-table
           :data='tableData'
@@ -35,138 +39,226 @@
             <template scope="scope">
 
               <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>
-              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移</el-button>
+              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移
+              </el-button>
               <el-button type="text" size="small" @click=Top(scope.row) v-if="scope.row.num!=1">置顶</el-button>
               <el-button type="text" size="small" v-if="scope.row.num!=DataLength">置底</el-button>
-              <el-button type="text" size="small" @click="Updata(scope.row)">修改</el-button>
+              <el-button type="text" size="small">修改</el-button>
               <el-button type="text" size="small" @click="Delete(scope.row)">删除</el-button>
 
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <!--<div class="boxx" style="max-width:800px;margin:0 auto;">-->
-        <!--<el-pagination-->
-          <!--layout="prev, pager, next"-->
-          <!--:total="50" class="right" style=" margin:0;">-->
-        <!--</el-pagination>-->
-      <!--</div>-->
-      <!--<ul class="show-img">-->
-        <!--<li>-->
-          <!--<div class="titlee">添加系统推荐-链接到商品详情</div>-->
-          <!--<div class="show-shop">-->
-            <!--<el-form label-width="150px" class="demo-ruleForm" style="width:80%;">-->
-              <!--<el-form-item-->
-                <!--label="链接商品"-->
-                <!--prop="goods">-->
-                <!--<el-input type="age" auto-complete="off" placeholder="输入商品名称查找商品"></el-input>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item-->
-                <!--label="推荐页展示图片"-->
-                <!--prop="imgs">-->
-                <!--<el-upload-->
-                  <!--class="upload-demo"-->
-                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-                  <!--list-type="picture">-->
-                  <!--<el-button size="small" type="primary">点击上传</el-button>-->
-                  <!--<div slot="tip" class="el-upload__tip">图片中请包含价格与标题</div>-->
-                <!--</el-upload>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item>-->
-                <!--<el-button type="primary" @click="open2">添加</el-button>-->
-              <!--</el-form-item>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</li>-->
-        <!--<li>-->
-          <!--<div class="titlee">添加系统推荐-链接到图文详情</div>-->
-          <!--<div class="show-shop">-->
-            <!--<el-form label-width="150px" class="demo-ruleForm" style="width:80%;">-->
-              <!--<el-form-item-->
-                <!--label="推荐页标题"-->
-                <!--prop="goods">-->
-                <!--<el-input type="age" auto-complete="off" placeholder="输入推荐页标题"></el-input>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item-->
-                <!--label="推荐页展示图片"-->
-                <!--prop="imgs">-->
-                <!--<el-upload-->
-                  <!--class="upload-demo"-->
-                  <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-                  <!--list-type="picture">-->
-                  <!--<el-button size="small" type="primary">点击上传</el-button>-->
-                  <!--<div slot="tip" class="el-upload__tip">图片中请包含价格与标题</div>-->
-                <!--</el-upload>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item-->
-                <!--label="推荐页图文介绍"-->
-                <!--prop="goods">-->
-                <!--<el-input-->
-                  <!--type="textarea"-->
-                  <!--:rows="5"-->
-                  <!--placeholder="图文介绍">-->
-                <!--</el-input>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item-->
-                <!--label="链接商品"-->
-                <!--prop="goods">-->
-                <!--<el-input type="age" auto-complete="off" placeholder="输入商品名称查找商品"></el-input>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item>-->
-                <!--<el-button type="primary" @click="open2">添加</el-button>-->
-              <!--</el-form-item>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</li>-->
-      <!--</ul>-->
-    <!--</div>-->
+      <!--添加到商品详情弹窗-->
+      <div class="leftshow popup">
+        <div class="titlee">添加系统推荐-链接到商品详情（优品推荐）</div>
+        <div class="show-shop">
+          <el-row>
+            <el-col :span="24" style="text-align: left">
+              <span style="padding-right: 20px">链接商品</span>
+              <el-input type="text" style="width: 50%" auto-complete="off" placeholder="输入商品名称查找商品"
+                        v-model="name"></el-input>
+              <el-button type="primary" @click="selectShowOne">查询</el-button>
+            </el-col>
+            <el-col :span="24">
+              <span class="left" style="padding-right: 20px">推荐页展示图片</span>
+              <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
+                <div class="labe el-icon-plus" @click="labe"></div>
+                <input class="input-loc-img imgLocal" name="pictureUrl" type='file' accept="image/*"
+                       @change="selectChange"/>
+              </form>
+              <div class="imgurl">
+                <img :src="images" alt="">
+              </div>
+            </el-col>
+            <el-col :span="24">
+              <span class="left" style="padding-right: 20px">商品标签</span>
+              <div class="left">
+                <div class="left aaa">
+                  <span class="left">性别</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" style=" ">
+                      <input type="radio" id="jack" value="m" v-model="sex">
+                      <label for="jack">男</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="john" value="w" v-model="sex">
+                      <label for="john">女</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="left aaa">
+                  <span class="left">年龄</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" style=" ">
+                      <input type="radio" id="60" value="60" v-model="age">
+                      <label for="60">60后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="70" value="70" v-model="age">
+                      <label for="70">70后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="80" value="80" v-model="age">
+                      <label for="80">80后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="90" value="90" v-model="age">
+                      <label for="90">90后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="00" value="00" v-model="age">
+                      <label for="00">00后</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="left aaa">
+                  <span class="left">兴趣</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" v-for="i in TagList">
+                      <input type="checkbox" :id="i.id" :value="i.id" v-model="interest">
+                      <label :for="i.id">{{i.interest}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
 
-    <!--<div class="mask"></div>-->
+          <el-button type="primary" @click="open2">添加</el-button>
+          <el-button type="" @click="addOneHide">取消</el-button>
 
-    <!--<div class="popup change_recommend">-->
-      <!--<div class="popup_title">修改系统推荐商品</div>-->
-      <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title">商品名称</div>-->
-        <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
-      <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title">推荐模式</div>-->
-        <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
-      <!--<div class="popup_form">-->
-        <!--<div class="popup_form_title">添加时间</div>-->
-        <!--<el-input v-model="input" placeholder="请输入内容"></el-input>-->
-      <!--</div>-->
-      <!--<div class="popup_btn">-->
-        <!--<el-button @click="DisplayNone">取消</el-button>-->
-        <!--<el-button type="primary">确定</el-button>-->
-      <!--</div>-->
-    <!--</div>-->
+        </div>
+      </div>
+
+      <!--添加到图文详情弹窗-->
+      <div class="rightshow popup">
+        <div class="titlee">添加系统推荐-链接到图文详情（人气爆款）</div>
+        <div class="show-shop">
+          <el-row>
+            <el-col :span="24" style="text-align: left">
+              <span style="padding-right: 50px">标题</span>
+              <el-input type="text" style="width: 50%"
+                        v-model="title"></el-input>
+            </el-col>
+            <el-col :span="24" style="text-align: left">
+              <span style="padding-right: 20px">链接商品</span>
+              <el-input type="text" style="width: 50%" class=""
+                        v-model="picName"></el-input>
+              <el-button type="primary" class="" @click="selectShowTwo">查询</el-button>
+            </el-col>
+            <el-col :span="24">
+              <span class="left" style="padding-right: 20px">推荐页展示图片</span>
+              <form name="imgForm" id="picimgForm" enctype="multipart/form-data" action="" method='post'
+                    style="float: left;">
+                <div class="labe el-icon-plus" @click="piclabe"></div>
+                <input class="input-loc-img picimgLocal" name="pictureUrl" type='file' accept="image/*"
+                       @change="picselectChange"/>
+              </form>
+              <div class="imgurl">
+                <img :src="picimages" alt="">
+              </div>
+            </el-col>
+            <el-col :span="24">
+              <span class="left" style="padding-right: 20px">商品标签</span>
+              <div class="left">
+                <div class="right aaa">
+                  <span class="left">性别</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" style=" ">
+                      <input type="radio" id="jackpic" value="m" v-model="picsex">
+                      <label for="jackpic">男</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="johnpic" value="w" v-model="picsex">
+                      <label for="johnpic">女</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="right aaa">
+                  <span class="left">年龄</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" style=" ">
+                      <input type="radio" id="pic60" value="60" v-model="picage">
+                      <label for="pic60">60后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="pic70" value="70" v-model="picage">
+                      <label for="pic70">70后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="pic80" value="80" v-model="picage">
+                      <label for="pic80">80后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="pic90" value="90" v-model="picage">
+                      <label for="pic90">90后</label>
+                    </div>
+                    <div class="listshow">
+                      <input type="radio" id="pic00" value="00" v-model="picage">
+                      <label for="pic00">00后</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="right aaa">
+                  <span class="left">兴趣</span>
+                  <div class="left" style="padding-left: 20px">
+                    <div class="listshow" v-for="i in TagList">
+                      <input type="checkbox" :id="i.id+123" :value="i.id" v-model="picinterest">
+                      <label :for="i.id+123">{{i.interest}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+
+          <el-button type="primary" @click="addpic">添加</el-button>
+          <el-button @click="addTwoHide">取消</el-button>
+
+        </div>
+      </div>
+
+
+    </div>
+    <div class="popup change_left">
+      <div class="popup_title">商品列表</div>
+
+      <el-table
+        :data="selectData"
+        border>
+        <el-table-column
+          label="商品名称"
+          prop="name">
+        </el-table-column>
+        <el-table-column
+          :span='5'
+          label="操作">
+          <template scope="scope">
+            <el-button type="teprimaryxt" size="small" @click="select(scope.row)">选择</el-button>
+            <span></span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block" style="height: 50px;">
+        <el-pagination
+          @current-change="handleCurrentChange22"
+          :current-page.sync="currentPage22"
+          :page-size="10"
+          layout="prev, pager, next, jumper"
+          :total="count22">
+        </el-pagination>
+      </div>
+      <div class="popup_btn">
+        <el-button @click="selectNoneOne">取消</el-button>
+      </div>
+    </div>
+
+
   </div>
 </template>
-<style>
-  .show-img {
-    border-top: 1px solid #838383;
-    max-width: 800px;
-    margin: 50px auto 0;
-    display: flex;
-  }
 
-  .show-img li {
-    width: 50%;
-    float: left;
-    border-right: 1px solid #838383;
-    border-bottom: 1px solid #838383;
-  }
-
-  .show-img li:nth-child(2) {
-    border-right: 0;
-  }
-
-  .demo-ruleForm {
-    margin: 30px 0 !important;
-  }
-</style>
 
 <script>
   import http from '../../http'
@@ -175,85 +267,70 @@
     data() {
       return {
         tableData: [],
-        DataLength: ''
+        count11: 1,
+        count22: 1,
+        currentPage: 1,
+        currentPage22: 1,
+        name: '',
+        selectData: [],
+        images: '',
+        imgFiles: '',
+        id: '',
+        sex: '',
+        age: '',
+        interest: [],
+        TagList: [],
+        //图文推荐
+        title: '',
+        picName: '',
+        flag: '',
+        picid: '',
+        picimages: '',
+        picimgFiles: '',
+        picsex: '',
+        picage: '',
+        picinterest: [],
       }
     },
     created: function () {
       this.getTable()
     },
     methods: {
-      getTable(){
+      getTable() {
         let url = http.apiMap.listSystemRecommend;
         let data = {
-          common: this.GLOBAL.common
+          common: 1
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               let data = res.body.data.list;
               let arr = [];
-              let num=0;
+              let num = 0;
               for (let i = 0; i < data.length; i++) {
                 if (data[i].mode == 1) {
                   data[i].mode = '商品详情'
                 } else {
                   data[i].mode = '图文推荐'
                 }
-                num+=1;
-                data[i].num=num;
+                num += 1;
+                data[i].num = num;
                 arr.push(data[i])
-                console.log(arr[i].number)
-
               }
               this.tableData = arr;
-              this.DataLength = arr[arr.length - 1].num;
+              console.log(arr)
+//              this.DataLength = arr[arr.length - 1].num;
             }
           }
         )
       },
-      open2() {
-        this.$confirm('此操作将添加此商品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      open3() {
-        this.$confirm('此操作将删除该推荐商品, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
-      DisplayBlock: function () {
 
-      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_recommend').css('display', 'none');
       },
       //上移
-      Up(row){
+      Up(row) {
         var nowID = row.id;
         var nowNumber = row.number;
         var table = this.tableData;
@@ -277,7 +354,7 @@
         );
       },
       //下移
-      Down(row){
+      Down(row) {
         let nowID = row.id;
         let nowNumber = row.number;
         let table = this.tableData;
@@ -300,15 +377,11 @@
           }
         );
       },
-      //修改
-      Updata(row){
-        $('.mask').css('display', 'block');
-        $('.change_recommend').css('display', 'block');
-      },
+
       //删除
-      Delete(row){
+      Delete(row) {
         let url = http.apiMap.deleteSystemRecommend;
-        this.$http.post(url, {id:row.id,common:2}).then(
+        this.$http.post(url, {id: row.id, common: 2}).then(
           function (res) {
             if (res.body.result) {
               this.getTable();
@@ -316,12 +389,12 @@
           }
         );
       },
-      Top(row){
+      Top(row) {
         let url = http.apiMap.topSystemRecommend;
-        let data={
-            id:row.id,
-            number:row.number,
-            common:this.GLOBAL.common
+        let data = {
+          id: row.id,
+          number: row.number,
+          common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -335,3 +408,26 @@
   }
 </script>
 
+<style>
+  .show-img {
+    border-top: 1px solid #838383;
+    max-width: 800px;
+    margin: 50px auto 0;
+    display: flex;
+  }
+
+  .show-img li {
+    width: 50%;
+    float: left;
+    border-right: 1px solid #838383;
+    border-bottom: 1px solid #838383;
+  }
+
+  .show-img li:nth-child(2) {
+    border-right: 0;
+  }
+
+  .demo-ruleForm {
+    margin: 30px 0 !important;
+  }
+</style>

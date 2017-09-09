@@ -513,6 +513,7 @@
     display: none;
   }
   .popup{
+    border-radius: 10px;
     width: 600px;
     max-height: 400px;
     overflow-y: scroll;

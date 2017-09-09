@@ -81,7 +81,17 @@
             </quill-editor>
           </div>
         </el-col>
-
+        <el-col :span="24" style="margin-top: 20px">
+          <div class="add_goods_stock_title">商品参数</div>
+          <div class="edit_container">
+            <quill-editor v-model="contentCan"
+                          ref="myQuillEditorCan"
+                          class="editer"
+                          :options="editorOptionCan"
+                          @ready="onEditorReadyCan($event)">
+            </quill-editor>
+          </div>
+        </el-col>
         <el-col :span="24" style="margin-top: 20px">
           <div class="add_goods_specifications">
             <div class="add_goods_specifications_title">规格：</div>
@@ -268,6 +278,9 @@
         brandId: '',
         content: '',
         editorOption: {},
+
+        contentCan:'',
+        editorOptionCan: {},
         paramlist: [],
         paramName: '', //规格名称
         dynamicTags: [],//单个规格数组
@@ -317,8 +330,9 @@
                 o.name = data.picture.split(',')[i];
                 this.imgFiles.push(o);
               }
-              this.content = JSON.parse(data.details);
-              let url = http.apiMap.findtTypeByTwoId;
+              this.content = data.details;
+              this.contentCan=data.parameter;
+                let url = http.apiMap.findtTypeByTwoId;
               let data1 = {
                 common: 1,
                 id: data.typeId
@@ -454,7 +468,10 @@
         );
       },
       onEditorReady(editor) {
-        console.log('editor ready!', editor)
+        //console.log('editor ready!', editor)
+      },
+      onEditorReadyCan(editor) {
+//        console.log('editor ready!', editor)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -544,8 +561,6 @@
             if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
               if (this.imgFiles[i].name.indexOf('http') != 0) {
                 arr.push(this.imgFiles[i])
-                console.log(this.imgFiles[i])
-
                 formData.append('pictureUrl', this.imgFiles[i])
               }
             }
@@ -563,6 +578,7 @@
           formData.append('parameters', JSON.stringify(this.paramlist));
           formData.append('freightId', this.freightId);
           formData.append('pictureOriginal', this.pic.join(','));
+          formData.append('parameter', this.contentCan);
 
           this.$http.post(url, formData, {
             method: 'post',

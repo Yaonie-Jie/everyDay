@@ -99,7 +99,7 @@
         dataList: [],
         OneTypeList:[],
         TwoypeList:[],
-        typeId:'',
+        typeId:'-1',
         name:''
       }
     },

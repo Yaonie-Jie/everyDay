@@ -25,6 +25,8 @@ import RecommendGoods from './page/goods/recommend-goods.vue'
 import RecommendGoodsLike from './page/goods/recommend-goods-like.vue'
 import tagGoods from './page/goods/tag-goods.vue'
 import updataGoods from './page/goods/updata-goods.vue'
+import updatashop from './page/goods/updatashop.vue'
+import updatashoppic from './page/goods/updatashoppic.vue'
 
 import AccountedFor from './page/money/accounted-for.vue'
 import OutOf from './page/money/out-of-account.vue'
@@ -115,6 +117,12 @@ export default [
       },
       {
         path: '/BrandGoods', component: BrandGoods,
+      },
+      {
+        path: '/updatashop/:id', component: updatashop,
+      },
+      {
+        path: '/updatashoppic/:id', component: updatashoppic,
       },
       {
         path: '/Classify', component: Classify,
