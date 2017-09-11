@@ -126,7 +126,6 @@
                 let data1 = res.body.data.oav;
                 let arr = [];
                 for (var i = 0; i < data1.length; i++) {
-
                   if (data1[i].level == 0) {
                     data1[i].level = '普通用户'
                   } else if (data1[i].level == 1) {
@@ -166,16 +165,34 @@
               startTime:FormatDate(this.time[0]),
               endTime:FormatDate(this.time[1]),
               message:$("#orderState :selected").text().replace(/(^\s*)|(\s*$)/g, ""),
-              account:this.account  //账号信息
+              account:this.account,  //账号信息
+              size:10,
+              nowpage:this.currentPage,
             };
             this.$http.post(searchurl,searchdata).then(
               function (res) {
                 if (res.body.result) {
-                  console.log(res.body.data.list)
-                  dataTime = res.body.data.list;
-                  this.tableData = dataTime;
-                  dataMsg=res.body.data.ownerApplication;
-                  this.tableData=dataMsg;
+
+                  data = res.body.data.list;
+                    //判断级别
+                  let arr = [];
+                  for (var i = 0; i < data.length; i++) {
+                    if (data[i].level == 0) {
+                      data[i].level = '普通用户'
+                    } else if (data[i].level == 1) {
+                      data[i].level = '个人店主'
+                    } else if (data[i].level == 2) {
+                      data[i].level = '公司店主'
+                    } else if (data[i].level == 3) {
+                      data[i].level = '高级店主'
+                    }
+                    arr.push(data[i])
+                  }
+
+                  this.tableData=arr;
+
+
+
                 }
               }
             );

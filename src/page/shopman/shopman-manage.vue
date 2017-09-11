@@ -452,18 +452,28 @@
         let data={
           common:2,
           account:this.account,
-          teamState:$("#shopManState :selected").attr('value')
+          teamState:$("#shopManState :selected").attr('value'),
+          size:10,
+          nowpage:this.currentPage,
         };
         this.$http.post(url,data).then(
           function(res){
             if(res.body.result){
               let data=res.body.data.userVO
-              console.log(data)
-              this.tableData=data
-//              let dataAccount=res.body.data.userVO
-//              let arr=[]
-//              arr.push(dataAccount)
-//              this.tableData=arr
+
+              //店主级别
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].level == 1) {
+                  data[i].level = '个人店主'
+                } else if (data[i].level == 2) {
+                  data[i].level = '公司店主'
+                } else if (data[i].level == 3) {
+                  data[i].level = '高级店主'
+                }
+                arr.push(data[i])
+              }
+             this.tableData=arr
 
             }
           }
