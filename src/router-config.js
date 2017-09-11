@@ -27,6 +27,8 @@ import tagGoods from './page/goods/tag-goods.vue'
 import updataGoods from './page/goods/updata-goods.vue'
 import updatashop from './page/goods/updatashop.vue'
 import updatashoppic from './page/goods/updatashoppic.vue'
+import updatashopxi from './page/goods/updatashop-xi.vue'
+import updatashopxipic from './page/goods/updatashop-xipic.vue'
 
 import AccountedFor from './page/money/accounted-for.vue'
 import OutOf from './page/money/out-of-account.vue'
@@ -123,6 +125,12 @@ export default [
       },
       {
         path: '/updatashoppic/:id', component: updatashoppic,
+      },
+      {
+        path: '/updatashopxi/:id', component: updatashopxi,
+      },
+      {
+        path: '/updatashopxipic/:id', component: updatashopxipic,
       },
       {
         path: '/Classify', component: Classify,

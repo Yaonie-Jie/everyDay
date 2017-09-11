@@ -35,8 +35,8 @@
             fixed="right"
             label="操作">
             <template scope="scope">
-              <el-button type="text" size="small">上移</el-button>
-              <el-button type="text" size="small">下移</el-button>
+              <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>
+              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移</el-button>
               <el-button type="text" size="small" @click="removeTop(scope.row)">置顶</el-button>
               <el-button type="text" size="small" @click="removeBottom(scope.row)">置底</el-button>
               <el-button type="text" size="small" @click="updataALl(scope.row)">修改</el-button>
@@ -230,6 +230,19 @@
                 </div>
               </div>
             </el-col>
+            <el-col :span="24">
+              <span class="left" style="padding-right: 20px">图文详情</span>
+              <div class="left">
+                <div class="edit_container">
+                  <quill-editor v-model="content"
+                                ref="myQuillEditor"
+                                class="editer"
+                                :options="editorOption"
+                                @ready="onEditorReady($event)">
+                  </quill-editor>
+                </div>
+              </div>
+            </el-col>
           </el-row>
 
           <el-button type="primary" @click="addpic">添加</el-button>
@@ -281,8 +294,17 @@
 
 <script>
   import http from '../../http'
+  import {quillEditor} from 'vue-quill-editor'
 
   export default {
+    components: {
+      quillEditor,
+    },
+    computed: {
+      editor() {
+        return this.$refs.myQuillEditor.quill
+      }
+    },
     data() {
       return {
         tableData: [],
@@ -312,6 +334,10 @@
 
         popAmount: '',
         pAmount: '',
+
+        content: '',
+        editorOption: {},
+        DataLength:''
       }
     },
     created() {
@@ -435,6 +461,8 @@
                 arr.push(data[i])
               }
               this.tableData = arr;
+              this.DataLength = arr[arr.length - 1].num;
+
             }
           }
         )
@@ -500,7 +528,7 @@
           });
         });
       },
-      //添加右边图文详情，待修改缺少富文本编辑器
+      //添加右边图文详情
       addpic() {
         this.$confirm('此操作将添加此商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -511,11 +539,13 @@
           let formData = new FormData();//通过formdata上传
           formData.append('pictureUrl', this.picimgFiles);
           formData.append('proName', this.picName);
+          formData.append('title', this.title);
           formData.append('mode', 1);
           formData.append('proId', this.picid);
           formData.append('sex', this.picsex);
           formData.append('age', this.picage);
           formData.append('interest', this.picinterest);
+          formData.append('introduce', this.content);
           formData.append('common', 1);
           this.$http.post(url, formData).then(
             function (res) {
@@ -548,8 +578,55 @@
           });
         });
       },
+      //上移
+      Up(row) {
+        var nowID = row.id;
+        var nowNumber = row.number;
+        var table = this.tableData;
+        var FrontID;
+        var FrontNumber;
+        for (var i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i - 1].id;
+            FrontNumber = table[i - 1].number;
+          }
+        }
+        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
+        let url = http.apiMap.moveSystemxing;
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.findProList();
+            }
+          }
+        );
+      },
+      //下移
+      Down(row) {
+        let nowID = row.id;
+        let nowNumber = row.number;
+        let table = this.tableData;
+        let FrontID;
+        let FrontNumber;
+        for (let i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i + 1].id;
+            FrontNumber = table[i + 1].number;
+          }
+        }
+        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
+        let url = http.apiMap.moveSystemxing;
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.findProList();
+            }
+          }
+        );
+      },
       deleteShop(row) {
-        console.log(row)
         this.$confirm('此操作将删除该推荐商品, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -591,7 +668,6 @@
         }else {
           this.$router.push('/updatashoppic/' + row.id);
         }
-
       },
 
       DisplayNone() {
@@ -717,6 +793,9 @@
           };
         }
       },
+      onEditorReady(editor) {
+//        console.log('editor ready!', editor)
+      },
     }
   }
 </script>
@@ -773,7 +852,10 @@
   .leftshow {
     display: none;
   }
-
+  .editer{
+    width:500px;
+    margin-bottom: 40px;
+  }
   .popup {
     height:500px;
   }

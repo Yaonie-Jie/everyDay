@@ -9,7 +9,7 @@
 
       <!--添加到商品详情弹窗-->
       <div class="leftshow">
-        <div class="titlee">修改兴趣推荐-链接到商品详情（优品推荐）</div>
+        <div class="titlee">修改系统推荐-链接到商品详情（优品推荐）</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">
@@ -29,63 +29,10 @@
                 <img :src="images" alt="">
               </div>
             </el-col>
-            <el-col :span="24">
-              <span class="left" style="padding-right: 20px">商品标签</span>
-              <div class="left">
-                <div class="left aaa">
-                  <span class="left">性别</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" style=" ">
-                      <input type="radio" id="jack" value="m" v-model="sex">
-                      <label for="jack">男</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="john" value="w" v-model="sex">
-                      <label for="john">女</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="left aaa">
-                  <span class="left">年龄</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" style=" ">
-                      <input type="radio" id="60" value="60" v-model="age">
-                      <label for="60">60后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="70" value="70" v-model="age">
-                      <label for="70">70后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="80" value="80" v-model="age">
-                      <label for="80">80后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="90" value="90" v-model="age">
-                      <label for="90">90后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="00" value="00" v-model="age">
-                      <label for="00">00后</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="left aaa">
-                  <span class="left">兴趣</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" v-for="i in TagList">
-                      <input type="checkbox" :id="i.id+12" :value="i.id" v-model="interest">
-                      <label :for="i.id+12">{{i.interest}}</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </el-col>
           </el-row>
-
-          <el-button type="primary" @click="open2">修改</el-button>
-          <el-button type="" @click="addOneHide">取消</el-button>
-
+          <div style="text-align: center">
+            <el-button type="primary" @click="open2">修改</el-button>
+          </div>
         </div>
       </div>
 
@@ -145,17 +92,11 @@
         images: '',
         imgFiles: '',
         id: '',
-        sex: '',
-        age: '',
-        interest: [],
-        TagList: [],
-        ids: '',
       }
     },
     created() {
 
       this.ids = this.$route.params.id;
-      this.findTagList()
       this.findProList()
     },
     methods: {
@@ -163,10 +104,6 @@
       addOneShow() {
         $(".leftshow").show();
         $(".mask").show();
-      },
-      addOneHide() {
-        $(".leftshow").hide();
-        $(".mask").hide();
       },
       addTwoShow() {
         $(".rightshow").show();
@@ -207,7 +144,7 @@
       },
 
       findProList() {
-        let url = http.apiMap.findInterestRecommendById;
+        let url = http.apiMap.findSystemRecommendById;
         let data = {
           common: 1,
           id: this.ids,
@@ -215,26 +152,10 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              let data = res.body.data.interestRecommend
+              let data = res.body.data.systemRecommend
               this.name = data.proName;
               this.images = data.proPicture;
-              this.sex = data.sex;
-              this.age = data.age;
-              this.interest = data.interest.split(',');
-              this.id=data.proId
-            }
-          }
-        )
-      },
-      findTagList() {
-        let url = http.apiMap.findTagList;
-        let data = {
-          common: 2,
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.TagList = res.body.data.list;
+              this.id = data.proId
             }
           }
         )
@@ -246,15 +167,12 @@
           cancelButtonText: '取消',
           type: 'info'
         }).then(() => {
-          let url = http.apiMap.updataInterestRecommend;
+          let url = http.apiMap.updataSystemRecommend;
           let formData = new FormData();//通过formdata上传
           formData.append('pictureUrl', this.imgFiles);
           formData.append('proName', this.name);
           formData.append('id', this.ids);
           formData.append('proId', this.id);
-          formData.append('sex', this.sex);
-          formData.append('age', this.age);
-          formData.append('interest', this.interest);
           formData.append('common', 1);
           this.$http.post(url, formData).then(
             function (res) {
@@ -263,7 +181,7 @@
                   type: 'success',
                   message: '修改成功!'
                 });
-                this.$router.push('/RecommendGoodsLike/');
+                this.$router.push('/RecommendGoods/');
               } else {
                 this.$message({
                   type: 'warning',

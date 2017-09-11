@@ -18,19 +18,29 @@ const apiMap={
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
 
   'listSystemRecommend':hosts.api+'systemRecommend/findSystemRecommendList',    //系统推荐列表
-  'addInterestRecommend':hosts.api+'interestRecommend/addInterestRecommend',    //添加商品到系统推荐列表商品详情
+  'addInterestRecommend':hosts.api+'interestRecommend/addInterestRecommend',    //添加商品到根据兴趣推荐列表商品详情
   'updataInterestRecommend':hosts.api+'interestRecommend/modifyInterestRecommend',    //修改商品到系统推荐列表商品详情
-  'moveSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommendPosition',    //系统推荐列表上移下移
+  'moveSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommendPosition',    //推荐列表上移下移
+  'moveSystemxing':hosts.api+'interestRecommend/modifyInterestRecommendPosition',    //兴趣推荐列表上移下移
   'deleteSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品删除
   'findTagList':hosts.api+'productTagInterest/findProductTagInterestList',    //商品标签列表
-  'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //系统推荐商品置顶
+  'topSystemRecommend':hosts.api+'systemRecommend/removeSystemRecommendL',    //兴趣推荐商品置顶
+  'SystemRecommendTop':hosts.api+'systemRecommend/modifySystemRecommendTop',    //系统推荐商品置顶
+  'SystemRecommendBottom':hosts.api+'systemRecommend/modifySystemRecommendBottom',    //系统推荐商品置底
   'findProductList':hosts.api+'interestRecommend/findInterestRecommendList',    //兴趣列表
   'findProductNum':hosts.api+'interestRecommend/findRecommendAmount',    //兴趣推荐数量查询
+  'updataSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommend',    //修改系统推荐商品详情
   'updataProductNum':hosts.api+'interestRecommend/modifyInterestRecommendProAmount',    //修改人气爆款推荐数量
   'updataProductNumpop':hosts.api+'interestRecommend/modifyInterestRecommendAmount',    //修改商品详情推荐数量
   'deleteProductList':hosts.api+'interestRecommend/removeInterestRecommendL',    //删除兴趣推荐商品
   'InterestRecommendBottom':hosts.api+'interestRecommend/modifyInterestRecommendBottom',    //置底根据客户兴趣列表商品
   'InterestRecommendTop':hosts.api+'interestRecommend/modifyInterestRecommendTop',    //置顶根据客户兴趣列表商品
+  'findInterestRecommendById':hosts.api+'interestRecommend/findInterestRecommendById',    //根据客户兴趣列表id查询商品详情
+  'findSystemRecommendById':hosts.api+'systemRecommend/findSystemRecommendById',    //根据系统推荐id查询商品详情
+
+  'addSystemRecommend':hosts.api+'systemRecommend/addSystemRecommend',    //添加商品到系统推荐列表商品详情
+
+
 
   'addShop':hosts.api+'product/addProduct',    //添加商品
   'findById':hosts.api+'product/findProductById',    //查看商品详情

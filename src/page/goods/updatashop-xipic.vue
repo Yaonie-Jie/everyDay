@@ -7,22 +7,27 @@
       </el-breadcrumb>
 
 
-      <!--添加到商品详情弹窗-->
-      <div class="leftshow">
-        <div class="titlee">修改兴趣推荐-链接到商品详情（优品推荐）</div>
+      <div class="rightshow">
+        <div class="titlee">修改系统推荐-链接到图文详情（人气爆款）</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">
+              <span style="padding-right: 50px">标题</span>
+              <el-input type="text" style="width: 50%"
+                        v-model="title"></el-input>
+            </el-col>
+            <el-col :span="24" style="text-align: left">
               <span style="padding-right: 20px">链接商品</span>
-              <el-input type="text" style="width: 50%" auto-complete="off" placeholder="输入商品名称查找商品"
+              <el-input type="text" style="width: 50%" class=""
                         v-model="name"></el-input>
-              <el-button type="primary" @click="selectShowOne">查询</el-button>
+              <el-button type="primary" class="" @click="selectShowTwo">查询</el-button>
             </el-col>
             <el-col :span="24">
               <span class="left" style="padding-right: 20px">推荐页展示图片</span>
-              <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
+              <form name="imgForm" id="picimgForm" enctype="multipart/form-data" action="" method='post'
+                    style="float: left;">
                 <div class="labe el-icon-plus" @click="labe"></div>
-                <input class="input-loc-img imgLocal" name="pictureUrl" type='file' accept="image/*"
+                <input class="input-loc-img picimgLocal" name="pictureUrl" type='file' accept="image/*"
                        @change="selectChange"/>
               </form>
               <div class="imgurl">
@@ -30,62 +35,22 @@
               </div>
             </el-col>
             <el-col :span="24">
-              <span class="left" style="padding-right: 20px">商品标签</span>
+              <span class="left" style="padding-right: 20px">图文详情</span>
               <div class="left">
-                <div class="left aaa">
-                  <span class="left">性别</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" style=" ">
-                      <input type="radio" id="jack" value="m" v-model="sex">
-                      <label for="jack">男</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="john" value="w" v-model="sex">
-                      <label for="john">女</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="left aaa">
-                  <span class="left">年龄</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" style=" ">
-                      <input type="radio" id="60" value="60" v-model="age">
-                      <label for="60">60后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="70" value="70" v-model="age">
-                      <label for="70">70后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="80" value="80" v-model="age">
-                      <label for="80">80后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="90" value="90" v-model="age">
-                      <label for="90">90后</label>
-                    </div>
-                    <div class="listshow">
-                      <input type="radio" id="00" value="00" v-model="age">
-                      <label for="00">00后</label>
-                    </div>
-                  </div>
-                </div>
-                <div class="left aaa">
-                  <span class="left">兴趣</span>
-                  <div class="left" style="padding-left: 20px">
-                    <div class="listshow" v-for="i in TagList">
-                      <input type="checkbox" :id="i.id+12" :value="i.id" v-model="interest">
-                      <label :for="i.id+12">{{i.interest}}</label>
-                    </div>
-                  </div>
+                <div class="edit_container">
+                  <quill-editor v-model="content"
+                                ref="myQuillEditor"
+                                class="editer"
+                                :options="editorOption"
+                                @ready="onEditorReady($event)">
+                  </quill-editor>
                 </div>
               </div>
             </el-col>
           </el-row>
-
-          <el-button type="primary" @click="open2">修改</el-button>
-          <el-button type="" @click="addOneHide">取消</el-button>
-
+          <div style="text-align: center">
+            <el-button type="primary" @click="open2">修改</el-button>
+          </div>
         </div>
       </div>
 
@@ -131,8 +96,17 @@
 
 <script>
   import http from '../../http'
+  import {quillEditor} from 'vue-quill-editor'
 
   export default {
+    components: {
+      quillEditor,
+    },
+    computed: {
+      editor() {
+        return this.$refs.myQuillEditor.quill
+      }
+    },
     data() {
       return {
         tableData: [],
@@ -141,32 +115,25 @@
         currentPage: 1,
         currentPage22: 1,
         name: '',
+        title: '',
         selectData: [],
         images: '',
         imgFiles: '',
         id: '',
-        sex: '',
-        age: '',
-        interest: [],
-        TagList: [],
         ids: '',
+
+        content: '',
+        editorOption: {},
       }
     },
     created() {
-
       this.ids = this.$route.params.id;
-      this.findTagList()
       this.findProList()
     },
     methods: {
-
       addOneShow() {
         $(".leftshow").show();
         $(".mask").show();
-      },
-      addOneHide() {
-        $(".leftshow").hide();
-        $(".mask").hide();
       },
       addTwoShow() {
         $(".rightshow").show();
@@ -207,7 +174,7 @@
       },
 
       findProList() {
-        let url = http.apiMap.findInterestRecommendById;
+        let url = http.apiMap.findSystemRecommendById;
         let data = {
           common: 1,
           id: this.ids,
@@ -215,26 +182,12 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              let data = res.body.data.interestRecommend
+              let data = res.body.data.systemRecommend
               this.name = data.proName;
               this.images = data.proPicture;
-              this.sex = data.sex;
-              this.age = data.age;
-              this.interest = data.interest.split(',');
-              this.id=data.proId
-            }
-          }
-        )
-      },
-      findTagList() {
-        let url = http.apiMap.findTagList;
-        let data = {
-          common: 2,
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.TagList = res.body.data.list;
+              this.id = data.proId;
+              this.title = data.title;
+              this.content = data.introduce
             }
           }
         )
@@ -252,9 +205,8 @@
           formData.append('proName', this.name);
           formData.append('id', this.ids);
           formData.append('proId', this.id);
-          formData.append('sex', this.sex);
-          formData.append('age', this.age);
-          formData.append('interest', this.interest);
+          formData.append('title', this.title);
+          formData.append('introduce', this.content);
           formData.append('common', 1);
           this.$http.post(url, formData).then(
             function (res) {
@@ -263,7 +215,7 @@
                   type: 'success',
                   message: '修改成功!'
                 });
-                this.$router.push('/RecommendGoodsLike/');
+                this.$router.push('/RecommendGoods/');
               } else {
                 this.$message({
                   type: 'warning',
@@ -379,7 +331,9 @@
           };
         }
       },
-
+      onEditorReady(editor) {
+//        console.log('editor ready!', editor)
+      },
     }
   }
 </script>
@@ -433,8 +387,13 @@
     border: none;
   }
 
-  .leftshow {
+  .rightshow {
     display: block;
+  }
+
+  .editer {
+    width: 500px;
+    margin-bottom: 40px;
   }
 
   .popup {
