@@ -10,7 +10,7 @@
         <div class="apply_condition">
           <div class="apply_time">
             <div class="block">
-              <el-button type="success" @click="DisplayBlock">添加团队</el-button>
+              <el-button type="success" @click="AddshopmanTeam">添加团队</el-button>
             </div>
           </div>
           <div class="apply_information">
@@ -192,19 +192,11 @@
         )
       },
 
-
-
-      DisplayBlock: function () {
-        $('.mask').css('display', 'block');
-        $('.add_team').css('display', 'block');
-      },
-
       DisplayBlock2: function () {
         $('.mask').css('display', 'block');
         $('.add_team').css('display', 'none');
         $('.add_team2').css('display', 'block');
       },
-
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.add_team2').css('display', 'none');
@@ -212,8 +204,12 @@
 
 
 
+
+      AddshopmanTeam: function () {
+        this.$router.push('/AddShopmanTeam/')
+      },
+
       shows (row) {
-        console.log(row)
        this.$router.push('/ShopmanTeamShow/' + row.teamAccount );
       }
     }

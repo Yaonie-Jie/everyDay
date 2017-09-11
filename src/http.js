@@ -83,6 +83,12 @@ const apiMap={
   'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
   'getTeamList':hosts.api+'ownerTeamManage/findOwnerTeamManageList',   //获取店主团队信息（店主管理）
   'getTeamMessage':hosts.api+'ownerTeamManage/findTeamMessage',   //获取店主团队信息（店主管理）
+  'findTeamli':hosts.api+'ownerTeamManage/findUserTeamByAccount',   //查询店主信息
+  'addTeamli':hosts.api+'headManage/addHeadManage',   //添加团长
+  'findTeamy':hosts.api+'ownerTeamManage/findMemberByAccount',   //查询店主信息
+  'addTeamliy':hosts.api+'headManage/addCompanyMemberManage',   //添加tuanyuan
+
+
 
 
 

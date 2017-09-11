@@ -1,7 +1,6 @@
 <template>
   <div id="box">
 
-
     <div class="add_team popup">
       <div class="add_team_title popup_title">添加团队-选择团长</div>
       <div class="add_team_search">

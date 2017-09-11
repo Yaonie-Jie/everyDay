@@ -61,7 +61,7 @@ import ShopmanTeam from './page/shopman/shopman-team.vue'
 import ShopmanTeamShow from './page/shopman/shopman-team-show.vue'
 import ShopmanTeamShow2 from './page/shopman/shopman-team-show2.vue'
 import ShopmanTeamShow3 from './page/shopman/shopman-team-show3.vue'
-
+import AddShopmanTeam from './page/shopman/AddShopmanTeam.vue'
 
 import User from './page/user/user.vue'
 import ChangePass from './page/user/changepassword.vue'
@@ -227,6 +227,9 @@ export default [
       },
       {
         path: '/ShopmanTeamShow3', component: ShopmanTeamShow3
+      },
+      {
+        path: '/AddShopmanTeam', component: AddShopmanTeam
       },
       {
         path: '/ShopmanCommission', component: ShopmanCommission,
