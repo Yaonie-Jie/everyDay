@@ -332,7 +332,6 @@
               let data=res.body.data.user
               this.account=data.account
               this.shopmanManage=data
-              console.log(this.shopmanManage)
             }
           }
         )

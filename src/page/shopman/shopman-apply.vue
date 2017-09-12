@@ -20,7 +20,8 @@
             </div>
           </div>
           <div class="apply_information">
-            申请信息：
+
+            <span style="float:left;">申请信息：</span>
             <select id="orderState" >
               <option>全部</option>
               <option>申请升级到个人店主</option>
@@ -28,7 +29,7 @@
               <option>申请升级到高级店主</option>
 
             </select>
-            <input type="text" placeholder="根据账号查找" v-model="account"/>
+            <input type="text" placeholder="根据账号查找" v-model="account" style="float:left;margin-right: 20px"/>
             <el-button type="success" @click="searchFind">搜索</el-button>
           </div>
         </div>
@@ -66,7 +67,7 @@
               fixed="right"
               label="操作">
               <template scope="scope">
-                <el-button type="text" size="small" @click="showapplyManage(scope.row.account)">查看申请信息详情</el-button>
+                <el-button type="text" size="small" @click="showapplyManage(scope.row.account)">查看</el-button>
                 <el-button type="text" size="small" @click="open2(scope.row)">通过</el-button>
                 <el-button type="text" size="small" @click="open3(scope.row)">驳回</el-button>
               </template>
@@ -292,7 +293,7 @@
 
 </script>
 
-<style>
+<style >
   .apply_{
     width: 100%;
     min-height: 500px;
@@ -323,7 +324,7 @@
   }
 
   .apply_information{
-    float: right;
+    float: left;
     line-height: 32px;
   }
 
@@ -351,11 +352,6 @@
     text-decoration: none;
   }
 
-  .apply_form{
-    width: 80%;
-    margin-left: 10%;
-  }
-
   .table tr td{
     text-align: center;
     border-color: #303030 !important;
@@ -372,6 +368,9 @@
   .table tr td a{
     color: #303030;
     margin: 0 5px;
+  }
+  .el-button{
+    margin:0 !important;
   }
 </style>
 

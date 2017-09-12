@@ -7,8 +7,8 @@
       </el-breadcrumb>
       <div class="titlee" style="border:none;">系统推荐列表</div>
       <div style="margin-bottom: 20px;padding-bottom: 20px">
-        <el-button type="success" class="right" @click="addOneShow">添加到商品详情</el-button>
-        <el-button type="success" class="right" @click="addTwoShow">添加到图文详情</el-button>
+        <el-button type="success" @click="addOneShow">添加到商品详情</el-button>
+        <el-button type="success" @click="addTwoShow">添加到图文详情</el-button>
       </div>
 
       <div class="boxx">
@@ -416,7 +416,16 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '修改成功'
+              });
               this.findProductNum()
+            }else {
+              this.$message({
+                type: 'error',
+                message: '修改失败'
+              });
             }
           }
         )
@@ -431,7 +440,16 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '修改成功'
+              });
               this.findProductNum()
+            }else {
+              this.$message({
+                type: 'error',
+                message: '修改失败'
+              });
             }
           }
         )

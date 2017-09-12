@@ -6,9 +6,9 @@
         <el-breadcrumb-item>用户提现申请</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="titlee" style="border:0;">提现申请列表</div>
-      <div class="operation_time">
-        <i>申请时间：</i>
-        <div class="block">
+      <div class="operation_time" style="line-height: 60px">
+        <i style="float:left;">申请时间：</i>
+        <div class="block" style="float:left;width: 500px;">
           <el-date-picker
             v-model="time"
             type="daterange"

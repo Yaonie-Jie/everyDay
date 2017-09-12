@@ -19,8 +19,9 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price}}</span> 包含运费：￥<span>{{listData.freigh}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span class="pink">{{listData.price}}</span>
+                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
+                  class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -57,9 +58,9 @@
                       <p>{{i.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{i.unitPrice}}</span></p>
+                      <p>商品单价：<span>{{i.unitPrice / 100}}</span></p>
                       <p>购买数量：X<span>{{i.amount}}</span></p>
-                      <p>总价：<span>{{i.amount * i.unitPrice}}</span></p>
+                      <p>总价：<span>{{i.amount * i.unitPrice / 100}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -75,9 +76,9 @@
             <div class=" width100  NoBorderBottom">
               <div class="titlee">物流信息</div>
               <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>百世快递</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>3222222233343</span></li>
-                <li class="marginTopLeft">物流电话：<span>暂无</span></li>
+                <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
+                <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
+                <li class="marginTopLeft">电话：<span>{{phone}}</span></li>
               </ul>
               <div class="right imgNum">
                 <div class="imgBOXs">
@@ -93,17 +94,9 @@
                 <img src="" alt="">
               </div>
               <ul class="wlxq">
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>您的订单已导入，快递公司正在取件</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
+                <li v-for="i in dataList">
+                  <p>{{i.time}}</p>
+                  <p>{{i.context}}</p>
                 </li>
               </ul>
             </div>
@@ -113,9 +106,129 @@
     </div>
   </div>
 </template>
+
+<script>
+  import http from '../../http'
+  import md5 from 'js-md5';
+
+  export default {
+    data() {
+      return {
+        orderNum: '',    //订单号
+        listData: '',
+        price: '',
+        phone:'',
+        company:'',
+        expressNum:'',
+        dataList:[],
+        abbreviation:''
+      }
+    },
+    created() {
+      this.orderNum = this.$route.params.orderNum;
+      this.getshow()
+      this.findExpress()
+      this.getlog()
+    },
+    methods: {
+      stataFilter(value) {
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
+          return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
+        }
+      },
+      //根据订单号查询物流资料，用于调取快递100
+      findExpress() {
+        let url = http.apiMap.findExpress;
+        let data = {
+          orderNum: this.orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.express;
+              this.company=data.company;
+              this.expressNum=data.expressNum;
+              this.phone=data.phone;
+              this.abbreviation=data.abbreviation;
+
+
+              let url = 'https://poll.kuaidi100.com/poll/query.do';
+              let param = {
+                "com": this.abbreviation,
+                "num": this.expressNum,
+                "from": "",
+                "to": ""
+              }
+              let key = 'mSLNZbDA8571';
+              let customer = '34E2F2A06651DF5E9DF2D042E31B954D';
+              $.ajax({
+                url:url,
+                type:'post',
+                data:{
+                  customer: customer,
+                  sign: md5(JSON.stringify(param) + key + customer).toUpperCase(),
+                  param: JSON.stringify(param)
+                },
+                dataType:'jsonp',
+                success:function (data) {
+                  console.log(data)
+                }
+              })
+
+            } else {
+              console.log('暂无物流信息')
+            }
+          }
+        );
+      },
+      //获取物流信息
+      getlog() {
+
+      },
+      getshow() {
+        let url = http.apiMap.showOrder;
+        let data = {
+          orderNum: this.orderNum,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.order;
+              this.listData = data
+
+            }
+          }
+        );
+      },
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.change_price').css('display', 'none');
+      },
+
+    }
+  }
+
+
+</script>
+
+
 <style>
   .wlxq {
     display: flex;
+    padding-left: 20px;
+    flex-direction: column;
     justify-content: space-around;
   }
 
@@ -175,61 +288,3 @@
     box-sizing: border-box;
   }
 </style>
-<script>
-  import http from '../../http'
-  export default{
-    data(){
-      return {
-        orderNum: '',    //订单号
-        listData: '',
-        price: ''
-      }
-    },
-    created() {
-      this.orderNum = this.$route.params.orderNum;
-      this.getshow()
-    },
-    methods: {
-      stataFilter(value){
-        if (value == 0) {
-          return '待付款'
-        } else if (value == 1) {
-          return '待发货'
-        } else if (value == 2) {
-          return '待收货'
-        } else if (value == 3) {
-          return '已完成'
-        } else if (value == 4) {
-          return '已退款'
-        } else if (value == 5) {
-          return '已超时'
-        }
-      },
-      getshow(){
-        let url = http.apiMap.showOrder;
-        let data = {
-          orderNum: this.orderNum,
-          common: this.GLOBAL.common
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              let data = res.body.data.order;
-              this.listData = data
-
-            }
-          }
-        );
-      },
-      DisplayNone: function () {
-        $('.mask').css('display', 'none');
-        $('.change_price').css('display', 'none');
-      },
-
-    }
-  }
-
-
-</script>
-
-

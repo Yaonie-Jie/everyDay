@@ -11,7 +11,9 @@
         <div class="team_data">
           <div class="team_data_title">团队资料</div>
           <div class="team_level">团队级别：<span>{{data1}}</span></div>
-          <div class="team_number">团队人数（算团长）：<span></span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人</div>
+          <div class="team_number">
+            团队人数（算团长）：<span></span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人
+          </div>
           <div class="team_total_money">团队累计销售金：<span>￥{{teamMoney}}</span></div>
           <div class="team_month_money">团队上月销售金：<span>￥{{teamLastMoney}}</span></div>
         </div>
@@ -98,32 +100,32 @@
 <script>
   import http from '../../http'
 
-  export default{
-     data(){
-      return{
-        id:'',
-        tableData:'',
-        teamLevel:'',   //团队等级
-        teamLastMoney:'', //上月累计销售金
-        teamMoney:'',     //团队累计销售金
-        data1:''       //团队级别
+  export default {
+    data() {
+      return {
+        id: '',
+        tableData: [],
+        teamLevel: '',   //团队等级
+        teamLastMoney: '', //上月累计销售金
+        teamMoney: '',     //团队累计销售金
+        data1: ''       //团队级别
       }
-  },
-    created(){
-    this.id = this.$route.params.id;
-    this.showId()
-  },
+    },
+    created() {
+      this.id = this.$route.params.id;
+      this.showId()
+    },
     methods: {
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_junior_member').css('display','block');
+      DisplayBlock() {
+        $('.mask').css('display', 'block');
+        $('.add_junior_member').css('display', 'block');
       },
 
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_junior_member').css('display','none');
+      DisplayNone() {
+        $('.mask').css('display', 'none');
+        $('.add_junior_member').css('display', 'none');
       },
-      showId(){
+      showId() {
         let url = http.apiMap.getTeamMessage
         let data = {
           account: this.id,  //团长账号
@@ -131,30 +133,20 @@
         };
         this.$http.post(url, data).then(
           function (res) {
-            console.log(res)
             if (res.body.result) {
               let data = res.body.data;
-              console.log(data)
-              this.tableData=data.list
-              //console.log(data.headManage)
-              //this.teamLevel=data.headManage.level
-              this.teamLastMoney=data.headManage.lastMonthMoney
-              this.teamMoney=data.headManage.money
+              this.tableData = data.list
+              this.teamLastMoney = data.headManage.lastMonthMoney;
+              this.teamMoney = data.headManage.money;
 
-
-              let data1=data.headManage.level;
-              console.log(data1)
-                if (data1 == 0) {
-                  data1 = '公司店主团队_美日美C'
-                } else if(data1 == 1){
-                  data1 = '公司店主团队'      //level=3   ???
-                }else if(data1 == 2){
-                  data1 = '高级店主团队'
-                }
-
-              console.log(data1)
-
-
+              let data1 = data.headManage.level;
+              if (data1 == 0) {
+                data1 = '公司店主团队_美日美C'
+              } else if (data1 == 1) {
+                data1 = '公司店主团队'      //level=3   ???
+              } else if (data1 == 2) {
+                data1 = '高级店主团队'
+              }
             }
           }
         );
@@ -166,17 +158,19 @@
 
 
 <style>
-  .team_information{
+  .team_information {
     margin: 30px 0;
   }
-  .team_information_title{
+
+  .team_information_title {
     font-size: 16px;
     line-height: 32px;
     margin-top: 30px;
     text-align: center;
     margin-bottom: 30px;
   }
-  .team_data{
+
+  .team_data {
     width: 100%;
     height: auto;
     overflow: hidden;
@@ -184,15 +178,18 @@
     box-sizing: border-box;
     border: 1px solid #303030;
   }
-  .team_data_title{
+
+  .team_data_title {
     font-size: 16px;
     line-height: 32px;
   }
-  .team_number,.team_month_money,.team_total_money,.team_level{
+
+  .team_number, .team_month_money, .team_total_money, .team_level {
     font-size: 14px;
     line-height: 28px;
   }
-  .team_structure{
+
+  .team_structure {
     width: 100%;
     height: auto;
     overflow: hidden;
@@ -201,28 +198,34 @@
     margin-top: 30px;
     border: 1px solid #303030;
   }
-  .team_structure_title{
+
+  .team_structure_title {
     font-size: 16px;
     line-height: 32px;
     padding-left: 10%;
   }
-  .form_head{
+
+  .form_head {
     width: 80%;
     margin-left: 10%;
   }
-  .form_head tr td{
+
+  .form_head tr td {
     height: 32px;
     line-height: 32px;
   }
-  .form_head tr td i{
+
+  .form_head tr td i {
     color: #000000;
     cursor: pointer;
   }
-  .junior_league_menber{
+
+  .junior_league_menber {
     width: 80%;
     margin-left: 10%;
   }
-  .junior_league_menber p{
+
+  .junior_league_menber p {
     font-size: 14px;
     line-height: 40px;
     color: #FFFFFF;
@@ -230,33 +233,40 @@
     text-align: center;
     font-weight: bold;
   }
-  .add_junior_member p{
+
+  .add_junior_member p {
     font-size: 16px;
     font-weight: bold;
     color: #303030;
     text-align: center;
     line-height: 32px;
   }
-  .el-form-item{
+
+  .el-form-item {
     width: 75%;
   }
-  .el-form{
+
+  .el-form {
     height: 36px;
   }
-  .el-form .el-form-item{
+
+  .el-form .el-form-item {
     float: left;
   }
-  .el-form .el-button{
+
+  .el-form .el-button {
     float: right;
   }
-  .hide_tip{
+
+  .hide_tip {
     width: 80%;
     height: 28px;
     margin-left: 10%;
     overflow: hidden;
     position: relative;
   }
-  .hide_tip i{
+
+  .hide_tip i {
     color: #ff3366;
     font-size: 14px;
     line-height: 28px;
@@ -264,35 +274,41 @@
     left: 0;
     top: 0;
   }
-  .junior_menber_information{
+
+  .junior_menber_information {
     width: 80%;
     margin-left: 10%;
     height: auto;
     overflow: hidden;
     text-align: center;
   }
-  .junior_menber_information p{
+
+  .junior_menber_information p {
     font-size: 14px;
     line-height: 28px;
     color: #ffffff;
     background: #ff3366;
     margin-bottom: 20px;
   }
-  .junior_menber_information ul li{
+
+  .junior_menber_information ul li {
     height: 28px;
     font-size: 14px;
     width: 100%;
     text-align: left;
     box-sizing: border-box;
   }
-  .add_junior_member_btn{
+
+  .add_junior_member_btn {
     margin: 0 auto;
   }
-  .add_junior_member_btn .el-button:nth-child(1){
+
+  .add_junior_member_btn .el-button:nth-child(1) {
     float: left;
     margin-left: 25%;
   }
-  .add_junior_member_btn .el-button:nth-child(2){
+
+  .add_junior_member_btn .el-button:nth-child(2) {
     float: right;
     margin-right: 25%;
   }

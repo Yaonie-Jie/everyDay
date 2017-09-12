@@ -10,7 +10,7 @@
         <div class="titlee" style="border:0;">
           用户可选发票内容
         </div>
-        <el-button type="text" @click="dialogFormVisible = true" class="addMsk">添加发票内容</el-button>
+        <el-button type="text" @click="addFa" class="addMsk">添加发票内容</el-button>
         <div class="invoice_form">
           <el-table
             :data="tableData"
@@ -22,10 +22,10 @@
             </el-table-column>
             <el-table-column
               label="操作">
-            <template scope="scope" style="text-align:center;">
-              <el-button type="text" size="small" @click="DisplayBlock(scope.$index)" >修改</el-button>
-              <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
-            </template>
+              <template scope="scope" style="text-align:center;">
+                <el-button type="text" size="small" @click="DisplayBlock(scope.$index)">修改</el-button>
+                <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -33,91 +33,47 @@
     </div>
 
 
-  <!--修改-->
-  <div class="mask"></div>
-  <div class="popup change_ticheng">
-    <div class="popup_title">修改<span style="font-weight:bold;" v-text="updataText"></span></div>
-    <div class="popup_form">
-      <div class="popup_form_title"></div>
-      <el-input  v-model="updateData" placeholder="请输入内容"></el-input>
+    <!--修改-->
+    <div class="mask"></div>
+    <div class="popup change_ticheng">
+      <div class="popup_title">修改<span style="font-weight:bold;" v-text="updataText"></span></div>
+      <div class="popup_form">
+        <div class="popup_form_title"></div>
+        <el-input v-model="updateData" placeholder="请输入内容"></el-input>
+      </div>
+      <div class="popup_btn">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary" @click="updateYes">确定</el-button>
+      </div>
     </div>
-    <div class="popup_btn">
-      <el-button @click="DisplayNone">取消</el-button>
-      <el-button type="primary" @click="updateYes">确定</el-button>
-    </div>
-  </div>
 
-<!--添加发票内容-->
-    <el-dialog title="添加发票内容" :visible.sync="dialogFormVisible">
+    <!--添加发票内容-->
+    <div class="popup change_left">
+      <div class="popup_title">添加发票内容</div>
       <el-form :model="form">
         <el-form-item label="发票内容" :label-width="formLabelWidth">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="">取 消</el-button>
-        <el-button type="primary" @click="addMask">确 定</el-button>
+        <div style="width: 100%;height: 50px;display: flex;justify-content: space-around">
+          <el-button type="primary" @click="addMask" style="float:left;;">确 定</el-button>
+          <el-button @click="disnone"  style="float:left;;">取 消</el-button>
+
+        </div>
+
       </div>
-    </el-dialog>
+    </div>
+    <div class="mask"></div>
+
 
   </div>
 </template>
 
-<style>
-  .invoice{
-    width: 100%;
-    min-height: 500px;
-    margin-top: 30px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .invoice button{
-    tetx-align:center;
-    margin: 50px 10% 20px 0;
-  }
-
-  .invoice_title{
-    text-align: center;
-    line-height: 60px;
-    font-size: 16px;
-    margin-top: 20px;
-  }
-
-  .add_invoice_btn{
-    width: 100px;
-    height: 30px;
-    border-radius: 5px;
-    background: #1E9FFF;
-    color: #FFFFFF;
-    text-align: center;
-    line-height: 30px;
-    position: absolute;
-    right: 10%;
-    top: 30px;
-  }
-
-  .invoice_form{
-    width: 80%;
-    margin:70px auto;
-  }
-
-  .invoice_form table tr td{
-    text-align: center;
-  }
-
-  .invoice_form table tr th{
-    text-align: center;
-  }
-
-  .table tr td{
-    text-align: center;
-    border-color: #303030 !important;
-  }
-</style>
 
 <script>
   import http from '../../http'
+
   export default {
     data() {
       return {
@@ -146,11 +102,18 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              console.log(res.body.data.list)
               this.tableData = res.body.data.list
             }
           }
         );
+      },
+      addFa(){
+        $(".change_left").show();
+        $(".mask").show()
+      },
+      disnone() {
+        $(".change_left").hide();
+        $(".mask").hide()
       },
       DisplayBlock(index) {
         this.updateData = this.tableData[index].invoiceType;
@@ -181,7 +144,7 @@
             if (res.body.result) {
               this.$message({
                 type: 'success',
-                message: '操作成功!'
+                message: '修改成功!'
               });
               $('.mask').css('display', 'none');
               $('.change_ticheng').css('display', 'none');
@@ -203,7 +166,7 @@
       open2(row) {
         var data = {'id': row.id, 'common': this.GLOBAL.common}
         var that = this;
-        this.$confirm('此操作将删除该商品, 是否继续?', '提示', {
+        this.$confirm('此操作将删除该发票内容, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -219,7 +182,7 @@
                   type: 'success',
                   message: '删除成功!',
                 });
-               that.findList();
+                that.findList();
               } else {
                 this.$message({
                   type: 'info',
@@ -238,19 +201,27 @@
 
       //添加发票
       addMask() {
-        console.log(1)
-        this.dialogFormVisible=false;
+        this.dialogFormVisible = false;
         let url = http.apiMap.addInvoiceList;
         let data = {
-          invoiceType:this.form.name,
-          common:1
+          invoiceType: this.form.name,
+          common: 1
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              console.log(res.body.data.list)
-              this.tableData = res.body.data.list
+              this.tableData = res.body.data.list;
+              this.$message({
+                type: 'success',
+                message: '添加成功'
+              });
               this.findList()
+              this.disnone()
+            }else {
+              this.$message({
+                type: 'error',
+                message: '添加失败'
+              });
             }
 
           }
@@ -261,3 +232,58 @@
     }
   }
 </script>
+<style scoped="scoped">
+  .invoice {
+    width: 100%;
+    min-height: 500px;
+    margin-top: 30px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .invoice button {
+    tetx-align: center;
+    margin: 50px 10% 20px 0;
+  }
+
+  .invoice_title {
+    text-align: center;
+    line-height: 60px;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  .add_invoice_btn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    background: #1E9FFF;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 30px;
+    position: absolute;
+    right: 10%;
+    top: 30px;
+  }
+
+  .invoice_form {
+    width: 80%;
+    margin: 70px auto;
+  }
+
+  .invoice_form table tr td {
+    text-align: center;
+  }
+
+  .invoice_form table tr th {
+    text-align: center;
+  }
+
+  .table tr td {
+    text-align: center;
+    border-color: #303030 !important;
+  }
+  .el-button{
+    margin: 10px 10px 0px !important
+  }
+</style>

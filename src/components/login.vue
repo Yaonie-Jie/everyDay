@@ -70,7 +70,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped="scoped">
   .padd {
     height: 200px;
   }
@@ -78,6 +78,7 @@
   .hello {
     background: #ff3366;
     height: 100%;
+    width:100%;
   }
 
   .box {

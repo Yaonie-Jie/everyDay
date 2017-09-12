@@ -20,31 +20,27 @@
             </el-table-column>
             <el-table-column
               :span='4'
-              prop="brand_name"
               label="级别提成">
+              <template scope="scope">
+                <el-input v-show="scope.row.edit" size="small" v-model="scope.row.brand_name"></el-input>
+                <span v-show="!scope.row.edit">{{ scope.row.brand_name }}</span>
+              </template>
             </el-table-column>
             <el-table-column
               fixed="right"
               :span='4'
               label="操作">
               <template scope="scope">
-                <el-button type="primary" size="small" @click="DisplayBlock(scope.$index)">修改</el-button>
+                <el-button :type="scope.row.edit?'success':'primary'" @click='scope.row.edit=!scope.row.edit'
+                           size="small" icon="edit">{{scope.row.edit ? '完成' : '编辑'}}
+                </el-button>
               </template>
-            </el-table-column>
+            </el-table-column>a
           </el-table>
         </div>
-      </div>
-    </div>
-    <div class="mask"></div>
-    <div class="popup change_ticheng">
-      <div class="popup_title">修改"<span style="font-weight:bold;" v-text="updataText"></span>"默认提成</div>
-      <div class="popup_form">
-        <div class="popup_form_title"></div>
-        <el-input  v-model="updateData" placeholder="请输入内容"></el-input>
-      </div>
-      <div class="popup_btn">
-        <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary" @click="updateYes()">确定</el-button>
+        <div style="text-align: center;margin-top: 20px">
+          <el-button type="primary" size="lager" @click="updataData">确定</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -55,73 +51,61 @@
   export default {
     data() {
       return {
-        updateData:"店主类型",
-        updataText:"0%",
-        clickIndex:"0",
-        tableData: [
-          {
-            brand_logo: '个人店主',
-            brand_name: '',
-            id:"",
-            operation: '操作'
-          },
-          {
-            brand_logo: '公司店主',
-            brand_name: '',
-            operation: '操作'
-          },
-          {
-            brand_logo: '高级店主',
-            brand_name: '',
-            operation: '操作'
-          }
-        ]
+        updateData: "店主类型",
+        updataText: "0%",
+        clickIndex: "0",
+        tableData: [],
+        id:''
       }
     },
-    created(){
+    created() {
       this.getData()
     },
     methods: {
-      getData(){
+      getData() {
         let url = http.apiMap.commissionData;
         let data = {
           common: this.GLOBAL.common
         };
-        this.$http.post(url,data).then(
+        this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.tableData[0].brand_name = res.body.data.royalty.personal/100+"%";
-              this.tableData[1].brand_name = res.body.data.royalty.company/100+"%";
-              this.tableData[2].brand_name = res.body.data.royalty.senior/100+"%";
-              this.tableData[0].id = res.body.data.royalty.id;
+              let data = res.body.data.royalty;
+              this.id=data.id;
+              this.tableData = [
+                {
+                  brand_logo: '个人店主',
+                  brand_name: data.personal / 100 + '%',
+                  id: "",
+                  operation: '操作',
+                  edit:false
+                },
+                {
+                  brand_logo: '公司店主',
+                  brand_name: data.company / 100 + '%',
+                  operation: '操作',
+                  edit:false
+
+                },
+                {
+                  brand_logo: '高级店主',
+                  brand_name: data.senior / 100 + '%',
+                  operation: '操作',
+                  edit:false
+
+                }
+              ]
             }
           }
         );
       },
-      DisplayBlock:function(index){
-        this.updataText = this.tableData[index].brand_logo;
-        this.updateData = this.tableData[index].brand_name;
-        this.clickIndex = index;
-        $('.mask').css('display','block');
-        $('.change_ticheng').css('display','block');
-      },
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.change_ticheng').css('display','none');
-      },
-      updateYes:function(){
-
-        let updatedataArray=[];
-        for(let i=0;i<this.tableData.length;i++){
-          if( i==this.clickIndex ){
-            this.tableData[i].brand_name = this.updateData;
-          }
-        }
+      updataData() {
         let updateurl = http.apiMap.updateCommissionData;
         let updatedata = {
-          common: this.GLOBAL.common,
-          id:this.tableData[0].id,
-          levelRoyalty:this.tableData[0].brand_name.split("%")[0]*100+","+this.tableData[1].brand_name.split("%")[0]*100+","+this.tableData[2].brand_name.split("%")[0]*100,
+          common: 1,
+          personal: this.tableData[0].brand_name.replace(/%/,'')*100,
+          company: this.tableData[1].brand_name.replace(/%/,'')*100,
+          senior: this.tableData[2].brand_name.replace(/%/,'')*100,
         };
         this.$http.post(updateurl, updatedata).then(
           function (res) {
@@ -131,25 +115,22 @@
                 message: '操作成功!'
               });
               this.getData();
-            }else {
+            } else {
               this.$message({
-                type: 'waring',
-                message: '修改失败'
+                type: 'info',
+                message: res.body.msg
               });
-            };
-            $('.mask').css('display','none');
-            $('.change_ticheng').css('display','none');
+            }
           }
         );
       }
     }
 
 
-
   }
 </script>
 <style>
-  .commission_{
+  .commission_ {
     width: 100%;
     min-height: 500px;
     margin-top: 30px;
@@ -157,46 +138,46 @@
     position: relative;
   }
 
-  .commission_title{
+  .commission_title {
     text-align: center;
     line-height: 60px;
     font-size: 16px;
     margin-top: 20px;
   }
 
-  .commission_form{
+  .commission_form {
     width: 80%;
     margin-left: 10%;
   }
 
-  .commission_form table tr th{
+  .commission_form table tr th {
     text-align: center;
   }
 
-  .commission_form table tr td{
+  .commission_form table tr td {
     text-align: center;
   }
 
-  .table tr td{
+  .table tr td {
     text-align: center;
     border-color: #303030 !important;
     width: 33%;
   }
 
-  .commission_operate_btn a{
+  .commission_operate_btn a {
     color: #ffffff;
     padding: 2px 8px;
     background: #303030;
   }
 
-  .commission_operate_btn a:hover{
+  .commission_operate_btn a:hover {
     color: #FFFFFF !important;
     text-decoration: none;
   }
 
-  .popup_form .el-input{
-    margin:0 auto;
-    float:none;
+  .popup_form .el-input {
+    margin: 0 auto;
+    float: none;
   }
 </style>
 

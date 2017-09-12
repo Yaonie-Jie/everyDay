@@ -37,7 +37,7 @@
 
 
         <div class="operation_btn">
-          <el-button type="primary" size="small" @click="DisplayBlock(scope.$index)">修改店主资料</el-button>
+          <el-button type="primary" size="small" @click="DisplayBlock">修改店主资料</el-button>
           <el-button type="primary" @click="DisplayBlock">升级到公司店主</el-button>
         </div>
 
@@ -351,50 +351,50 @@
           }
         )
       },
-//      DisplayBlock(index) {
-//        this.updateData = this.tableData[index].invoiceType;
-//        this.clickIndex = index;
-//        $('.mask').css('display', 'block');
-//        $('.change_ticheng').css('display', 'block');
-//      },
-//      DisplayNone() {
-//        $('.mask').css('display', 'none');
-//        $('.change_ticheng').css('display', 'none');
-//      },
-//      updateYes() {
-//        for (let i = 0; i < this.tableData.length; i++) {
-//          if (i == this.clickIndex) {
-//            this.tableData[i].invoiceType = this.updateData;
-//          }
-//        }
-//        let updateurl = http.apiMap.modifyInvoiceList;
-//        let updatedata = {
-//          common: 2,
-//          id: this.tableData[0].id,
-//          invoiceType: this.tableData[0].invoiceType
-//        };
-//        this.$http.post(updateurl, updatedata).then(
-//          function (res) {
-//            if (res.body.result) {
-//              this.$message({
-//                type: 'success',
-//                message: '操作成功!'
-//              });
-//              $('.mask').css('display', 'none');
-//              $('.change_ticheng').css('display', 'none');
-//              this.getData();
-//            } else {
-//              this.$message({
-//                type: 'waring',
-//                message: '修改失败'
-//              });
-//            }
-//            ;
-//            $('.mask').css('display', 'none');
-//            $('.change_ticheng').css('display', 'none');
-//          }
-//        );
-//      },
+      DisplayBlock() {
+        this.updateData = this.tableData[index].invoiceType;
+        this.clickIndex = index;
+        $('.mask').css('display', 'block');
+        $('.change_ticheng').css('display', 'block');
+      },
+      DisplayNone() {
+        $('.mask').css('display', 'none');
+        $('.change_ticheng').css('display', 'none');
+      },
+      updateYes() {
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (i == this.clickIndex) {
+            this.tableData[i].invoiceType = this.updateData;
+          }
+        }
+        let updateurl = http.apiMap.modifyInvoiceList;
+        let updatedata = {
+          common: 2,
+          id: this.tableData[0].id,
+          invoiceType: this.tableData[0].invoiceType
+        };
+        this.$http.post(updateurl, updatedata).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '操作成功!'
+              });
+              $('.mask').css('display', 'none');
+              $('.change_ticheng').css('display', 'none');
+              this.getData();
+            } else {
+              this.$message({
+                type: 'waring',
+                message: '修改失败'
+              });
+            }
+            ;
+            $('.mask').css('display', 'none');
+            $('.change_ticheng').css('display', 'none');
+          }
+        );
+      },
     }
   }
 </script>

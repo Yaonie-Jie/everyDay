@@ -8,13 +8,13 @@
       <div class="apply_">
         <div class="titlee" style="border:0;">店主团队列表</div>
         <div class="apply_condition">
-          <div class="apply_time">
+          <div class="apply_time" style="float:left;">
             <div class="block">
               <el-button type="success" @click="AddshopmanTeam">添加团队</el-button>
             </div>
           </div>
           <div class="apply_information">
-            <input type="text" v-model="teamAccount" placeholder="输入团长账号搜索团队" style="padding:0 10px;" />
+            <input type="text" v-model="teamAccount" placeholder="输入团长账号搜索团队" style="padding:0 10px;height: 30px;"/>
             <el-button type="success" @click="findTeam">搜索</el-button>
           </div>
         </div>
@@ -77,7 +77,9 @@
         <li><i>上月所得奖励：</i><span>13.00</span></li>
       </ul>
       <div class="add_tip">您正在创建高级店主团队</div>
-      <div class="add_this_teamer"><el-button type="primary"  size="small">添加其做团长</el-button></div>
+      <div class="add_this_teamer">
+        <el-button type="primary" size="small">添加其做团长</el-button>
+      </div>
       <div class="already_team">您已指定139281982918做团长</div>
       <el-button type="primary" @click="DisplayBlock2">下一步</el-button>
     </div>
@@ -105,7 +107,9 @@
         <li><i>上月所得奖励：</i><span>13.00</span></li>
       </ul>
       <div class="add_tip3"><i>添加其做团长下级团员</i>您正在创建高级店主团队</div>
-      <div class="add_this_teamer"><el-button type="primary"  size="small">添加其做团长</el-button></div>
+      <div class="add_this_teamer">
+        <el-button type="primary" size="small">添加其做团长</el-button>
+      </div>
       <div class="already_team">您已指定139281982918做团长</div>
       <div class="add_team2_btns">
         <el-button @click="DisplayNone">完成，返回团队管理列表</el-button>
@@ -128,54 +132,53 @@
 
 <script>
   import http from '../../http'
-  export default{
+
+  export default {
     data() {
       return {
         tableData: [],
         teamAccount: '',
-        id:'',
-        currentPage:1,
-        count11:1,
+        id: '',
+        currentPage: 1,
+        count11: 1,
       }
     },
-    created(){
+    created() {
       this.getTeamList()
     },
     methods: {
-      //分页跳转
-      handleCurrentChange(val) {
-        this.currentPage = val;
-        this.getInfinance()  //页面 加载数据
-      },
-      getTeamList(){
+
+      getTeamList() {
         let url = http.apiMap.getTeamList
         let data = {
-          common: 2,
-          size:10,
-          nowpage:this.currentPage,
+          common: 1,
+          size: 10,
+          nowpage: this.currentPage,
         }
+        console.log(data)
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              let data=res.body.data.ownerTeamManageList;
+
+              this.count11 = res.body.data.count;
+              let data = res.body.data.ownerTeamManageList;
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].teamLevel == 0) {
                   data[i].teamLevel = '公司店主团队_美日美C'
-                } else if(data[i].teamLevel == 1){
+                } else if (data[i].teamLevel == 1) {
                   data[i].teamLevel = '公司店主团队'
-                }else if(data[i].teamLevel == 2){
+                } else if (data[i].teamLevel == 2) {
                   data[i].teamLevel = '高级店主团队'
                 }
                 arr.push(data[i])
               }
-              //this.dataList = arr;
               this.tableData = arr
             }
           }
         )
       },
-      findTeam(){
+      findTeam() {
         let url = http.apiMap.findTeam
         let data = {
           teamAccount: this.teamAccount,
@@ -185,8 +188,21 @@
           function (res) {
             if (res.body.result) {
               let arr = []
-              arr.push(res.body.data.ownerTeamManage)
+              let data = res.body.data.ownerTeamManage;
+              if (data.teamLevel == 0) {
+                data.teamLevel = '公司店主团队_美日美C'
+              } else if (data.teamLevel == 1) {
+                data.teamLevel = '公司店主团队'
+              } else if (data.teamLevel == 2) {
+                data.teamLevel = '高级店主团队'
+              }
+              arr.push(data)
               this.tableData = arr
+            } else {
+              this.$message({
+                type: 'warning',
+                message: res.body.msg
+              });
             }
           }
         )
@@ -203,57 +219,67 @@
       },
 
 
-
-
       AddshopmanTeam: function () {
         this.$router.push('/AddShopmanTeam/')
       },
-
-      shows (row) {
-       this.$router.push('/ShopmanTeamShow/' + row.teamAccount );
+      //分页跳转
+      handleCurrentChange(val) {
+        console.log(1)
+        this.currentPage = val;
+        this.getTeamList()
+      },
+      shows(row) {
+        this.$router.push('/ShopmanTeamShow/' + row.teamAccount);
       }
     }
   }
 </script>
 
 
-<style>
-  .add_team_search{
+<style scoped="scoped">
+  .add_team_search {
     width: 80%;
     margin: 0 auto;
     margin-top: 20px;
     line-height: 36px;
     overflow: hidden;
   }
-  .add_team_search_title{
+
+  .add_team_search_title {
     float: left;
     width: 10%;
   }
-  .add_team_search .el-input{
+
+  .add_team_search .el-input {
     float: left;
     width: 72%;
     margin-left: 10px;
   }
-  .add_team_search .el-button{
+
+  .add_team_search .el-button {
     float: left;
     margin: 0;
     margin-left: 10px;
   }
-  .add_team_search_tip{
+
+  .add_team_search_tip {
     margin-left: 20%;
     position: relative;
     height: 28px;
-    display:flex;
+    display: flex;
   }
-  .add_team_search_tip i{
+
+  .add_team_search_tip i {
     color: #ff3366;
     font-size: 14px;
     line-height: 28px;
   }
-  .teamer_information{
+
+  .teamer_information {
     margin-top: 20px;
   }
-  .teamer_information_list{
+
+  .teamer_information_list {
     width: 60%;
     margin: 0 auto;
     margin-top: 20px;
@@ -261,71 +287,84 @@
     border: 1px solid #303030;
     padding: 30px 0;
   }
-  .teamer_information_list li{
+
+  .teamer_information_list li {
     height: 28px;
     line-height: 28px;
   }
-  .teamer_information_list li i{
+
+  .teamer_information_list li i {
     display: inline-block;
     float: left;
     width: 40%;
     text-align: left;
     margin-left: 10%;
   }
-  .teamer_information_list li span{
+
+  .teamer_information_list li span {
     display: inline-block;
     float: left;
     width: 40%;
     text-align: left;
   }
+
   .add_team .add_tip,
   .add_tip2,
-  .already_team{
+  .already_team {
     color: #ff3366;
     text-align: left;
     line-height: 28px;
     margin-left: 20%;
   }
-  .add_tip2{
+
+  .add_tip2 {
     margin-left: 10%;
     margin-top: 20px;
   }
-  .add_tip3{
+
+  .add_tip3 {
     text-align: left;
     color: #ff3366;
     margin: 20px 0;
     margin-left: 20%;
   }
-  .add_tip3 i{
+
+  .add_tip3 i {
     color: #303030;
     margin-right: 20px;
   }
-  .add_this_teamer{
+
+  .add_this_teamer {
     width: 60%;
     margin: 0 auto;
     overflow: hidden;
   }
-  .add_this_teamer .el-button{
+
+  .add_this_teamer .el-button {
     float: right;
     margin: 0;
   }
-  .add_small_title{
+
+  .add_small_title {
     width: 80%;
     margin: 0 auto;
     color: #FFFFFF;
     background: #ff3366;
   }
-  .add_team2_btns{
+
+  .add_team2_btns {
     width: 100%;
     margin: 0 auto;
     margin-top: 40px;
     overflow: hidden;
   }
-  .add_team2_btns .el-button:nth-child(1){
+
+  .add_team2_btns .el-button:nth-child(1) {
     float: left;
     margin-left: 10%;
   }
-  .add_team2_btns .el-button:nth-child(2){
+
+  .add_team2_btns .el-button:nth-child(2) {
     float: right;
     margin-right: 10%;
   }

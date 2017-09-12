@@ -14,7 +14,6 @@
             type="daterange"
             placeholder="选择日期范围">
           </el-date-picker>
-          <el-button type="success" @click="findOrder">搜索</el-button>
         </div>
 
         <i>发生原因：</i>
@@ -78,72 +77,67 @@
 
 <script>
   import http from '../../http'
+
   export default {
     data() {
       return {
-        currentPage:1,
-        count11:1,
+        currentPage: 1,
+        count11: 1,
         tableData: [],
-        time:'',  //时间搜索
+        time: '',  //时间搜索
         value6: '',
         value7: '',
-        OutMoney:'',
-        reason:'',    //发生原因
+        OutMoney: '',
+        reason: '',    //发生原因
         options: [
-        { text: '全部', value: '' },
-        { text: '退款', value: '1' },
-        { text: '提现', value: '2' }
-      ]
+          {text: '全部', value: ''},
+          {text: '退款', value: '1'},
+          {text: '提现', value: '2'}
+        ]
       }
     },
-    created(){
+    created() {
       this.getOutfinance()
     },
-    methods:{
-      getOutfinance(){
+    methods: {
+      getOutfinance() {
         let url = http.apiMap.findOutFinance;
         let data = {
           nowpage: this.currentPage,
           size: 10,
           common: 2,
-          startTime:'',
-          endTime:'',
+          startTime: '',
+          endTime: '',
 //          orderState:''
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count
-              console.log(res.body.data.list)
               this.tableData = res.body.data.list
-               this.OutMoney=res.body.data.sumInFinance
+              this.OutMoney = res.body.data.sumInFinance
               //出账原因
-              let data=res.body.data.list
-              console.log(data)
+              let data = res.body.data.list
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
                   data[i].reason = '退款'
-                } else if(data[i].reason == 2){
+                } else if (data[i].reason == 2) {
                   data[i].reason = '提现'
                 }
                 arr.push(data[i])
-                console.log(arr)
               }
-            //出款方式
-              let data1=res.body.data.list
-              console.log(data1)
+              //出款方式
+              let data1 = res.body.data.list
               let arr1 = [];
               for (let i = 0; i < data1.length; i++) {
                 if (data1[i].outMent == 1) {
                   data1[i].reason = '支付宝'
-                } else if(data1[i].outMent == 2){
+                } else if (data1[i].outMent == 2) {
                   data1[i].reason = '微信'
                 }
                 arr1.push(data1[i])
-                console.log(arr)
               }
-
             }
           }
         );
@@ -154,51 +148,48 @@
         this.getOutfinance()
       },
       //搜索订单
-      findOrder(){
-        var paddNum = function(num){    //如果是一位数就补一个0
+      findOrder() {
+        var paddNum = function (num) {    //如果是一位数就补一个0
           num += "";
-          return num.replace(/^(\d)$/,"0$1");
+          return num.replace(/^(\d)$/, "0$1");
         }
-        function FormatDate (strTime) {
-            if(strTime){
+
+        function FormatDate(strTime) {
+          if (strTime) {
             var date = new Date(strTime);
-            return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
-          }else {
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
             return ''
           }
         }
+
         let url = http.apiMap.findOutFinance;
         let data = {
           common: 1,
-          size:10,
-          nowpage:this.currentPage,
-          startTime:FormatDate(this.time[0]),
-          endTime:FormatDate(this.time[1]),
-          reason:$("#orderState :selected").attr('value')
+          size: 10,
+          nowpage: this.currentPage,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
+          reason: $("#orderState :selected").attr('value')
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              console.log(res.body.data)
               let data = res.body.data.list;
               this.tableData = data;
 
               //出账原因
               //let data=res.body.data.list
-              console.log(data)
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
                   data[i].reason = '退款'
-                } else if(data[i].reason == 2){
+                } else if (data[i].reason == 2) {
                   data[i].reason = '提现'
                 }
                 arr.push(data[i])
-                console.log(arr)
               }
-
-
             }
           }
         );
@@ -206,25 +197,25 @@
     }
   }
 </script>
-<style>
-  .operation_time{
+<style >
+  .operation_time {
     width: 80%;
     margin: 30px 0 30px 10%;
     overflow: hidden;
   }
 
-  .operation_time i{
+  .operation_time i {
     line-height: 36px;
     float: left;
   }
 
-  .operation_time .block{
+  .operation_time .block {
     float: left;
     margin-left: 30px;
     margin-right: 60px;
   }
 
-  .operation_time select{
+  .operation_time select {
     width: 100px;
     padding-left: 10px;
     height: 36px;
@@ -232,18 +223,24 @@
     margin-left: 30px;
   }
 
-  .out_account_form{
+  .out_account_form {
     width: 80%;
     margin-left: 10%;
   }
 
-  .accumulated_account{
+  .accumulated_account {
     width: 80%;
     margin-left: 10%;
     text-align: right;
     line-height: 42px;
-    font-style: 14px;
+    font-size: 14px;
     font-weight: bold;
     color: #000000;
   }
+  .el-button{
+    margin: 0 !important;
+  }
+  #orderState{
+    margin-right: 20px;
+   }
 </style>

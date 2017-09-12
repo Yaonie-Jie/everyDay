@@ -7,8 +7,8 @@
       </el-breadcrumb>
       <div class="titlee" style="border:none;">系统推荐列表</div>
       <div style="margin-bottom: 20px;padding-bottom: 20px">
-        <el-button type="success" class="right" @click="addOneShow">添加到商品详情</el-button>
-        <el-button type="success" class="right" @click="addTwoShow">添加到图文详情</el-button>
+        <el-button type="success"  @click="addOneShow">添加到商品详情</el-button>
+        <el-button type="success"  @click="addTwoShow">添加到图文详情</el-button>
       </div>
       <div class="boxx" style="max-width:880px;margin:0 auto;">
         <el-table
@@ -49,6 +49,14 @@
           </el-table-column>
         </el-table>
       </div>
+      <el-row>
+        <el-col :span="24">
+          <span style="padding-right: 20px">设置系统推荐页最多展示数量：</span>
+          <el-input type="text" style="width: 10%"
+                    v-model="pAmount"></el-input>
+          <el-button type="primary" @click="updatapopAmount">确定</el-button>
+        </el-col>
+      </el-row>
       <!--添加到商品详情弹窗-->
       <div class="leftshow popup">
         <div class="titlee">添加系统推荐-链接到商品详情（优品推荐）</div>
@@ -203,11 +211,14 @@
 
         content: '',
         editorOption: {},
-        DataLength:''
+        DataLength:'',
+        pAmount:''
       }
     },
     created: function () {
       this.findProList()
+      this.findProductNum()
+
     },
     methods: {
       findProList() {
@@ -237,7 +248,44 @@
           }
         )
       },
-
+      //查询推荐数量
+      findProductNum() {
+        let url = http.apiMap.findProductNum;
+        let data = {
+          common: 1,
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.pAmount = res.body.data.sAmount;
+            }
+          }
+        )
+      },
+      //修改系统推荐数量
+      updatapopAmount() {
+        let url = http.apiMap.updataProductNums;
+        let data = {
+          common: 1,
+          amount: this.pAmount
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '修改成功'
+              });
+              this.findProductNum()
+            }else {
+              this.$message({
+                type: 'error',
+                message: '修改失败'
+              });
+            }
+          }
+        )
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_recommend').css('display', 'none');

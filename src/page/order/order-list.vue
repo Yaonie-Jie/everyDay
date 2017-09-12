@@ -33,7 +33,7 @@
           </div>
           <div class="apply_information">
             订单状态：
-            <select name="" id="orderState" @change="stateChange" v-model="orderState">
+            <select name="" id="orderState" v-model="orderState">
               <option v-for="option in options" v-bind:value="option.value">
                 {{ option.text }}
               </option>
@@ -64,21 +64,23 @@
                       <p>{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{list.unitPrice}}</span></p>
+                      <p>商品单价：<span>{{list.unitPrice/100}}</span></p>
                       <p>购买数量：X<span>{{list.amount}}</span></p>
-                      <p>总价：<span>{{list.unitPrice * list.amount}}</span></p>
+                      <p>总价：<span>{{list.unitPrice * list.amount/100}}</span></p>
                     </div>
                   </li>
                 </ul>
                 <div class="Pic">
                   <p>共<span class="pink">{{i.orderState}}</span>件商品</p>
-                  <p>商品总额：￥<span class="pink">{{i.price}}</span></p>
+                  <p>商品总额：￥<span class="pink">{{i.price/100}}</span></p>
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>{{i.price}}</span></p>
-                <p>包含运费：<span>{{i.freigh}}</span></p>
-                <el-button @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
+                <p>订单总额：<span>{{i.price/100}}</span></p>
+                <p>包含运费：<span>{{i.freigh/100}}</span></p>
+                <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
+                <el-button v-show="i.orderState==1" @click="addExpress(i)">发货</el-button>
+                <el-button v-show="i.orderState==2">查看物流</el-button>
                 <el-button @click="open2(i.orderNum)">取消订单</el-button>
                 <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
@@ -118,15 +120,56 @@
       </div>
     </div>
 
+
+    <div class="popup change_left">
+      <div class="popup_title">发货</div>
+      <el-row style="text-align: left;">
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">订单号：</span>
+          </div>
+          <span style="line-height: 36px;">{{orderNum}}</span>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">运单号：</span>
+          </div>
+          <el-input type="text" style="width: 30%" v-model="ExpressNum"></el-input>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">快递公司：</span>
+          </div>
+          <select name="" id="addwuliu" v-model="Abbreviation">
+            <option v-for="option in expressList" v-bind:value="option.abbreviation">
+              {{ option.company }}
+            </option>
+          </select>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">手机号：</span>
+          </div>
+          <el-input type="text" style="width: 30%" v-model="phone"></el-input>
+        </el-col>
+      </el-row>
+      <div class="popup_btn">
+        <el-button type="primary" @click="addfa">发货</el-button>
+        <el-button @click="noneblock">取消</el-button>
+      </div>
+    </div>
+    <div class="mask"></div>
+
+
     <div class="block">
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      :page-size="10"
-      layout="prev, pager, next, jumper"
-      :total="count11">
-    </el-pagination>
-  </div>
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
 
   </div>
 
@@ -135,8 +178,10 @@
 
 <script>
   import http from '../../http'
-  export default{
-    data(){
+  import md5 from 'js-md5';
+
+  export default {
+    data() {
       return {
         dataList: '',
         price: '',       //改价的订单价格
@@ -144,24 +189,28 @@
         time: '',         //选择时间搜索
         currentPage: 1,
         count11: 1,
-        userAccount:'',   //用户账户
-        orderState:'',    //订单状态
+        userAccount: '',   //用户账户
+        orderState: '',    //订单状态
         options: [
-          { text: '全部', value: '' },
-          { text: '待付款', value: '0' },
-          { text: '待发货', value: '1' },
-          { text: '待收货', value: '2' },
-          { text: '已完成', value: '3' },
-          { text: '已退款', value: '4' },
-          { text: '已超时', value: '5' }
-        ]
+          {text: '全部', value: ''},
+          {text: '待付款', value: '0'},
+          {text: '待发货', value: '1'},
+          {text: '待收货', value: '2'},
+          {text: '已完成', value: '3'},
+          {text: '已退款', value: '4'},
+          {text: '已超时', value: '5'}
+        ],
+        expressList: [],
+        Abbreviation: '',
+        ExpressNum: '',
+        phone: ''
       }
     },
     created() {
       this.getList()
     },
     methods: {
-      stataFilter(value){
+      stataFilter(value) {
         if (value == 0) {
           return '待付款'
         } else if (value == 1) {
@@ -176,29 +225,73 @@
           return '已超时'
         }
       },
-      DisplayBlock: function (orderNum,price) {
+      addExpressOrder(i, q) {
+        console.log(i)
+      },
+      //发货选择框
+      addExpress(i) {
+        this.findExpressList();
+        $(".change_left").show();
+        $(".mask").show();
+        this.orderNum = i.orderNum;
+        console.log(i)
+      },
+      noneblock() {
+        $(".change_left").hide();
+        $(".mask").hide();
+      },
+      //发货
+      addfa() {
+        let url = http.apiMap.addExpressOrder;
+        let data = {
+          common: 1,
+          ExpressNum: this.ExpressNum,
+          OrderNum: this.orderNum,
+          Abbreviation: this.Abbreviation,
+          company: $("#addwuliu :selected").text().replace(/\s+/g, ''),
+          phone: this.phone
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '发货成功!'
+              });
+              this.noneblock()
+            } else {
+              this.$message({
+                type: 'warning',
+                message: res.body.msg
+              });
+            }
+          }
+        );
+      },
+
+      DisplayBlock(orderNum, price) {
         this.orderNum = orderNum;
-        this.price=price
+        this.price = price
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
 
-      DisplayNone: function () {
+      DisplayNone() {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
       },
 
-      DisplayBlock3: function () {
+      DisplayBlock3() {
         $('.mask').css('display', 'block');
         $('.deliver_goods').css('display', 'block');
       },
 
-      DisplayNone3: function () {
+      DisplayNone3() {
         $('.mask').css('display', 'none');
         $('.deliver_goods').css('display', 'none');
       },
       //跳转详情页
-      shows: function (num, state) {
+      shows(num, state) {
         if (state == 0) {
           this.$router.push('/OrderNo/' + num + '');
         } else if (state == 1) {
@@ -247,7 +340,7 @@
         });
       },
       //获取列表
-      getList(){
+      getList() {
         let url = http.apiMap.getList;
         let data = {
           nowpage: this.currentPage,
@@ -265,7 +358,7 @@
         );
       },
       //改价
-      updata(){
+      updata() {
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
@@ -291,30 +384,31 @@
         this.getList()
       },
       //搜索订单
-      findOrder(){
-
-        var paddNum = function(num){    //如果是一位数就补一个0
+      findOrder() {
+        var paddNum = function (num) {    //如果是一位数就补一个0
           num += "";
-          return num.replace(/^(\d)$/,"0$1");
+          return num.replace(/^(\d)$/, "0$1");
         }
-        function FormatDate (strTime) {
-            if(strTime){
-              var date = new Date(strTime);
-              return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
-            }else {
-                return ''
-            }
+
+        function FormatDate(strTime) {
+          if (strTime) {
+            var date = new Date(strTime);
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
+            return ''
+          }
         }
+
         let url = http.apiMap.findOrder;
         let data = {
           orderNum: this.orderNum,
           userAccount: this.userAccount,
           common: this.GLOBAL.common,
-          size:10,
-          nowpage:this.currentPage,
-          startTime:FormatDate(this.time[0]),
-          endTime:FormatDate(this.time[1]),
-          orderState:$("#orderState :selected").attr('value')
+          size: 10,
+          nowpage: this.currentPage,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
+          orderState: $("#orderState :selected").attr('value')
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -326,13 +420,36 @@
           }
         );
       },
-      stateChange(){
-
+      //快递公司列表
+      findExpressList() {
+        let url = http.apiMap.findExpressList;
+        let data = {
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.expressList
+              this.expressList = data
+              console.log(data)
+            }
+          }
+        );
       }
     }
   }
 </script>
 <style>
+  .fahuo {
+    width: 100px;
+    float: left;
+    line-height: 36px;
+  }
+
+  #addwuliu {
+    height: 36px;
+  }
+
   .zt {
     line-height: 60px;
   }

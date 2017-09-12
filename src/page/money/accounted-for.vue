@@ -77,124 +77,115 @@
 
 <script>
   import http from '../../http'
-    export default{
-      data(){
-        return{
-          tableData:[],
-          currentPage:1,
-          count11:1,
-          time:'',  //时间搜索
-          startTime:'',
-          endTime:'',
-          OutMoney:''
+
+  export default {
+    data() {
+      return {
+        tableData: [],
+        currentPage: 1,
+        count11: 1,
+        time: '',  //时间搜索
+        startTime: '',
+        endTime: '',
+        OutMoney: ''
       }
-      },
-      created(){
-        this.getInfinance()
-      },
-      methods:{
-        getInfinance(){
-          let url = http.apiMap.findInFinance;
-          let data = {
-            nowpage: this.currentPage,
-            size: 10,
-            common: 2,
-          };
-          this.$http.post(url, data).then(
-            function (res) {
-              if (res.body.result) {
-                console.log(res)
-                this.count11 = res.body.data.count
-                console.log(this.count11)
-                 console.log(res.body.data.list)
-                this.tableData = res.body.data.list
-                this.OutMoney= res.body.data.sumInFinance
+    },
+    created() {
+      this.getInfinance()
+    },
+    methods: {
+      getInfinance() {
+        let url = http.apiMap.findInFinance;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: 2,
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count
+              this.tableData = res.body.data.list
+              this.OutMoney = res.body.data.sumInFinance
 
-                //发生原因
-                let data=res.body.data.list
-                console.log(data)
-                let arr = [];
-                for (let i = 0; i < data.length; i++) {
-                  if (data[i].reason == 1) {
-                    data[i].reason = '付款'
-                  }
-                  arr.push(data[i])
-                  console.log(arr)
+              //发生原因
+              let data = res.body.data.list
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].reason == 1) {
+                  data[i].reason = '付款'
                 }
-
-
+                arr.push(data[i])
               }
             }
-          );
-        },
-        //分页跳转
-        handleCurrentChange(val) {
-          this.currentPage = val;
-          this.getInfinance()  //页面 加载数据
-        },
-        //搜索订单
-        findOrder(){
-          var paddNum = function(num){    //如果是一位数就补一个0
-            num += "";
-            return num.replace(/^(\d)$/,"0$1");
           }
-          function FormatDate (strTime) {  //转换时间格式
-            if(strTime){
-              var date = new Date(strTime);
-              return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
-            }else {
-              return ''
-            }
-          }
-          let url = http.apiMap.findInFinance;
-          let data = {
-            common: 1,
-            size:10,
-            nowpage:this.currentPage,
-            startTime:FormatDate(this.time[0]),
-            endTime:FormatDate(this.time[1]),
-          };
-          this.$http.post(url, data).then(
-            function (res) {
-              if (res.body.result) {
-                this.count11 = res.body.data.count;
-                let data = res.body.data.list;
-                console.log(data)
-                this.tableData = data;
+        );
+      },
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getInfinance()  //页面 加载数据
+      },
+      //搜索订单
+      findOrder() {
+        var paddNum = function (num) {    //如果是一位数就补一个0
+          num += "";
+          return num.replace(/^(\d)$/, "0$1");
+        }
 
-                //发生原因
-                //let data=res.body.data.list
-                //console.log(data)
-                let arr = [];
-                for (let i = 0; i < data.length; i++) {
-                  if (data[i].reason == 1) {
-                    data[i].reason = '付款'
-                  }
-                  arr.push(data[i])
-                  console.log(arr)
+        function FormatDate(strTime) {  //转换时间格式
+          if (strTime) {
+            var date = new Date(strTime);
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
+            return ''
+          }
+        }
+
+        let url = http.apiMap.findInFinance;
+        let data = {
+          common: 1,
+          size: 10,
+          nowpage: this.currentPage,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              let data = res.body.data.list;
+              this.tableData = data;
+
+              //发生原因
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].reason == 1) {
+                  data[i].reason = '付款'
                 }
-
+                arr.push(data[i])
+              }
 
             }
-            }
-          );
-        },
-      }
+          }
+        );
+      },
     }
-  </script>
+  }
+</script>
 
 <style>
-  .accounted_for{
+  .accounted_for {
     width: 80%;
     margin: 30px 0 30px 10%;
   }
 
-  .accounted_for_form{
+  .accounted_for_form {
     width: 80%;
     margin: 0 10%;
   }
 
-  .current_balance{
+  .current_balance {
     width: 80%;
     margin-left: 10%;
     text-align: right;

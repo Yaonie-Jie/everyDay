@@ -50,13 +50,13 @@
     list-style: none;
   }
 
-  body {
+  body ,html{
     margin: 0;
+    width: 100%;
     height:100%;
   }
 
   #app {
-    min-width: 1200px;
     margin: 0 auto;
     font-family: "Helvetica Neue", "PingFang SC", Arial, sans-serif;
   }

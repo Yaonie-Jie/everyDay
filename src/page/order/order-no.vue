@@ -19,8 +19,9 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price}}</span> 包含运费：￥<span>{{listData.freigh}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span class="pink">{{listData.price}}</span>
+                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
+                  class="pink">{{listData.price + listData.freigh / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -57,9 +58,9 @@
                       <p>{{i.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{i.unitPrice}}</span></p>
+                      <p>商品单价：<span>{{i.unitPrice / 100}}</span></p>
                       <p>购买数量：X<span>{{i.amount}}</span></p>
-                      <p>总价：<span>{{i.amount * i.unitPrice}}</span></p>
+                      <p>总价：<span>{{i.amount * i.unitPrice / 100}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -153,8 +154,9 @@
 </style>
 <script>
   import http from '../../http'
-  export default{
-    data(){
+
+  export default {
+    data() {
       return {
         orderNum: '',    //订单号
         listData: '',
@@ -166,7 +168,7 @@
       this.getshow()
     },
     methods: {
-      stataFilter(value){
+      stataFilter(value) {
         if (value == 0) {
           return '待付款'
         } else if (value == 1) {
@@ -181,7 +183,7 @@
           return '已超时'
         }
       },
-      getshow(){
+      getshow() {
         let url = http.apiMap.showOrder;
         let data = {
           orderNum: this.orderNum,
@@ -201,14 +203,14 @@
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
       },
-      DisplayBlock (orderNum) {
+      DisplayBlock(orderNum) {
         this.orderNum = orderNum;
         console.log(orderNum)
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
       //改价
-      updata(){
+      updata() {
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
@@ -224,7 +226,7 @@
                 message: '订单修改成功!'
               });
               this.getshow()
-            }else {
+            } else {
               this.DisplayNone();
               this.$message({
                 type: 'warning',
@@ -234,7 +236,7 @@
           }
         );
       },
-      Delete(orderNum){
+      Delete(orderNum) {
         this.$confirm('此操作将取消订单, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -242,7 +244,7 @@
         }).then(() => {
           let url = http.apiMap.removeOrder;
           let data = {
-            orderNum:orderNum,
+            orderNum: orderNum,
             common: this.GLOBAL.common
           };
           this.$http.post(url, data).then(
@@ -254,7 +256,7 @@
                 });
 
                 this.getList()
-              }else {
+              } else {
                 this.$message({
                   type: 'warning',
                   message: '取消订单失败'

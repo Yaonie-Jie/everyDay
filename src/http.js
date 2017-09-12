@@ -1,6 +1,6 @@
 const hosts = {
-  //api: 'http://test.sunxung.cn:3083/'
-  api: 'http://192.168.0.137:8083/'
+  api: 'http://test.sunxung.cn:3083/'
+  // api: 'http://192.168.1.108:8083/'
 
 }
 const apiMap={
@@ -29,6 +29,7 @@ const apiMap={
   'SystemRecommendBottom':hosts.api+'systemRecommend/modifySystemRecommendBottom',    //系统推荐商品置底
   'findProductList':hosts.api+'interestRecommend/findInterestRecommendList',    //兴趣列表
   'findProductNum':hosts.api+'interestRecommend/findRecommendAmount',    //兴趣推荐数量查询
+  'updataProductNums':hosts.api+'/systemRecommend/modifySystemRecommendPamount',    //系统推荐数量修改
   'updataSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommend',    //修改系统推荐商品详情
   'updataProductNum':hosts.api+'interestRecommend/modifyInterestRecommendProAmount',    //修改人气爆款推荐数量
   'updataProductNumpop':hosts.api+'interestRecommend/modifyInterestRecommendAmount',    //修改商品详情推荐数量
@@ -54,11 +55,14 @@ const apiMap={
 
 
   'getList':hosts.api+'order/findOrder',    //获取订单列表
+  'findExpressList':hosts.api+'express/findExpressList',    //快递公司列表
+  'addExpressOrder':hosts.api+'express/addExpressOrder',    //发货
   'updataOrderNum':hosts.api+'order/modifyOrderPriceByOrderNum',    //订单改价
   'removeOrder':hosts.api+'order/removeOrder',    //取消订单
   'showOrder':hosts.api+'order/findOrderByOrderNum',    //订单详情
   'returnOrderList':hosts.api+'order/findOrderRefundList',    //退款中订单列表
   'findOrder':hosts.api+'order/findOrder',    //搜索订单
+  'findExpress':hosts.api+'express/findExpressByOrderNum',    //查看物流
 
 
   'addFreight':hosts.api+'freightTemplate/addFreightTemplate',    //添加运费模板

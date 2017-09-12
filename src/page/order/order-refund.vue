@@ -21,7 +21,7 @@
               <option value="">退款</option>
               <option value="">退货退款</option>
             </select>
-            <input type="text" value="输入订单号或用户账号查找订单"/>
+            <input type="text" placeholder="输入订单号或用户账号查找订单"/>
             <el-button type="success">搜索</el-button>
           </div>
         </div>
@@ -48,16 +48,16 @@
                       <p>{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{list.unitPrice}}</span></p>
+                      <p>商品单价：<span>{{list.unitPrice/100}}</span></p>
                       <p>购买数量：X<span>{{list.amount}}</span></p>
-                      <p>总价：<span>{{list.unitPrice * list.amount}}</span></p>
+                      <p>总价：<span>{{list.unitPrice * list.amount/100}}</span></p>
                     </div>
                   </li>
                 </ul>
                 <div class="Pic">
                   <div class="left">
                     <p>共<span class="pink">{{i.orderState}}</span>件商品</p>
-                    <p>商品总额：￥<span class="pink">{{i.price}}</span></p>
+                    <p>商品总额：￥<span class="pink">{{i.price/100}}</span></p>
                   </div>
                   <div class="right">
                     <el-button type="danger">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button>
@@ -65,8 +65,8 @@
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>{{i.price}}</span></p>
-                <p>包含运费：<span>{{i.freigh}}</span></p>
+                <p>订单总额：<span>{{i.price/100}}</span></p>
+                <p>包含运费：<span>{{i.freigh/100}}</span></p>
                 <el-button @click="open2">审核驳回</el-button>
                 <el-button @click="open3">审核同意</el-button>
                 <el-button @click="open4">退款成功</el-button>
