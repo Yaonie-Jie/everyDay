@@ -3,7 +3,7 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>待收货订单</el-breadcrumb-item>
+        <el-breadcrumb-item>已完成订单</el-breadcrumb-item>
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -66,143 +66,24 @@
                 </ul>
               </div>
             </div>
+            <div class="TopTitle NoBorderTop NoBorderBottom">
+              <div class="right">
+                <!--<el-button @click="DisplayBlock(listData.orderNum)">改价</el-button>-->
+                <!--<el-button>发货</el-button>-->
+                <!--<el-button @click="Delete(listData.orderNum)">取消此订单</el-button>-->
+
+              </div>
+            </div>
           </li>
         </ul>
       </div>
-      <div class="apply_">
 
-        <div class="order-list order-lists">
-          <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
-            <div class=" width100  NoBorderBottom">
-              <div class="titlee">物流信息</div>
-              <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
-                <li class="marginTopLeft">电话：<span>{{phone}}</span></li>
-              </ul>
-              <!--<div class="right imgNum">-->
-                <!--<div class="imgBOXs">-->
-                  <!--<img-->
-                    <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
-                    <!--alt="">-->
-                <!--</div>-->
-                <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
-              <!--</div>-->
-            </div>
-            <div class=" width100  NoBorderBottom">
-              <div class="jt">
-                <img src="" alt="">
-              </div>
-              <ul class="wlxq">
-                <li v-for="i in dataList">
-                  <p>{{i.time}}</p>
-                  <p>{{i.context}}</p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
-<script>
-  import http from '../../http'
-  import md5 from 'js-md5';
-
-  export default {
-    data() {
-      return {
-        orderNum: '',    //订单号
-        listData: '',
-        price: '',
-        phone:'',
-        company:'',
-        expressNum:'',
-        dataList:[],
-        abbreviation:''
-      }
-    },
-    created() {
-      this.orderNum = this.$route.params.orderNum;
-      this.getshow()
-      this.findExpress()
-    },
-    methods: {
-      stataFilter(value) {
-        if (value == 0) {
-          return '待付款'
-        } else if (value == 1) {
-          return '待发货'
-        } else if (value == 2) {
-          return '待收货'
-        } else if (value == 3) {
-          return '已完成'
-        } else if (value == 4) {
-          return '已退款'
-        } else if (value == 5) {
-          return '已超时'
-        }
-      },
-      //根据订单号查询物流
-      findExpress() {
-        let url = http.apiMap.findExpress;
-        let data = {
-          orderNum: this.orderNum,
-          common: 1
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.company=res.body.data.company;
-              this.phone=res.body.data.expressNew;
-
-              let data = JSON.parse(res.body.data.express);
-              this.expressNum=data.nu;
-              this.abbreviation=data.abbreviation;
-              this.dataList = data.data
-            } else {
-              console.log('暂无物流信息')
-            }
-          }
-        );
-      },
-
-      getshow() {
-        let url = http.apiMap.showOrder;
-        let data = {
-          orderNum: this.orderNum,
-          common: 1
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              let data = res.body.data.order;
-              this.listData = data
-            }
-          }
-        );
-      },
-      DisplayNone: function () {
-        $('.mask').css('display', 'none');
-        $('.change_price').css('display', 'none');
-      },
-
-    }
-  }
-
-
-</script>
-
 
 <style>
-  .wlxq {
-    display: flex;
-    padding-left: 20px;
-    flex-direction: column;
-    justify-content: space-around;
-  }
 
   .order-lists {
     max-width: 800px;
@@ -260,3 +141,61 @@
     box-sizing: border-box;
   }
 </style>
+<script>
+  import http from '../../http'
+
+  export default {
+    data() {
+      return {
+        orderNum: '',    //订单号
+        listData: '',
+        price: ''
+      }
+    },
+    created() {
+      this.orderNum = this.$route.params.orderNum;
+      this.getshow()
+    },
+    methods: {
+      stataFilter(value) {
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
+          return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
+        }
+      },
+      getshow() {
+        let url = http.apiMap.showOrder;
+        let data = {
+          orderNum: this.orderNum,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.order;
+              this.listData = data
+
+            }
+          }
+        );
+      },
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.change_price').css('display', 'none');
+      }
+    }
+  }
+
+
+</script>
+
+

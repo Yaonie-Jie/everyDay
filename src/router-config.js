@@ -43,6 +43,7 @@ import OrderRefundShow from './page/order/order-refund-show.vue'
 import OrderDeliver from './page/order/order-deliver-goods.vue'
 import OrderReceived from './page/order/order-received-goods.vue'
 import OrderMoney from './page/order/order-refund-money.vue'
+import OrderMoneychao from './page/order/order-chao.vue'
 
 import BillDemo from './page/order-service/bill-demo.vue'
 import FreightManage from './page/order-service/freight-manage.vue'
@@ -188,6 +189,9 @@ export default [
       },
       {
         path: '/OrderMoney/:orderNum', component: OrderMoney, //已退款订单详情
+      },
+      {
+        path: '/OrderMoneychao/:orderNum', component: OrderMoneychao, //已超时订单详情
       },
       {
         path: '/OrderRefundShow', component: OrderRefundShow,

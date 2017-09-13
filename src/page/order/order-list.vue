@@ -64,24 +64,24 @@
                       <p>{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{list.unitPrice/100}}</span></p>
+                      <p>商品单价：<span>{{list.unitPrice / 100}}</span></p>
                       <p>购买数量：X<span>{{list.amount}}</span></p>
-                      <p>总价：<span>{{list.unitPrice * list.amount/100}}</span></p>
+                      <p>总价：<span>{{list.unitPrice * list.amount / 100}}</span></p>
                     </div>
                   </li>
                 </ul>
                 <div class="Pic">
-                  <p>共<span class="pink">{{i.orderState}}</span>件商品</p>
-                  <p>商品总额：￥<span class="pink">{{i.price/100}}</span></p>
+                  <p>共<span class="pink">{{i.orderProduct.length}}</span>件商品</p>
+                  <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>{{i.price/100}}</span></p>
-                <p>包含运费：<span>{{i.freigh/100}}</span></p>
+                <p>订单总额：<span>{{i.price / 100}}</span></p>
+                <p>包含运费：<span>{{i.freigh / 100}}</span></p>
                 <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
                 <el-button v-show="i.orderState==1" @click="addExpress(i)">发货</el-button>
                 <el-button v-show="i.orderState==2">查看物流</el-button>
-                <el-button @click="open2(i.orderNum)">取消订单</el-button>
+                <el-button v-show="i.orderState==0||i.orderState==1" @click="open2(i.orderNum)">取消订单</el-button>
                 <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
             </div>
@@ -271,7 +271,7 @@
 
       DisplayBlock(orderNum, price) {
         this.orderNum = orderNum;
-        this.price = price
+        this.price = price/100
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -293,15 +293,17 @@
       //跳转详情页
       shows(num, state) {
         if (state == 0) {
-          this.$router.push('/OrderNo/' + num + '');
+          this.$router.push('/OrderNo/' + num);
         } else if (state == 1) {
-          this.$router.push('/OrderDeliver/' + num + '');
+          this.$router.push('/OrderDeliver/' + num);
         } else if (state == 2) {
-          this.$router.push('/OrderReceived/' + num + '');
+          this.$router.push('/OrderReceived/' + num);
         } else if (state == 3) {
-          this.$router.push('/OrderEnd/' + num + '');
+          this.$router.push('/OrderEnd/' + num);
         } else if (state == 4) {
-          this.$router.push('/OrderMoney/' + num + '');
+          this.$router.push('/OrderMoney/' + num);
+        }else if (state == 5) {
+          this.$router.push('/OrderMoneychao/' + num);
         }
       },
       //取消订单
@@ -362,7 +364,7 @@
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
-          price: this.price,
+          price: this.price*100,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(

@@ -20,7 +20,9 @@
         <div class="team_structure">
           <table class="form_head">
             <tr>
-              <td><i @click="DisplayBlock">添加下级团员</i></td>
+              <td>
+                <el-button type="success" @click="DisplayBlock">添加下级团员</el-button>
+              </td>
             </tr>
           </table>
           <div class="junior_league_menber">
@@ -207,7 +209,7 @@
 
   .form_head {
     width: 80%;
-    margin-left: 10%;
+    margin:20px auto;
   }
 
   .form_head tr td {

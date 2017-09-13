@@ -21,7 +21,7 @@
               <option value="" v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
             </select>
 
-            <input type="text" placeholder="输入账号（手机号）查找店主" style="padding:0 10px;"  v-model="account"/>
+            <input type="text" placeholder="输入账号查找店主" style="padding:0 10px;" v-model="account"/>
             <el-button type="success" @click="checkShopman">查找</el-button>
           </div>
         </div>
@@ -83,7 +83,7 @@
       </div>
       <div class="add_s_title">添加个人店主</div>
       <div class="required_">必填个人店主资料</div>
-      <div class="true_name" >
+      <div class="true_name">
         <div class="true_name_title">真实姓名</div>
         <el-input placeholder="请填写真实姓名" v-model="relName"></el-input>
       </div>
@@ -121,8 +121,6 @@
       </div>
 
 
-
-
       <div class="optional_">必填个人店主资料</div>
       <div class="zfb_account">
         <div class="zfb_account_title">支付宝账号</div>
@@ -151,166 +149,42 @@
   </div>
 </template>
 
-<style>
-  .apply_form{
-    margin-top: 20px;
-  }
-  .add_shopman_account,
-  .true_name,
-  .id_num,
-  .zfb_account,
-  .wx_account
-  {
-    width: 60%;
-    margin: 0 auto;
-    margin-top: 30px;
-    overflow: hidden;
-  }
-  .add_shopman_account_title,
-  .add_level_title,
-  .true_name_title,
-  .id_num_title,
-  .zfb_account_title,
-  .wx_account_title
-  {
-    width: 25%;
-    float: left;
-    line-height: 36px;
-    text-align: left;
-  }
-  .add_shopman_account .el-input,
-  .true_name .el-input,
-  .id_num .el-input,
-  .zfb_account .el-input,
-  .wx_account .el-input
-  {
-    float: right;
-    width: 75%;
-  }
-  .add_level{
-    width: 60%;
-    margin: 0 auto;
-    margin-top: 30px;
-    overflow: hidden;
-  }
-  .add_level .el-select{
-    width: 75%;
-    float: right;
-  }
-  .add_s_title{
-    width: 100%;
-    margin: 30px 0 0 0;
-  }
-  .required_,.optional_{
-    width: 60%;
-    margin: 0 auto;
-    text-align: left;
-    line-height: 28px;
-    font-size: 14px;
-    font-weight: bold;
-    background: #ff3366;
-    color: #FFFFFF;
-    margin-top: 30px;
-    padding-left: 10px;
-    box-sizing: border-box;
-  }
-  .id_img_title{
-    margin-left: 20%;
-    line-height: 36px;
-    text-align: left;
-    margin-top: 30px;
-  }
-  .id_img_upload{
-    width: 60%;
-    overflow: hidden;
-    margin: 0 auto;
-  }
-  /*.id_img_upload div{*/
-    /*width: 150px;*/
-    /*height: 80px;*/
-    /*border:dotted 5px #aaa;*/
-    /*float:left;*/
-    /*margin:30px;*/
-    /*z-index:0;*/
-    /*text-align: center;*/
-    /*line-height: 80px;*/
-    /*color: #FFFFFF;*/
-  /*}*/
-  .showPho{
-    width: 150px;
-    height: 80px;
-    border:dotted 5px #aaa;
-    float:left;
-    margin:10px;
-    z-index:0;
-    text-align: center;
-    line-height: 80px;
-    color: #FFFFFF;
-  }
-  .phof{
-    width: 150px;
-    height: 80px;
-    border:dotted 5px #aaa;
-    margin-top:20px;
-  }
-  .postFilepho{
-    display:none;
-  }
-  .id_img_upload div:nth-child(1){
-    float: left;
-  }
-  .id_img_upload div:nth-child(2){
-    float: right;
-  }
-  .add_shopman_btns{
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-  .add_shopman_btns .el-button:nth-child(1){
-    float: left;
-    margin-left: 25%;
-  }
-  .add_shopman_btns .el-button:nth-child(2){
-    float: right;
-    margin-right: 25%;
-  }
-</style>
 
 <script>
   import http from '../../http'
 
-  export default{
+  export default {
     data() {
       return {
-        tableData:[],
-        modifyMessage:"升级到公司店主",
+        tableData: [],
+        modifyMessage: "升级到公司店主",
         value: '',
-        teamState:'',
-        shopmanMessage:{},
-        currentPage:1,
-        count11:1,
-        options:[
-          {text:'全部',value:''},
-          {text:'有团队店主',value:'1'},
-          {text:'无团队店主',value:'2'}
+        teamState: '',
+        shopmanMessage: {},
+        currentPage: 1,
+        count11: 1,
+        options: [
+          {text: '全部', value: ''},
+          {text: '有团队店主', value: '1'},
+          {text: '无团队店主', value: '2'}
         ],
-        account:'',
-        relName:'', //真实姓名
-        shopmanAccount:'',//账号
-        idNumber:'',//身份证号码
-        alipay:'',//支付宝
-        weChat:'',//微信
-        images:'',
-        imgFiles:'',
-        imagesf:'',
-        imgFilesf:'',
-        imagesfs:'',
-        imgFilesfs:''
+        account: '',
+        relName: '', //真实姓名
+        shopmanAccount: '',//账号
+        idNumber: '',//身份证号码
+        alipay: '',//支付宝
+        weChat: '',//微信
+        images: '',
+        imgFiles: '',
+        imagesf: '',
+        imgFilesf: '',
+        imagesfs: '',
+        imgFilesfs: ''
 
       }
     },
 
-    created(){
+    created() {
       this.getData()
     },
     methods: {
@@ -337,7 +211,7 @@
         }
       },
 
-    //添加身份证反面
+      //添加身份证反面
       selectChangef(e) {
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
@@ -384,41 +258,38 @@
       },
 
 
-
-      postPho(){
+      postPho() {
         $(".postFilepho").click()
       },
-      postPhof(){
+      postPhof() {
         $(".postFilephof").click()
       },
-      postPhofs(){
+      postPhofs() {
         $(".postFilephofs").click()
       },
       //查看
-      shows:function (account,level) {
-        console.log(level)
-        if(level=='个人店主'){
+      shows: function (account, level) {
+        if (level == '个人店主') {
           this.$router.push('/ShopmanManageShow/' + account);
-        }else if(level=='公司店主'){
+        } else if (level == '公司店主') {
           this.$router.push('/ShopmanManageShow1/' + account);
-        }else if(level=='高级店主'){
-          this.$router.push('/ShopmanManageShow2/'+ account);
+        } else if (level == '高级店主') {
+          this.$router.push('/ShopmanManageShow2/' + account);
         }
       },
 
 
-      getData(){
+      getData() {
         let url = http.apiMap.OwnerShopmanData;
-              let data = {
-                common: 1,
-                size:10,
-                nowpage:this.currentPage,
-              };
-              this.$http.post(url,data).then(
-                function (res) {
-                  if (res.body.result) {
-              this.tableData = res.body.data.userVoList
-
+        let data = {
+          common: 1,
+          size: 10,
+          nowpage: this.currentPage,
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11=res.body.data.count
               //店主级别
               let data1 = res.body.data.userVoList
               let arr = [];
@@ -432,34 +303,36 @@
                 }
                 arr.push(data1[i])
               }
-
-            }})},
-
-
-      DisplayBlock:function(){
-        $('.mask').css('display','block');
-        $('.add_shopman').css('display','block');
-      },
-
-      DisplayNone:function(){
-        $('.mask').css('display','none');
-        $('.add_shopman').css('display','none');
+              this.tableData = arr
+            }
+          })
       },
 
 
-      checkShopman(){
-        let url=http.apiMap.findShopmanData
-        let data={
-          common:2,
-          account:this.account,
-          teamState:$("#shopManState :selected").attr('value'),
-          size:10,
-          nowpage:this.currentPage,
+      DisplayBlock: function () {
+        $('.mask').css('display', 'block');
+        $('.add_shopman').css('display', 'block');
+      },
+
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.add_shopman').css('display', 'none');
+      },
+
+
+      checkShopman() {
+        let url = http.apiMap.findShopmanData
+        let data = {
+          common: 2,
+          account: this.account,
+          teamState: $("#shopManState :selected").attr('value'),
+          size: 10,
+          nowpage: this.currentPage,
         };
-        this.$http.post(url,data).then(
-          function(res){
-            if(res.body.result){
-              let data=res.body.data.userVO
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.userVO
 
               //店主级别
               let arr = [];
@@ -473,36 +346,36 @@
                 }
                 arr.push(data[i])
               }
-             this.tableData=arr
+              this.tableData = arr
 
             }
           }
         )
       },
 
-      addShopman(){
+      addShopman() {
         console.log(this.imgFiles)
-        let url=http.apiMap.addShopman;
-        let formData=new FormData();
-        formData.append('common',1)
-         formData.append('account',this.shopmanAccount)
-         formData.append('level',this.value)
-         formData.append('realName',this.relName)
-         formData.append('idNumber',this.idNumber)
-        formData.append('pictureUrl',this.imgFiles)
-        formData.append('pictureUrl1',this.imgFilesf)
-        formData.append('pictureUrl2',this.imgFilesfs)
-        formData.append('alipay',this.alipay)
-        formData.append('weChat',this.weChat)
-        this.$http.post(url,formData).then(
-          function(res){
-            if(res.body.result){
+        let url = http.apiMap.addShopman;
+        let formData = new FormData();
+        formData.append('common', 1)
+        formData.append('account', this.shopmanAccount)
+        formData.append('level', this.value)
+        formData.append('realName', this.relName)
+        formData.append('idNumber', this.idNumber)
+        formData.append('pictureUrl', this.imgFiles)
+        formData.append('pictureUrl1', this.imgFilesf)
+        formData.append('pictureUrl2', this.imgFilesfs)
+        formData.append('alipay', this.alipay)
+        formData.append('weChat', this.weChat)
+        this.$http.post(url, formData).then(
+          function (res) {
+            if (res.body.result) {
               this.DisplayNone()
               this.$message({
                 type: 'info',
                 message: '添加成功'
               })
-            }else{
+            } else {
               this.$message({
                 type: 'error',
                 message: '添加失败'
@@ -510,18 +383,156 @@
             }
           }
         )
-        },
+      },
 
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
         this.getData()  //页面 加载数据
       },
-      },
+    },
 
-    }
+  }
 
 
 </script>
 
 
+<style>
+  .apply_form {
+    margin-top: 20px;
+  }
+
+  .add_shopman_account,
+  .true_name,
+  .id_num,
+  .zfb_account,
+  .wx_account {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 30px;
+    overflow: hidden;
+  }
+
+  .add_shopman_account_title,
+  .add_level_title,
+  .true_name_title,
+  .id_num_title,
+  .zfb_account_title,
+  .wx_account_title {
+    width: 25%;
+    float: left;
+    line-height: 36px;
+    text-align: left;
+  }
+
+  .add_shopman_account .el-input,
+  .true_name .el-input,
+  .id_num .el-input,
+  .zfb_account .el-input,
+  .wx_account .el-input {
+    float: right;
+    width: 75%;
+  }
+
+  .add_level {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 30px;
+    overflow: hidden;
+  }
+
+  .add_level .el-select {
+    width: 75%;
+    float: right;
+  }
+
+  .add_s_title {
+    width: 100%;
+    margin: 30px 0 0 0;
+  }
+
+  .required_, .optional_ {
+    width: 60%;
+    margin: 0 auto;
+    text-align: left;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #ff3366;
+    color: #FFFFFF;
+    margin-top: 30px;
+    padding-left: 10px;
+    box-sizing: border-box;
+  }
+
+  .id_img_title {
+    margin-left: 20%;
+    line-height: 36px;
+    text-align: left;
+    margin-top: 30px;
+  }
+
+  .id_img_upload {
+    width: 60%;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  /*.id_img_upload div{*/
+  /*width: 150px;*/
+  /*height: 80px;*/
+  /*border:dotted 5px #aaa;*/
+  /*float:left;*/
+  /*margin:30px;*/
+  /*z-index:0;*/
+  /*text-align: center;*/
+  /*line-height: 80px;*/
+  /*color: #FFFFFF;*/
+  /*}*/
+  .showPho {
+    width: 150px;
+    height: 80px;
+    border: dotted 5px #aaa;
+    float: left;
+    margin: 10px;
+    z-index: 0;
+    text-align: center;
+    line-height: 80px;
+    color: #FFFFFF;
+  }
+
+  .phof {
+    width: 150px;
+    height: 80px;
+    border: dotted 5px #aaa;
+    margin-top: 20px;
+  }
+
+  .postFilepho {
+    display: none;
+  }
+
+  .id_img_upload div:nth-child(1) {
+    float: left;
+  }
+
+  .id_img_upload div:nth-child(2) {
+    float: right;
+  }
+
+  .add_shopman_btns {
+    margin: 0 auto;
+    margin-top: 40px;
+  }
+
+  .add_shopman_btns .el-button:nth-child(1) {
+    float: left;
+    margin-left: 25%;
+  }
+
+  .add_shopman_btns .el-button:nth-child(2) {
+    float: right;
+    margin-right: 25%;
+  }
+</style>

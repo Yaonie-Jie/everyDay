@@ -155,7 +155,6 @@
           size: 10,
           nowpage: this.currentPage,
         }
-        console.log(data)
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
@@ -224,7 +223,6 @@
       },
       //分页跳转
       handleCurrentChange(val) {
-        console.log(1)
         this.currentPage = val;
         this.getTeamList()
       },

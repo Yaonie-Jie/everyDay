@@ -46,7 +46,7 @@
       <div class="add_team_y">
         <div class="teamer_information">团员</div>
         <ul class="teamer_information_list">
-          <li><i>账号：</i><span>{9</span></li>
+          <li><i>账号：</i><span>{{shopmanManagey.account}}</span></li>
           <li><i>昵称：</i><span>{{shopmanManagey.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
@@ -56,9 +56,7 @@
           <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
           <li><i>上月所得奖励：</i><span>{{shopmanManagey.lastMonthBonus}}</span></li>
         </ul>
-        <!--<div class="add_tip3"><i>添加其做团长下级团员</i>您正在创建高级店主团队</div>-->
-        <!--<div class="add_this_teamer"><el-button type="primary"  size="small">添加其做团长</el-button></div>-->
-        <!--<div class="already_team">您已指定139281982918做团长</div>-->
+
         <div class="add_team2_btns">
           <el-button @click="returnshowTeam">完成，返回团队管理列表</el-button>
           <el-button type="primary" @click="addTeamy">完成，继续添加团员</el-button>
@@ -153,7 +151,7 @@
           });
         });
       },
-
+//查找团员
       findTeamy() {
         let url = http.apiMap.findTeamli;
         let data = {
@@ -182,17 +180,17 @@
           }
         )
       },
-
+//添加团员
       addTeamy() {
         let url = http.apiMap.addTeamliy;
         let data = {
           common: 2,
-          account: this.teamAccount
+          account: this.teamAccount,
+          userAccount:this.shopmanManage.account
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              console.log(1)
               this.$router.push('/ShopmanTeamShow/' + this.teamAccount);
             } else {
               this.$message({

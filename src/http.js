@@ -68,6 +68,7 @@ const apiMap={
   'addFreight':hosts.api+'freightTemplate/addFreightTemplate',    //添加运费模板
   'freightList':hosts.api+'freightTemplate/findfreightTemplateList',    //运费模板列表
   'updataFreight':hosts.api+'freightTemplate/modifyfreightTemplate',    //修改运费模板
+  'deleteFreight':hosts.api+'freightTemplate/removefreightTemplateL',    //删除运费模板
 
 
   'teamData':hosts.api+'teamNumLimit/findTeamNum',    //查询团队人数限制
@@ -100,7 +101,7 @@ const apiMap={
   'findTeamli':hosts.api+'ownerTeamManage/findUserTeamByAccount',   //查询店主信息
   'addTeamli':hosts.api+'headManage/addHeadManage',   //添加团长
   'findTeamy':hosts.api+'ownerTeamManage/findMemberByAccount',   //查询店主信息
-  'addTeamliy':hosts.api+'headManage/addCompanyMemberManage',   //添加tuanyuan
+  'addTeamliy':hosts.api+'companyMemberManage/addCompanyMemberManage',   //添加tuanyuan
 
 
 

@@ -106,9 +106,6 @@
           nowpage: this.currentPage,
           size: 10,
           common: 2,
-          startTime: '',
-          endTime: '',
-//          orderState:''
         };
         this.$http.post(url, data).then(
           function (res) {
