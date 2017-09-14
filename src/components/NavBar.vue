@@ -48,11 +48,11 @@
       </el-submenu>
       <el-submenu index="5" >
         <template slot="title">
-          <i class="el-icon-edit"></i>财务管理
+          <i class="el-icon-edit"></i>店主结算中心
         </template>
-        <el-menu-item index="/AccountedFor">入账</el-menu-item>
-        <el-menu-item index="/OutOf">出账记录</el-menu-item>
-        <el-menu-item index="/UserWithdrawApply">用户提现申请</el-menu-item>
+        <el-menu-item index="/AccountedFor">收益查询</el-menu-item>
+        <el-menu-item index="/OutOf">支出查询</el-menu-item>
+        <el-menu-item index="/UserWithdrawApply">结算申请查询</el-menu-item>
       </el-submenu>
       <el-submenu index="6">
         <template slot="title">

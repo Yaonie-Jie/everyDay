@@ -78,7 +78,7 @@
               <ul class="left">
                 <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
                 <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
-                <li class="marginTopLeft">电话：<span>{{phone}}</span></li>
+                <li class="marginTopLeft">电话：<span>{{wuliu.phone}}</span></li>
               </ul>
               <!--<div class="right imgNum">-->
                 <!--<div class="imgBOXs">-->
@@ -109,7 +109,6 @@
 
 <script>
   import http from '../../http'
-  import md5 from 'js-md5';
 
   export default {
     data() {
@@ -117,7 +116,7 @@
         orderNum: '',    //订单号
         listData: '',
         price: '',
-        phone:'',
+        wuliu:'',
         company:'',
         expressNum:'',
         dataList:[],
@@ -155,8 +154,7 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.company=res.body.data.company;
-              this.phone=res.body.data.expressNew;
+              this.wuliu=res.body.data.expressNew;
 
               let data = JSON.parse(res.body.data.express);
               this.expressNum=data.nu;

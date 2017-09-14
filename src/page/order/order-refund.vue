@@ -9,20 +9,23 @@
       <div class="apply_">
         <div class="titlee" style="border:0;">退款中订单列表</div>
         <div class="apply_condition">
-          <div class="apply_time">
-            <div class="block">
-              <el-radio class="radio" label="1">只看已审核同意的订单</el-radio>
-            </div>
-          </div>
           <div class="apply_information">
             退货类型：
-            <select name="">
+            <select name="" v-model="refundType">
               <option value="">全部</option>
-              <option value="">退款</option>
-              <option value="">退货退款</option>
+              <option value="0">仅退款</option>
+              <option value="1">退货退款</option>
             </select>
-            <input type="text" placeholder="输入订单号或用户账号查找订单"/>
-            <el-button type="success">搜索</el-button>
+            审核状态：
+            <select name="" v-model="refundState">
+              <option value="">全部</option>
+              <option value="1">退款中</option>
+              <option value="2">退款驳回</option>
+              <option value="3">退款同意</option>
+            </select>
+            <input type="text" placeholder="输入用户账号查找订单" v-model="userAccount"/>
+            <input type="text" placeholder="输入订单号查找订单" v-model="orderNum"/>
+            <el-button type="success" @click="selectOrder">搜索</el-button>
           </div>
         </div>
         <ul class="order-list" v-for="i in dataList" :key="i.id">
@@ -56,11 +59,12 @@
                 </ul>
                 <div class="Pic">
                   <div class="left">
-                    <p>共<span class="pink">{{i.orderState}}</span>件商品</p>
+                    <p>共<span class="pink">{{i.orderProduct.length}}</span>件商品</p>
                     <p>商品总额：￥<span class="pink">{{i.price/100}}</span></p>
                   </div>
                   <div class="right">
-                    <el-button type="danger">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button>
+                    <el-button type="danger" v-show="i.refundType==0">退款中&nbsp;&nbsp;&nbsp;退款类型：仅退款</el-button>
+                    <el-button type="danger" v-show="i.refundType==1">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button>
                   </div>
                 </div>
               </div>
@@ -97,7 +101,11 @@
       return {
         currentPage: 1,
         dataList:'',
-        count:1
+        count:1,
+        userAccount:'',
+        orderNum:'',
+        refundType:'',
+        refundState:''
       }
 
     },
@@ -126,7 +134,28 @@
         let data = {
           nowpage: this.currentPage,
           size: 10,
-          common: this.GLOBAL.common
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count= res.body.data.count;
+              let data = res.body.data.orderList;
+              this.dataList = data;
+            }
+          }
+        );
+      },
+      selectOrder(){
+        let url = http.apiMap.returnOrderList;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: 1,
+          userAccount:this.userAccount,
+          orderNum:this.orderNum,
+          refundType:this.refundType,
+          refundState:this.refundState
         };
         this.$http.post(url, data).then(
           function (res) {

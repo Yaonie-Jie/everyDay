@@ -17,7 +17,7 @@
           </div>
         </li>
         <li>
-          <button class="btn" @click="login">登录</button>
+          <button class="btn" @click="login" >登录</button>
         </li>
       </ul>
     </div>
@@ -41,7 +41,11 @@
       }
     },
     created() {
-
+      $(document).on('keyup',function(event){
+        if(event.keyCode ==13){
+          $(".btn").click()
+        }
+      });
     },
     methods: {
 

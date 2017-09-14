@@ -5,7 +5,7 @@
         <el-breadcrumb-item>支付系统</el-breadcrumb-item>
         <el-breadcrumb-item>用户提现申请</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="titlee" style="border:0;">提现申请列表</div>
+      <div class="titlee" style="border:0;">结算申请明细</div>
       <div class="operation_time" style="line-height: 60px">
         <i style="float:left;">申请时间：</i>
         <div class="block" style="float:left;width: 500px;">
@@ -33,7 +33,7 @@
           </el-table-column>
           <el-table-column
             prop="money"
-            label="申请提现奖励（元）">
+            label="结算金额">
           </el-table-column>
           <el-table-column
             prop="remarks"

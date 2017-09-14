@@ -102,7 +102,6 @@
           </el-row>
 
           <el-button type="primary" @click="open2">修改</el-button>
-          <el-button @click="addOneHide">取消</el-button>
 
         </div>
       </div>

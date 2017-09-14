@@ -199,7 +199,7 @@
           cancelButtonText: '取消',
           type: 'info'
         }).then(() => {
-          let url = http.apiMap.updataInterestRecommend;
+          let url = http.apiMap.updataSystemRecommend;
           let formData = new FormData();//通过formdata上传
           formData.append('pictureUrl', this.imgFiles);
           formData.append('proName', this.name);

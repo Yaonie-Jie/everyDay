@@ -574,7 +574,7 @@
           formData.append('name', this.name);
           formData.append('price', this.price * 100);
           formData.append('brandId', this.brandId);
-          formData.append('details', JSON.stringify(this.content));
+          formData.append('details', this.content);
           formData.append('parameters', JSON.stringify(this.paramlist));
           formData.append('freightId', this.freightId);
           formData.append('pictureOriginal', this.pic.join(','));

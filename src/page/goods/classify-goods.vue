@@ -488,7 +488,7 @@
           reader.readAsDataURL(file[i]);
           reader.onload = function (e) {
             vm.images = e.target.result;
-            vm.updataimgFiles = $('.imgLocal')[0].files[0];
+            vm.imgFiles = $('.imgLocal')[0].files[0];
           };
         }
       },

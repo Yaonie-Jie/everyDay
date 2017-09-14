@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class="apply_information">
-            订单状态：
+            <span style="float:left;">订单状态：</span>
             <select name="" id="orderState" v-model="orderState">
               <option v-for="option in options" v-bind:value="option.value">
                 {{ option.text }}
@@ -80,7 +80,7 @@
                 <p>包含运费：<span>{{i.freigh / 100}}</span></p>
                 <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
                 <el-button v-show="i.orderState==1" @click="addExpress(i)">发货</el-button>
-                <el-button v-show="i.orderState==2">查看物流</el-button>
+                <el-button v-show="i.orderState==2" @click="showwuliu(i.orderNum)">查看物流</el-button>
                 <el-button v-show="i.orderState==0||i.orderState==1" @click="open2(i.orderNum)">取消订单</el-button>
                 <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
@@ -100,27 +100,45 @@
         <el-button type="primary" @click="updata">订单改价</el-button>
       </div>
     </div>
-    <div class="deliver_goods popup">
-      <div class="order_number">
-        <div class="order_number_title">订单编号：</div>
-        <el-input placeholder=""></el-input>
-        <el-button type="primary">搜索</el-button>
+    <!--查看物流-->
+    <div class="deliver_goods popup" style="text-align: left">
+      <div class="order-list order-lists">
+        <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
+          <div class=" width100  NoBorderBottom">
+            <div class="titlee">物流信息</div>
+            <ul class="left">
+              <li class="marginTopLeft">物流公司：<span>{{wuliu.company}}</span></li>
+              <li class="marginTopLeft"> 运单编号：<span>{{wuliu.expressNum}}</span></li>
+              <li class="marginTopLeft">电话：<span>{{wuliu.phone}}</span></li>
+            </ul>
+            <!--<div class="right imgNum">-->
+            <!--<div class="imgBOXs">-->
+            <!--<img-->
+            <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
+            <!--alt="">-->
+            <!--</div>-->
+            <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
+            <!--</div>-->
+          </div>
+          <div class=" width100  NoBorderBottom">
+            <div class="jt">
+              <img src="" alt="">
+            </div>
+            <ul class="wlxq">
+              <li v-for="i in wuliuList">
+                <p>{{i.time}}</p>
+                <p>{{i.context}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="logistics_company">
-        <div class="logistics_company_title">物流公司：</div>
-        <el-input placeholder=""></el-input>
-      </div>
-      <div class="logistics_company_phone">
-        <div class="logistics_company_phone_title">物流公司电话：</div>
-        <el-input placeholder=""></el-input>
-      </div>
-      <div class="deliver_goods_btns">
-        <el-button type="primary" @click="DisplayNone3">取消</el-button>
-        <el-button>发货</el-button>
+      <div class="deliver_goods_btns" style="text-align: center">
+        <el-button type="primary" @click="DisplayNone3" style="float:none;">取消</el-button>
       </div>
     </div>
 
-
+<!--发货-->
     <div class="popup change_left">
       <div class="popup_title">发货</div>
       <el-row style="text-align: left;">
@@ -178,7 +196,6 @@
 
 <script>
   import http from '../../http'
-  import md5 from 'js-md5';
 
   export default {
     data() {
@@ -203,7 +220,9 @@
         expressList: [],
         Abbreviation: '',
         ExpressNum: '',
-        phone: ''
+        phone: '',
+        wuliu:'',
+        wuliuList:[]
       }
     },
     created() {
@@ -225,8 +244,29 @@
           return '已超时'
         }
       },
-      addExpressOrder(i, q) {
-        console.log(i)
+      //查看物流
+      showwuliu(orderNum){
+        $(".deliver_goods").show();
+        $(".mask").show();
+        let url = http.apiMap.findExpress;
+        let data = {
+          orderNum: orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.wuliu=res.body.data.expressNew;
+
+              let data = JSON.parse(res.body.data.express);
+              this.expressNum=data.nu;
+              this.abbreviation=data.abbreviation;
+              this.wuliuList = data.data
+            } else {
+              console.log('暂无物流信息')
+            }
+          }
+        );
       },
       //发货选择框
       addExpress(i) {
@@ -254,6 +294,7 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.getList();
               this.$message({
                 type: 'success',
                 message: '发货成功!'
@@ -275,17 +316,14 @@
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
-
       DisplayNone() {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
       },
-
       DisplayBlock3() {
         $('.mask').css('display', 'block');
         $('.deliver_goods').css('display', 'block');
       },
-
       DisplayNone3() {
         $('.mask').css('display', 'none');
         $('.deliver_goods').css('display', 'none');

@@ -72,7 +72,7 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="noDefault_area"
+            prop="region"
             label="非默认运费地区">
           </el-table-column>
           <el-table-column
@@ -96,7 +96,7 @@
           <input type="radio" id="john" value="1" v-model="freeShipping">
           <label for="john">订单满额免邮</label>
         </div>
-        <div class="freight_set_up"  v-show="freeShipping == 1">满额免邮</div>
+        <div class="freight_set_up" v-show="freeShipping == 1">满额免邮</div>
         <el-input v-show="freeShipping == 1" style="width: 40%" v-model="full"></el-input>
 
       </div>
@@ -105,55 +105,55 @@
         <el-button type="primary" @click="addFreightTemplate">添加</el-button>
       </div>
     </div>
-       <div class="add_noDefaultarea popup">
-          <div class="add_noDefaultarea_title popup_title">添加非默认运费地区</div>
-          <!--<div class="add_noDefaultarea_list_title">非默认运费地区选择</div>-->
-          <!--<div class="add_noDefaultarea_list">-->
-            <!--<dl>-->
-              <!--<dt><el-checkbox label="浙江省" name="type"></el-checkbox></dt>-->
-              <!--<dd><el-checkbox label="杭州市" name="type"></el-checkbox></dd>-->
-              <!--<dd><el-checkbox label="舟山市" name="type"></el-checkbox></dd>-->
-            <!--</dl>-->
-            <!--<dl>-->
-              <!--<dt><el-checkbox label="辽宁省" name="type"></el-checkbox></dt>-->
-              <!--<dd><el-checkbox label="葫芦岛市" name="type"></el-checkbox></dd>-->
-              <!--<dd><el-checkbox label="大连市" name="type"></el-checkbox></dd>-->
-            <!--</dl>-->
-          <!--</div>-->
-         <el-row style="margin-top: 20px">
-           <el-col :span="24" style="margin-bottom: 20px">
-             <span style="padding-right: 20px">地区</span>
-             <el-tag
-               :key="tag"
-               v-for="tag in dynamicTags"
-               :closable="true"
-               :close-transition="false"
-               @close="handleClose(tag)"
-             >
-               {{tag}}
-             </el-tag>
-             <el-input
-               class="input-new-tag"
-               v-if="inputVisible"
-               v-model="inputValue"
-               ref="saveTagInput"
-               size="mini"
-               @keyup.enter.native="handleInputConfirm"
-               @blur="handleInputConfirm"
-             >
-             </el-input>
-             <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加地区</el-button>
-           </el-col>
-           <el-col :span="24">
-             <span style="padding-right: 20px">运费</span>
-             <el-input type="text" style="width: 50%" v-model="freights"></el-input>
-           </el-col>
-         </el-row>
-          <div class="add_noDefaultarea_btns">
-            <el-button @click="DisplayNone2">取消</el-button>
-            <el-button type="primary" @click="adddiqu">添加</el-button>
-          </div>
-        </div>
+    <div class="add_noDefaultarea popup">
+      <div class="add_noDefaultarea_title popup_title">添加非默认运费地区</div>
+      <!--<div class="add_noDefaultarea_list_title">非默认运费地区选择</div>-->
+      <!--<div class="add_noDefaultarea_list">-->
+      <!--<dl>-->
+      <!--<dt><el-checkbox label="浙江省" name="type"></el-checkbox></dt>-->
+      <!--<dd><el-checkbox label="杭州市" name="type"></el-checkbox></dd>-->
+      <!--<dd><el-checkbox label="舟山市" name="type"></el-checkbox></dd>-->
+      <!--</dl>-->
+      <!--<dl>-->
+      <!--<dt><el-checkbox label="辽宁省" name="type"></el-checkbox></dt>-->
+      <!--<dd><el-checkbox label="葫芦岛市" name="type"></el-checkbox></dd>-->
+      <!--<dd><el-checkbox label="大连市" name="type"></el-checkbox></dd>-->
+      <!--</dl>-->
+      <!--</div>-->
+      <el-row style="margin-top: 20px">
+        <el-col :span="24" style="margin-bottom: 20px">
+          <span style="padding-right: 20px">地区</span>
+          <el-tag
+            :key="tag"
+            v-for="tag in dynamicTags"
+            :closable="true"
+            :close-transition="false"
+            @close="handleClose(tag)"
+          >
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="inputVisible"
+            v-model="inputValue"
+            ref="saveTagInput"
+            size="mini"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加地区</el-button>
+        </el-col>
+        <el-col :span="24">
+          <span style="padding-right: 20px">运费</span>
+          <el-input type="text" style="width: 50%" v-model="freights"></el-input>
+        </el-col>
+      </el-row>
+      <div class="add_noDefaultarea_btns">
+        <el-button @click="DisplayNone2">取消</el-button>
+        <el-button type="primary" @click="adddiqu">添加</el-button>
+      </div>
+    </div>
 
     <div class="change_freight popup">
       <div class="popup_title">修改运费模板</div>
@@ -205,16 +205,16 @@
         dynamicTags: [],
         inputVisible: false,
         inputValue: '',
-        freights:'',
+        freights: '',
       }
     },
     created() {
       this.getList()
     },
     methods: {
-      adddiqu(){
-        let data={
-          noDefault_area: this.dynamicTags.join(','),
+      adddiqu() {
+        let data = {
+          region: this.dynamicTags.join(','),
           freight: this.freights,
         }
         this.tableData.push(data);
@@ -239,7 +239,7 @@
         this.inputVisible = false;
         this.inputValue = '';
       },
-      addFreightTemplate(){
+      addFreightTemplate() {
         let url = http.apiMap.addFreight;
         let data = {
           common: 1,
@@ -247,23 +247,27 @@
           freight: this.freight,
           full: this.full,
           freeShipping: this.freeShipping,
-          freightNodefaults:this.tableData
+          freightNodefaults: JSON.stringify(this.tableData)
         };
-        console.log(data)
-//        this.$http.post(url, data).then(
-//          function (res) {
-//            if (res.body.result) {
-//              this.$message({
-//                type: 'success',
-//                message: '添加成功!'
-//              });
-//              $(".add_template").hide();
-//              $(".mask").hide();
-//              this.getList()
-//            }
-//
-//          }
-//        );
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+              $(".add_template").hide();
+              $(".mask").hide();
+              this.getList()
+            } else {
+              this.$message({
+                type: 'error',
+                message: ''
+              });
+            }
+
+          }
+        );
       },
       open2(row) {
         this.$confirm('此操作将删除运费模版, 是否继续?', '提示', {
@@ -274,7 +278,7 @@
           let url = http.apiMap.deleteFreight;
           let data = {
             common: 1,
-            id:row.id
+            id: row.id
           };
           this.$http.post(url, data).then(
             function (res) {
@@ -284,7 +288,7 @@
                   message: '删除成功!'
                 });
                 this.getList()
-              }else {
+              } else {
                 this.$message({
                   type: 'error',
                   message: res.body.msg
@@ -533,7 +537,7 @@
 
   .add_noDefaultarea {
     width: 600px;
-    height:400px;
+    height: 400px;
     padding: 30px;
     background: #ffffff;
     position: fixed;
