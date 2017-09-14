@@ -55,67 +55,7 @@
         </div>
       </div>
     </div>
-    <div class="mask"></div>
-    <div class="add_team popup">
-      <div class="add_team_title popup_title">添加团队-选择团长</div>
-      <div class="add_team_search">
-        <div class="add_team_search_title">团长：</div>
-        <el-input placeholder="输入团长账号（需是无团队的高级店主或公司店主）"></el-input>
-        <el-button type="primary">查询</el-button>
-      </div>
-      <p class="add_team_search_tip"><i>此账号不符合团长的条件</i><i>此账号已属于团队</i></p>
-      <div class="teamer_information">团长信息</div>
-      <ul class="teamer_information_list">
-        <li><i>账号：</i><span>13928989823</span></li>
-        <li><i>昵称：</i><span>------</span></li>
-        <li><i>注册时间：</i><span>2015-01-01 ·12:00:00</span></li>
-        <li><i>店主级别：</i><span>高级店主</span></li>
-        <li><i>升级到高级店主时间：</i><span>2015-01-01 ·12:00:00</span></li>
-        <li><i>累计销售金：</i><span>￥1353.00</span></li>
-        <li><i>上月销售金：</i><span>￥132.00</span></li>
-        <li><i>累计所得奖励：</i><span>133.00</span></li>
-        <li><i>上月所得奖励：</i><span>13.00</span></li>
-      </ul>
-      <div class="add_tip">您正在创建高级店主团队</div>
-      <div class="add_this_teamer">
-        <el-button type="primary" size="small">添加其做团长</el-button>
-      </div>
-      <div class="already_team">您已指定139281982918做团长</div>
-      <el-button type="primary" @click="DisplayBlock2">下一步</el-button>
-    </div>
-    <div class="add_team2 popup">
-      <div class="add_team2_title popup_title">添加团队-2团长下级团员添加</div>
-      <div class="add_tip2">您正在创建高级店主团队</div>
-      <div class="add_small_title">下级团员---公司团员添加</div>
-      <div class="add_team_search">
-        <div class="add_team_search_title">团长：</div>
-        <el-input placeholder="输入团长账号（需是无团队的高级店主或公司店主）" v-model="teamAccount
-"></el-input>
-        <el-button type="primary">查询</el-button>
-      </div>
-      <p class="add_team_search_tip"><i>此账号不符合此层级团员的条件</i><i>此账号已属于团队</i></p>
-      <div class="teamer_information">团员</div>
-      <ul class="teamer_information_list">
-        <li><i>账号：</i><span>13928989823</span></li>
-        <li><i>昵称：</i><span>------</span></li>
-        <li><i>注册时间：</i><span>2015-01-01 ·12:00:00</span></li>
-        <li><i>店主级别：</i><span>高级店主</span></li>
-        <li><i>升级到高级店主时间：</i><span>2015-01-01 ·12:00:00</span></li>
-        <li><i>累计销售金：</i><span>￥1353.00</span></li>
-        <li><i>上月销售金：</i><span>￥132.00</span></li>
-        <li><i>累计所得奖励：</i><span>133.00</span></li>
-        <li><i>上月所得奖励：</i><span>13.00</span></li>
-      </ul>
-      <div class="add_tip3"><i>添加其做团长下级团员</i>您正在创建高级店主团队</div>
-      <div class="add_this_teamer">
-        <el-button type="primary" size="small">添加其做团长</el-button>
-      </div>
-      <div class="already_team">您已指定139281982918做团长</div>
-      <div class="add_team2_btns">
-        <el-button @click="DisplayNone">完成，返回团队管理列表</el-button>
-        <el-button type="primary">完成，去团队信息页继续添加团员</el-button>
-      </div>
-    </div>
+
 
     <div class="block">
       <el-pagination

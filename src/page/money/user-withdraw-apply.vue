@@ -43,12 +43,38 @@
             fixed="right"
             label="操作">
             <template scope="scope">
-              <el-button type="text" size="small">升级</el-button>
+              <el-button type="text" size="small" @click="DispalyBlock(scope.row)">提现成功</el-button>
+              <el-button type="text" size="small" @click="fireDra(scope.row)">提现驳回</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
+
+    <div class="mask"></div>
+    <div class="modifypass popup">
+      <el-row >
+        <el-col :span="24" style="margin-top:20px;">
+          <span style="float:left;margin-left:21%;">提现方式:</span>:
+          <select name="" id="orderState" v-model="orderState" style="width:50%;">
+            <option value="">请选择</option>
+            <option value="1">支付宝</option>
+            <option value="2">微信</option>
+          </select>
+        </el-col>
+        <el-col :span="24" style="margin-top:20px;">
+          <span>用户支付宝账号</span>:
+          <el-input style="width:50%;" v-model="userzfb"></el-input>
+        </el-col>
+        <el-col :span="24" style="margin-top:20px;">
+          <span>退款支付宝账号</span>:
+          <el-input style="width:50%;" v-model="tkzfb"></el-input>
+        </el-col>
+        <el-button type="info" @click="DisplayNone">取消</el-button>
+        <el-button type="success" @click="successDra">确认提现成功</el-button>
+      </el-row>
+    </div>
+
     <div class="block">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -61,6 +87,28 @@
 
   </div>
 </template>
+<style>
+  .input_f{
+    width:80%;
+    height:30px;
+    font-size:16px;
+  }
+  .mask{
+
+    display:none;
+  }
+  .modifypass{
+    display:none;
+  }
+  .input_user{
+    width:80%;
+    height:30px;
+    font-size:16px;
+    line-height:30px;
+   text-align:left;
+  }
+</style>
+
 
 <script>
   import http from '../../http'
@@ -70,18 +118,106 @@
         currentPage:1,
         count11:1,
         time:'',  //时间搜索
-        tableData: []
+        tableData: [],
+        orderState:'',
+        userzfb:'',
+        tkzfb:'',
+        id:'',
+        money:'',
+        userAccount:''
       }
     },
     created(){
       this.getWithdrawals()
     },
     methods:{
+      DispalyBlock(row){
+         this.id=row.id;
+         this.money=row.money;
+         this.userAccount=row.userAccount;
+        $('.mask').css('display','block');
+        $('.modifypass').css('display','block');
+      },
+      DisplayNone(){
+        $('.mask').css('display','none');
+        $('.modifypass').css('display','none');
+      },
+      //提现成功
+      successDra(){
+           let url=http.apiMap.modifyReject;
+           let data={
+             common:1,
+             id:this.id,
+             outMent:this.orderState,//出账方式
+             outAccount:this.tkzfb,//出账账号
+             incomeAccount:this.userAccount,//收款账号
+             userAccount:this.userzfb,//用户账号
+             outMoney:this.money,//出账金额
+           };
+           this.$http.post(url,data).then(
+             function(res){
+               if(res.body.result){
+                 this.$message({
+                   type: 'success',
+                   message: '提现成功!'
+                 });
+                 this.getWithdrawals()
+               }else{
+                 this.$message({
+                   type: 'danger',
+                   message: '申请失败!'
+                 });
+               }
+               $('.mask').css('display','none');
+               $('.modifypass').css('display','none');
+               this.orderState='';
+               this.tkzfb='';
+               this.userzfb='';
+             }
+           )
+      },
+
+      //提现驳回
+      fireDra(row){
+        this.$confirm('此操作将驳回该申请, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url =  http.apiMap.modifyReject;
+          let data = {
+            common: 2,
+            id:row.id,
+          };
+          this.$http.post(url,data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '驳回成功!'
+                });
+                this.getWithdrawals();
+              }else{
+                this.$message({
+                  type: 'info',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+      },
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
         this.getWithdrawals()
       },
+
       getWithdrawals(){
         let url = http.apiMap.findWithdrawals;
         let data = {

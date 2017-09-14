@@ -15,18 +15,33 @@
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManage.canLevel}}</span></li>
           <li><i>升级到高级店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
-          <li><i>所属团队：</i><span>高级店主团队（有可以点击查看团队详情，没有空）</span></li>
+          <li><i>所属团队：</i><span></span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.sumPrice}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney}}</span></li>
           <li><i>累计所得奖励：</i><span>{{shopmanManage.sumBonus}}</span></li>
           <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
         </ul>
+      </div>
 
+      <div class="shopman_data2">
+        <div class="data2_title">公司店主资料</div>
+        <div class="data2_name"><i>公司名称：</i><span>{{shopmanManage.companyName}}</span></div>
+        <div class="data2_id"><i>公司注册号：</i><span>{{shopmanManage.companyNum}}</span></div>
+        <div class="data2_id_img">
+          <p>公司营业执照</p>
+          <div class="positive_img">
+            <img :src="shopmanManage.companyLicence">
+          </div>
+        </div>
+      </div>
 
         <div class="operation_btn">
           <el-button type="primary" @click="showp">升级到高级店主</el-button>
         </div>
-      </div>
+
+
+
+
     </div>
   </div>
 </template>
@@ -323,6 +338,7 @@
           }
         )
       },
+
       showAccount(){
         let url=http.apiMap.findOwnerMessage
         let data={
@@ -335,11 +351,11 @@
               let data=res.body.data.user
               this.account=data.account
               this.shopmanManage=data
-              console.log(this.shopmanManage)
             }
           }
         )
       },
+
       DisplayBlock:function(){
         $('.mask').css('display','block');
         $('.supplement_information').css('display','block');

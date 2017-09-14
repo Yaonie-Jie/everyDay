@@ -105,7 +105,6 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count
-              this.tableData = res.body.data.list
               this.OutMoney = res.body.data.sumInFinance
 
               //发生原因
@@ -115,8 +114,18 @@
                 if (data[i].reason == 1) {
                   data[i].reason = '付款'
                 }
+                if (data[i].incomeMent == 0) {
+                  data[i].incomeMent = '支付宝'
+                } else if (data[i].incomeMent == 1) {
+                  data[i].incomeMent = '微信'
+                }
                 arr.push(data[i])
               }
+              this.tableData = arr
+
+
+
+
             }
           }
         );
@@ -154,17 +163,23 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              let data = res.body.data.list;
-              this.tableData = data;
 
               //发生原因
+              let data = res.body.data.list
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
                   data[i].reason = '付款'
                 }
+                if (data[i].incomeMent == 0) {
+                  data[i].incomeMent = '支付宝'
+                } else if (data[i].incomeMent == 1) {
+                  data[i].incomeMent = '微信'
+                }
                 arr.push(data[i])
               }
+              this.tableData = arr
+
 
             }
           }

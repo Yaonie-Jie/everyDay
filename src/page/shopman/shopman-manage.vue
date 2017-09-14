@@ -128,11 +128,11 @@
       <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填公司店主资料</h2>
       <div class="true_name">
         <div class="true_name_title">公司名称</div>
-        <el-input placeholder="请填写真实姓名" v-model="relName"></el-input>
+        <el-input placeholder="请填写公司名称" v-model="comName"></el-input>
       </div>
       <div class="id_num">
         <div class="id_num_title">公司注册号</div>
-        <el-input placeholder="请填写身份证号" v-model="idNumber"></el-input>
+        <el-input placeholder="请填写公司注册号" v-model="comNumber"></el-input>
       </div>
       <div class="id_img_title">公司营业执照</div>
       <!--公司营业执照-->
@@ -193,7 +193,9 @@
         imgFilesf: '',
         imagesfs: '',
         imgFilesfs: '',
-        teLevel:''
+        teLevel:'',
+        comName:'',
+        comNumber:''
       }
     },
 
@@ -322,12 +324,12 @@
       },
 
 
-      DisplayBlock: function () {
+      DisplayBlock () {
         $('.mask').css('display', 'block');
         $('.add_shopman').css('display', 'block');
       },
 
-      DisplayNone: function () {
+      DisplayNone () {
         $('.mask').css('display', 'none');
         $('.add_shopman').css('display', 'none');
       },
@@ -380,6 +382,8 @@
         formData.append('pictureUrl2', this.imgFilesfs)
         formData.append('alipay', this.alipay)
         formData.append('weChat', this.weChat)
+        formData.append('companyName', this.comName)
+        formData.append('companyNum', this.comNumber)
         this.$http.post(url, formData).then(
           function (res) {
             if (res.body.result) {
