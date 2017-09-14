@@ -111,7 +111,6 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count
-              this.tableData = res.body.data.list
               this.OutMoney = res.body.data.sumInFinance
               //出账原因
               let data = res.body.data.list
@@ -122,19 +121,16 @@
                 } else if (data[i].reason == 2) {
                   data[i].reason = '提现'
                 }
+                if (data[i].outMent == 1) {
+                  data[i].outMent = '支付宝'
+                } else if (data[i].outMent == 2) {
+                  data[i].outMent = '微信'
+                }
                 arr.push(data[i])
               }
-              //出款方式
-              let data1 = res.body.data.list
-              let arr1 = [];
-              for (let i = 0; i < data1.length; i++) {
-                if (data1[i].outMent == 1) {
-                  data1[i].reason = '支付宝'
-                } else if (data1[i].outMent == 2) {
-                  data1[i].reason = '微信'
-                }
-                arr1.push(data1[i])
-              }
+              this.tableData = arr;
+
+
             }
           }
         );
@@ -173,11 +169,11 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              let data = res.body.data.list;
-              this.tableData = data;
+              //let data = res.body.data.list;
+//              this.tableData = data;
 
               //出账原因
-              //let data=res.body.data.list
+              let data = res.body.data.list
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
@@ -185,8 +181,17 @@
                 } else if (data[i].reason == 2) {
                   data[i].reason = '提现'
                 }
+                if (data[i].outMent == 1) {
+                  data[i].outMent = '支付宝'
+                } else if (data[i].outMent == 2) {
+                  data[i].outMent = '微信'
+                }
                 arr.push(data[i])
               }
+              this.tableData = arr;
+
+
+
             }
           }
         );

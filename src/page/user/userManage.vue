@@ -77,37 +77,54 @@
     },
     methods: {
       addUserMessage(){
-        let url=http.apiMap.addreg;
-        let data={
-          common:1,
-          account:this.phoneNum,
-          password:this.psd
-        };
-        this.$http.post(url,data).then(
-          function(res){
-            if(res.body.result){
-              this.$message({
-                type: 'success',
-                message: '添加成功!'
-              });
-            }else{
-              this.$message({
-                type: 'waring',
-                message: '添加失败！'
-              });
-            }
-            this.phoneNum='';
-            this.psd='';
-            $('.mask').css('display','none');
-            $('.add_regular_users').css('display','none');
+        if(this.phoneNum == ''){
+          this.$message({
+            type: 'info',
+            message: '请输入账号'
+          });
+        }else {
+          if(this.psd == ''){
+            this.$message({
+              type: 'info',
+              message: '请输入密码'
+            });
+          }else {
+            let url=http.apiMap.addreg;
+            let data={
+              common:1,
+              account:this.phoneNum,
+              password:this.psd
+            };
+            this.$http.post(url,data).then(
+              function(res){
+                if(res.body.result){
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功!'
+                  });
+                  $('.mask').css('display','none');
+                  $('.add_regular_users').css('display','none');
+                }else{
+                  this.$message({
+                    type: 'error',
+                    message: res.body.msg
+                  });
+                }
+                this.phoneNum='';
+                this.psd='';
+
+              }
+            )
           }
-        )
+        }
+
       },
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
         this.getUserManage()  //页面 加载数据
       },
+
       getUserManage(){
         let url=http.apiMap.findUserManage;
         let data={
@@ -119,11 +136,27 @@
           function(res){
             if(res.body.result){
               this.count11 = res.body.data.count
-              this.tableData=res.body.data.userList
+              //用户层级
+              let data = res.body.data.userList
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].level== 0) {
+                  data[i].level = '普通用户'
+                }else if (data[i].level == 1) {
+                  data[i].level = '个人店主'
+                } else if (data[i].level == 2) {
+                  data[i].level = '公司店主'
+                }else if (data[i].level == 3) {
+                  data[i].level = '高级店主'
+                }
+                arr.push(data[i])
+              }
+              this.tableData=arr
             }
           }
         );
       },
+
       DisplayBlock:function(){
         $('.mask').css('display','block');
         $('.add_regular_users').css('display','block');
@@ -133,6 +166,7 @@
         $('.mask').css('display','none');
         $('.add_regular_users').css('display','none');
       }
+
     },
 
   }

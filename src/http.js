@@ -95,7 +95,7 @@ const apiMap={
 
 
 
-  'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主管理)
+  'modifyToCompanyLevel':hosts.api+'ownerManage/modifyOwnerToCompany',   //升级到公司店主(店主管理)
   'modifyToHighOwnerLevel':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主管理)
   'findOwnerMessage':hosts.api+'ownerManage/findOwnerMessage',   //获取店主资料(店主管理)
   'getTeamList':hosts.api+'ownerTeamManage/findOwnerTeamManageList',   //获取店主团队信息（店主管理）
@@ -114,6 +114,9 @@ const apiMap={
   'findInFinance':hosts.api+'finance/findInFinanceList', //入账记录
   'findOutFinance':hosts.api+'finance/findOutFinanceList', //出账记录
   'findWithdrawals':hosts.api+'withdrawals/findWithdrawalsList', //提现申请
+  'modifyPass':hosts.api+'withdrawals/modifyWithdrawalsPass', //提现成功
+  'modifyReject':hosts.api+'withdrawals/modifyWithdrawalsRejectById', //提现驳回
+
 
   'findUserManage':hosts.api+'user/userMessageList', //用户管理
 

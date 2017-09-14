@@ -14,19 +14,13 @@
           <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManage.canLevel}}</span></li>
-          <!--<li><i>升级到高级店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>-->
-          <li><i>所属团队：</i><span>高级店主团队（有可以点击查看团队详情，没有空）</span></li>
+          <li><i>所属团队：</i><span>高级店主团队</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.sumPrice}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney}}</span></li>
           <li><i>累计所得奖励：</i><span>{{shopmanManage.sumBonus}}</span></li>
           <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
         </ul>
 
-
-
-        <!--<div class="operation_btn">-->
-          <!--<el-button type="primary">修改高级店主资料</el-button>-->
-        <!--</div>-->
       </div>
     </div>
     <div class="mask"></div>
