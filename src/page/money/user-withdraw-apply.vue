@@ -3,7 +3,7 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>支付系统</el-breadcrumb-item>
-        <el-breadcrumb-item>用户提现申请</el-breadcrumb-item>
+        <el-breadcrumb-item>奖励结算</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="titlee" style="border:0;">结算申请明细</div>
       <div class="operation_time" style="line-height: 60px">

@@ -63,6 +63,10 @@ const apiMap={
   'returnOrderList':hosts.api+'order/findOrderRefundList',    //退款中订单列表
   'findOrder':hosts.api+'order/findOrder',    //搜索订单
   'findExpress':hosts.api+'express/findExpressByOrderNum',    //查看物流
+  'Reject':hosts.api+'refund/modifyRefundStateReject',    //审核驳回
+  'gettuikuan':hosts.api+'refund/findRefundeAccount',    //点击退款成功获取信息
+  'tuikuan':hosts.api+'refund/addRefundeSuccess',    //确定退款
+
 
 
   'addFreight':hosts.api+'freightTemplate/addFreightTemplate',    //添加运费模板

@@ -279,7 +279,7 @@
         content: '',
         editorOption: {},
 
-        contentCan:'',
+        contentCan: '',
         editorOptionCan: {},
         paramlist: [],
         paramName: '', //规格名称
@@ -331,8 +331,8 @@
                 this.imgFiles.push(o);
               }
               this.content = data.details;
-              this.contentCan=data.parameter;
-                let url = http.apiMap.findtTypeByTwoId;
+              this.contentCan = data.parameter;
+              let url = http.apiMap.findtTypeByTwoId;
               let data1 = {
                 common: 1,
                 id: data.typeId
@@ -375,7 +375,7 @@
 
       showInput() {
         //this.paramName = '';
-       // this.dynamicTags = [];
+        // this.dynamicTags = [];
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
@@ -549,67 +549,85 @@
         this.pic.splice(tmpi, 1);
       },
       submitUpload() {
-        this.$confirm('是否修改商品?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let url = http.apiMap.updataShop;
-          let formData = new FormData();//通过formdata上传
-          let arr = []
-          for (let i = 0; i < this.imgFiles.length; i++) {
-            if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
-              if (this.imgFiles[i].name.indexOf('http') != 0) {
-                arr.push(this.imgFiles[i])
-                formData.append('pictureUrl', this.imgFiles[i])
-              }
-            }
-          }
-          formData.append('id', this.id);
-          formData.append('common', '2');
-          formData.append('typeId', this.typeId);
-          formData.append('stock', this.stock);
-          formData.append('cose', this.cose * 100);
-          formData.append('royalty', this.royalty * 100);
-          formData.append('name', this.name);
-          formData.append('price', this.price * 100);
-          formData.append('brandId', this.brandId);
-          formData.append('details', this.content);
-          formData.append('parameters', JSON.stringify(this.paramlist));
-          formData.append('freightId', this.freightId);
-          formData.append('pictureOriginal', this.pic.join(','));
-          formData.append('parameter', this.contentCan);
-
-          this.$http.post(url, formData, {
-            method: 'post',
-            headers: {'Content-Type': 'multipart/form-data'}
-          }).then(function (res) {
-            this.$message({
-              type: 'success',
-              message: '修改成功!'
-            });
-          }).catch(function (error) {
-            this.$message({
-              type: 'info',
-              message: '修改失败'
-            });
-            console.log(error);
-          })
-
-
-
-        }).catch(() => {
+        if (this.typeId == '') {
           this.$message({
             type: 'info',
-            message: '已取消修改'
+            message: '请选择商品分类'
           });
-        });
+        } else {
+          if (this.brandId == '') {
+            this.$message({
+              type: 'info',
+              message: '请选择商品品牌'
+            });
+          } else {
+            if (this.freightId == '') {
+              this.$message({
+                type: 'info',
+                message: '请选择运费模版'
+              })
+            } else {
+              this.$confirm('是否修改商品?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                let url = http.apiMap.updataShop;
+                let formData = new FormData();//通过formdata上传
+                let arr = []
+                for (let i = 0; i < this.imgFiles.length; i++) {
+                  if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
+                    if (this.imgFiles[i].name.indexOf('http') != 0) {
+                      arr.push(this.imgFiles[i])
+                      formData.append('pictureUrl', this.imgFiles[i])
+                    }
+                  }
+                }
+                formData.append('id', this.id);
+                formData.append('common', '2');
+                formData.append('typeId', this.typeId);
+                formData.append('stock', this.stock);
+                formData.append('cose', this.cose * 100);
+                formData.append('royalty', this.royalty * 100);
+                formData.append('name', this.name);
+                formData.append('price', this.price * 100);
+                formData.append('brandId', this.brandId);
+                formData.append('details', this.content);
+                formData.append('parameters', JSON.stringify(this.paramlist));
+                formData.append('freightId', this.freightId);
+                formData.append('pictureOriginal', this.pic.join(','));
+                formData.append('parameter', this.contentCan);
+
+                this.$http.post(url, formData, {
+                  method: 'post',
+                  headers: {'Content-Type': 'multipart/form-data'}
+                }).then(function (res) {
+                  this.$message({
+                    type: 'success',
+                    message: '修改成功!'
+                  });
+                  this.$router.push('/ManageGoods');
+                }).catch(function (error) {
+                  this.$message({
+                    type: 'info',
+                    message: '修改失败'
+                  });
+                  console.log(error);
+                })
 
 
-      },
-
-
-    },
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消修改'
+                });
+              });
+            }
+          }
+        }
+      }
+    }
+    ,
     open3() {
       this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -626,7 +644,8 @@
           message: '已取消删除'
         });
       });
-    },
+    }
+    ,
 
 
   }

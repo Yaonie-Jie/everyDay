@@ -361,7 +361,7 @@
         let data = {
           common: 2,
           size: 10,
-          name: this.picName,
+          name: this.name,
           typeId: -1,
           nowpage: 1
         };

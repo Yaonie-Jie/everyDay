@@ -20,7 +20,7 @@
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
                   class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
                 </li>
               </ul>
@@ -68,9 +68,6 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button @click="DisplayBlock(listData.orderNum)">改价</el-button>
-                <el-button>发货</el-button>
-                <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
 
               </div>
             </div>
@@ -84,35 +81,27 @@
             <div class=" width100  NoBorderBottom">
               <div class="titlee">物流信息</div>
               <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>百世快递</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>3222222233343</span></li>
-                <li class="marginTopLeft">物流电话：<span>暂无</span></li>
+                <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
+                <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
+                <li class="marginTopLeft">电话：<span>{{wuliu.phone}}</span></li>
               </ul>
-              <div class="right imgNum">
-                <div class="imgBOXs">
-                  <img
-                    src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"
-                    alt="">
-                </div>
-                <div class="shopNUMs">共 <span>20</span>件商品</div>
-              </div>
+              <!--<div class="right imgNum">-->
+              <!--<div class="imgBOXs">-->
+              <!--<img-->
+              <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
+              <!--alt="">-->
+              <!--</div>-->
+              <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
+              <!--</div>-->
             </div>
             <div class=" width100  NoBorderBottom">
               <div class="jt">
                 <img src="" alt="">
               </div>
               <ul class="wlxq">
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>您的订单已导入，快递公司正在取件</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
-                </li>
-                <li>
-                  <p>2017-12-22 12：00:00</p>
-                  <p>收货人已取货</p>
+                <li v-for="i in dataList">
+                  <p>{{i.time}}</p>
+                  <p>{{i.context}}</p>
                 </li>
               </ul>
             </div>
@@ -192,12 +181,18 @@
       return {
         orderNum: '',    //订单号
         listData: '',
-        price: ''
+        price: '',
+        expressNum:'',
+        company:'',
+        wuliu:'',
+        dataList:''
       }
     },
     created() {
       this.orderNum = this.$route.params.orderNum;
       this.getshow()
+      this.findExpress()
+
     },
     methods: {
       stataFilter(value) {
@@ -227,6 +222,28 @@
               let data = res.body.data.order;
               this.listData = data
 
+            }
+          }
+        );
+      },
+      //根据订单号查询物流
+      findExpress() {
+        let url = http.apiMap.findExpress;
+        let data = {
+          orderNum: this.orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.wuliu=res.body.data.expressNew;
+
+              let data = JSON.parse(res.body.data.express);
+              this.expressNum=data.nu;
+              this.abbreviation=data.abbreviation;
+              this.dataList = data.data
+            } else {
+              console.log('暂无物流信息')
             }
           }
         );

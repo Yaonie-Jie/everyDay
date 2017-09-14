@@ -80,7 +80,7 @@
                 <p>包含运费：<span>{{i.freigh / 100}}</span></p>
                 <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
                 <el-button v-show="i.orderState==1" @click="addExpress(i)">发货</el-button>
-                <el-button v-show="i.orderState==2" @click="showwuliu(i.orderNum)">查看物流</el-button>
+                <el-button v-show="i.orderState==2||i.orderState==3||i.orderState==4" @click="showwuliu(i.orderNum)">查看物流</el-button>
                 <el-button v-show="i.orderState==0||i.orderState==1" @click="open2(i.orderNum)">取消订单</el-button>
                 <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
               </div>
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-<!--发货-->
+    <!--发货-->
     <div class="popup change_left">
       <div class="popup_title">发货</div>
       <el-row style="text-align: left;">
@@ -221,8 +221,8 @@
         Abbreviation: '',
         ExpressNum: '',
         phone: '',
-        wuliu:'',
-        wuliuList:[]
+        wuliu: '',
+        wuliuList: []
       }
     },
     created() {
@@ -245,7 +245,7 @@
         }
       },
       //查看物流
-      showwuliu(orderNum){
+      showwuliu(orderNum) {
         $(".deliver_goods").show();
         $(".mask").show();
         let url = http.apiMap.findExpress;
@@ -256,11 +256,11 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.wuliu=res.body.data.expressNew;
+              this.wuliu = res.body.data.expressNew;
 
               let data = JSON.parse(res.body.data.express);
-              this.expressNum=data.nu;
-              this.abbreviation=data.abbreviation;
+              this.expressNum = data.nu;
+              this.abbreviation = data.abbreviation;
               this.wuliuList = data.data
             } else {
               console.log('暂无物流信息')
@@ -312,7 +312,7 @@
 
       DisplayBlock(orderNum, price) {
         this.orderNum = orderNum;
-        this.price = price/100
+        this.price = price / 100
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -340,7 +340,7 @@
           this.$router.push('/OrderEnd/' + num);
         } else if (state == 4) {
           this.$router.push('/OrderMoney/' + num);
-        }else if (state == 5) {
+        } else if (state == 5) {
           this.$router.push('/OrderMoneychao/' + num);
         }
       },
@@ -393,6 +393,7 @@
               this.count11 = res.body.data.count;
               let data = res.body.data.orderList;
               this.dataList = data;
+
             }
           }
         );
@@ -402,7 +403,7 @@
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
-          price: this.price*100,
+          price: this.price * 100,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(

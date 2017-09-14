@@ -239,7 +239,6 @@
         <el-button style="margin-left: 10px;" size="large" type="success" @click="submitUpload">添加商品</el-button>
       </el-col>
     </div>
-    <span @click="aaa">ssss</span>
   </div>
 </template>
 
@@ -274,7 +273,7 @@
         content: '',
         editorOption: {},
 
-        contentCan:'',
+        contentCan: '',
         editorOptionCan: {},
         paramlist: [],
         paramName: '', //规格名称
@@ -292,9 +291,6 @@
       this.findFeightList();
     },
     methods: {
-      aaa() {
-        console.log(this.content)
-      },
       //运费模版
       findFeightList() {
         let url = http.apiMap.freightList;
@@ -462,69 +458,92 @@
         this.imgFiles = arrimg;
       },
       submitUpload() {
-        this.$confirm('是否继续添加商品?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let url = http.apiMap.addShop;
-          let formData = new FormData();//通过formdata上传
-          let arr = []
-          for (let i = 0; i < this.imgFiles.length; i++) {
-            if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
-              arr.push(this.imgFiles[i])
-            }
-            formData.append('pictureUrl', arr[i]);
-          }
-          formData.append('common', '2');
-          formData.append('typeId', this.typeId);
-          formData.append('stock', this.stock);
-          formData.append('cose', this.cose * 100);
-          formData.append('name', this.name);
-          formData.append('price', this.price * 100);
-          formData.append('brandId', this.brandId);
-          formData.append('details', this.content);
-          formData.append('royalty', this.royalty * 100);
-          formData.append('parameters', JSON.stringify(this.paramlist));
-          formData.append('freightId', this.freightId);
-          formData.append('parameter', this.contentCan);
-
-          this.$http.post(url, formData, {
-            method: 'post',
-            headers: {'Content-Type': 'multipart/form-data'}
-          }).then(function (res) {
-            if (res.body.result) {
-              this.$message({
-                type: 'success',
-                message: '添加成功!'
-              });
-              this.$router.push('/ManageGoods');
-            } else {
-              this.$message({
-                type: 'warning',
-                message: '添加失败'
-              });
-            }
-          }).catch(function (error) {
-            this.$message({
-              type: 'warning',
-              message: '添加失败'
-            });
-          })
-
-        }).catch(() => {
+        if (this.typeId == '') {
           this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: '请选择商品分类'
           });
-        });
+        } else {
+          if (this.brandId == '') {
+            this.$message({
+              type: 'info',
+              message: '请选择商品品牌'
+            });
+          } else {
+            if (this.freightId == '') {
+              this.$message({
+                type: 'info',
+                message: '请选择运费模版'
+              })
+            } else {
+              this.$confirm('是否继续添加商品?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                let url = http.apiMap.addShop;
+                let formData = new FormData();//通过formdata上传
+                let arr = []
+                for (let i = 0; i < this.imgFiles.length; i++) {
+                  if (arr.indexOf(this.imgFiles[i]) == -1) {//上传图片文件去重
+                    arr.push(this.imgFiles[i])
+                  }
+                  formData.append('pictureUrl', arr[i]);
+                }
+                formData.append('common', '2');
+                formData.append('typeId', this.typeId);
+                formData.append('stock', this.stock);
+                formData.append('cose', this.cose * 100);
+                formData.append('name', this.name);
+                formData.append('price', this.price * 100);
+                formData.append('brandId', this.brandId);
+                formData.append('details', this.content);
+                formData.append('royalty', this.royalty * 100);
+                formData.append('parameters', JSON.stringify(this.paramlist));
+                formData.append('freightId', this.freightId);
+                formData.append('parameter', this.contentCan);
 
-      },
+                this.$http.post(url, formData, {
+                  method: 'post',
+                  headers: {'Content-Type': 'multipart/form-data'}
+                }).then(function (res) {
+                  if (res.body.result) {
+                    this.$message({
+                      type: 'success',
+                      message: '添加成功!'
+                    });
+                    this.$router.push('/ManageGoods');
+                  } else {
+                    this.$message({
+                      type: 'warning',
+                      message: '添加失败'
+                    });
+                  }
+                }).catch(function (error) {
+                  this.$message({
+                    type: 'warning',
+                    message: '添加失败'
+                  });
+                })
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消添加'
+                });
+              });
+            }
+          }
+        }
+
+
+      }
+      ,
       selectChange(e) {
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         this.createImage(files);
-      },
+      }
+      ,
       createImage(file) {
         if (typeof FileReader === 'undefined') {
           alert('您的浏览器不支持图片上传，请升级您的浏览器');
@@ -544,7 +563,8 @@
             }
           };
         }
-      },
+      }
+      ,
 
       open3() {
         this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
@@ -562,7 +582,8 @@
             message: '已取消删除'
           });
         });
-      },
+      }
+      ,
 
     }
   }

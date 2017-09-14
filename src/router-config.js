@@ -194,7 +194,7 @@ export default [
         path: '/OrderMoneychao/:orderNum', component: OrderMoneychao, //已超时订单详情
       },
       {
-        path: '/OrderRefundShow', component: OrderRefundShow,
+        path: '/OrderRefundShow/:orderNum', component: OrderRefundShow,
       },
       {
         path: '/BillDemo', component: BillDemo,

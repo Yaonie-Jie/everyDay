@@ -65,7 +65,7 @@
                 tableList=data.data.list;
                 sumPage=data.data.count;
               }else{
-                swal({title:'',text:'获取列表失败！'})
+//                swal({title:'',text:'获取列表失败！'})
               }
           }
         })

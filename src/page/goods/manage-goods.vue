@@ -120,9 +120,16 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.count11 = res.body.data.count;
               let data = res.body.data.productList;
-
-              this.dataList = data;
+              let arr = [];
+              let num = 0;
+              for (let i = 0; i < data.length; i++) {
+                num += 1;
+                data[i].num = num;
+                arr.push(data[i])
+              }
+              this.dataList = arr;
             }
           }
         );
@@ -142,11 +149,6 @@
               let arr = [];
               let num = 0;
               for (let i = 0; i < data.length; i++) {
-//                if (data[i].mode == 1) {
-//                  data[i].mode = '商品详情'
-//                } else {
-//                  data[i].mode = '图文推荐'
-//                }
                 num += 1;
                 data[i].num = num;
                 arr.push(data[i])

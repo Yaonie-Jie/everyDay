@@ -20,7 +20,7 @@
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
                   class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
                 </li>
               </ul>

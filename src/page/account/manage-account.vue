@@ -156,7 +156,10 @@
               tableList=data.data.accountList;
               sumPage=data.data.count;
             }else{
-                swal({title:'',text:'获取列表失败！'})
+              this.$message({
+                type: 'error',
+                message: data.msg
+              });
             }
           }
         })
@@ -171,7 +174,10 @@
       //修改密码
       ChangePass:function(){
           if(this.newPass==''){
-              swal({title:'',text:'密码不能为空！'})
+            this.$message({
+              type: 'error',
+              message: '密码不能为空'
+            });
           }else{
               var data={'account':this.ChangePassAccount,'common':this.GLOBAL.common,'password':this.newPass};
               $.ajax({
@@ -181,12 +187,17 @@
                 success:function (data) {
                   if(data.result){
                     this.newPass='';
-                    swal({title:"",text:data.msg},function(){
-                      $('.mask').css('display','none');
-                      $('.change_password').css('display','none');
-                    })
+                    this.$message({
+                      type: 'success',
+                      message: data.msg
+                    });
+                    $('.mask').css('display','none');
+                    $('.change_password').css('display','none');
                   }else{
-                    swal({title:"",text:data.msg})
+                    this.$message({
+                      type: 'error',
+                      message: data.msg
+                    });
                   }
 
                 }
@@ -232,10 +243,17 @@
                             thats.loginPass='';
                             thats.AddID='';
                             thats.AddValue='';
-                            swal({title:'',text:'添加成功'})
+                            this.$message({
+                              type: 'success',
+                              message: '添加成功'
+                            });
+
                             that.getTable()
                           }else{
-                            swal({title:'',text:data.msg})
+                            this.$message({
+                              type: 'error',
+                              message: data.msg
+                            });
                           }
 
 
@@ -350,14 +368,18 @@
           url:this.ChangeRoleUrl,
           success:function(data){
               if(data.result){
-                 swal({title:'',text:'修改成功'},function(){
-                     window.location.href='';
-                })
+                this.$message({
+                  type: 'success',
+                  message: '修改成功'
+                });
                  that.ChangeID='';
                  that.ChangeValue='';
                  that.RoleID='';
               }else{
-                 swal({title:'',text:'修改失败'})
+                this.$message({
+                  type: 'error',
+                  message: '修改失败'
+                });
             }
           }
         })

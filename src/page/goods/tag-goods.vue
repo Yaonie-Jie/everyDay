@@ -122,7 +122,10 @@
                    that.tableData=list;
 
                }else{
-                   swal({title:'',text:'获取数据失败'})
+                 this.$message({
+                   type: 'error',
+                   message: data.msg
+                 });
                }
             }
           })
@@ -132,7 +135,10 @@
          var data={'common':this.GLOBAL.common,'interest':this.AddInterest}
          var that=this;
          if(this.AddInterest==''){
-             swal({title:'',text:'兴趣不能为空'})
+           this.$message({
+             type: 'error',
+             message: '兴趣不能为空'
+           });
          }else{
              $.ajax({
                type:'POST',
@@ -145,7 +151,10 @@
                    that.AddInterest='';
                    that.getTable();
                  }
-                 swal({title:'',text:data.msg})
+                 this.$message({
+                   type: 'error',
+                   message: data.msg
+                 });
 
                }
              })
@@ -180,7 +189,10 @@
                   $('.mask').css('display','none');
                   $('.add_interests2').css('display','none');
                 }
-                swal({title:'',text:data.msg})
+              this.$message({
+                type: 'error',
+                message: data.msg
+              });
             }
           })
 
