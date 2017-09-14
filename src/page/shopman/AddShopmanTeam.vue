@@ -50,7 +50,7 @@
           <li><i>昵称：</i><span>{{shopmanManagey.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
-          <li><i>升级到高级店主时间：</i><span>{{shopmanManagey.canLevel}}</span></li>
+          <li><i>升级到高级店主时间：</i><span>{{shopmanManagey.modifiedOn}}</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney}}</span></li>
           <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
@@ -74,7 +74,7 @@
       return {
         account: '',
         shopmanManage: '',
-        shopmanManagey: {},
+        shopmanManagey: '',
         teamAccount: '',
         state: ''
       }

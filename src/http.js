@@ -80,6 +80,8 @@ const apiMap={
   'passAudit':hosts.api+'ownerManage/passOwnerAudit',   //通过申请(店主申请管理)
   'rejectAudit':hosts.api+'ownerManage/rejectAudit',   //驳回申请(店主申请管理)
   'addShopman':hosts.api+'ownerManage/addNoTeamOwner',   //添加无店主团队(店主申请管理)
+  'modifyCompany':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主申请管理)
+  'modifyHigh':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主申请管理)
 
 
 
@@ -118,6 +120,16 @@ const apiMap={
   'findInvoiceList':hosts.api+'invoiceType/findInvoiceTypeList', //获取发票列表
   'modifyInvoiceList':hosts.api+'invoiceType/modifyInvoiceType', //修改发票列表
   'addInvoiceList':hosts.api+'invoiceType/addInvoiceType', //添加发票列表
+
+
+
+  'addreg':hosts.api+'user/registerUser', //添加普通用户
+
+
+  'findPhon':hosts.api+'systemPhone/findSystemPhone', //客服电话
+  'modifyPhon':hosts.api+'systemPhone/modifySystemPhone', //修改客服电话
+
+
 
 
 }

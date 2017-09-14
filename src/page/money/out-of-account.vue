@@ -31,7 +31,7 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="modifiedOn"
+            prop="createOn"
             label="操作时间">
           </el-table-column>
           <el-table-column

@@ -18,7 +18,7 @@
           <div class="apply_information">
             筛选：
             <select name="" id="shopManState" v-model="teamState">
-              <option value="" v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
+              <option  v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
             </select>
 
             <input type="text" placeholder="输入账号查找店主" style="padding:0 10px;" v-model="account"/>
@@ -71,18 +71,18 @@
         <el-input placeholder="请输入一个账号" v-model="shopmanAccount"></el-input>
       </div>
       <div class="add_level">
-        <div class="add_level_title">分配级别</div>
-        <el-select v-model="value" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+        <div class="add_level_title" style="display:block;">分配级别</div>
+        <select id="tLevel" v-model="teLevel" style="width:75%;height:36px;float:right;">
+          <option value="1" style="display:block;height:36px;font-size:16px;line-height:36px;">个人店主</option>
+          <option value="2" style="display:block;height:36px;font-size:16px;line-height:36px;">公司店主</option>
+          <option value="3" style="display:block;height:36px;font-size:16px;line-height:36px;">高级店主</option>
+        </select>
       </div>
-      <div class="add_s_title">添加个人店主</div>
-      <div class="required_">必填个人店主资料</div>
+
+
+      <!--个人店主-->
+      <div class="required_" style="width:100%;">添加个人店主</div>
+      <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填个人店主资料</h2>
       <div class="true_name">
         <div class="true_name_title">真实姓名</div>
         <el-input placeholder="请填写真实姓名" v-model="relName"></el-input>
@@ -95,7 +95,7 @@
 
       <!--正面-->
       <div class="id_img_upload">
-        <div @click="postPho" class="showPho">请上传身份证正面图片</div>
+        <div @click="postPho" class="showPho">+请上传身份证正面图片</div>
         <input type="file" class="postFilepho" @change="selectChange">
         <div class="imgUrl" style="float:right;">
           <img :src="images" style="text-align:center;">
@@ -104,24 +104,15 @@
 
       <!--反面-->
       <div class="id_img_upload">
-        <div @click="postPhof" class="showPho phof">请上传身份证反面图片</div>
+        <div @click="postPhof" class="showPho">+请上传身份证反面图片</div>
         <input type="file" class="postFilephof" @change="selectChangef" style="display:none;">
         <div class="imgUrl" style="float:right;">
           <img :src="imagesf" style="text-align:center;">
         </div>
       </div>
 
-      <!--公司营业执照-->
-      <div class="id_img_upload">
-        <div @click="postPhofs" class="showPho phof">请上传公司营业执照</div>
-        <input type="file" class="postFilephofs" @change="selectChangefs" style="display:none;">
-        <div class="imgUrl" style="float:right;">
-          <img :src="imagesfs" style="text-align:center;">
-        </div>
-      </div>
-
-
-      <div class="optional_">必填个人店主资料</div>
+      <hr >
+      <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">选填个人店主资料</h2>
       <div class="zfb_account">
         <div class="zfb_account_title">支付宝账号</div>
         <el-input placeholder="请填写支付宝账号" v-model="alipay"></el-input>
@@ -130,12 +121,35 @@
         <div class="wx_account_title">微信支付账号</div>
         <el-input placeholder="请填写微信支付账号" v-model="weChat"></el-input>
       </div>
+
+      <div v-show="teLevel==2 || teLevel==3">
+      <!--公司店主-->
+      <hr >
+      <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填公司店主资料</h2>
+      <div class="true_name">
+        <div class="true_name_title">公司名称</div>
+        <el-input placeholder="请填写真实姓名" v-model="relName"></el-input>
+      </div>
+      <div class="id_num">
+        <div class="id_num_title">公司注册号</div>
+        <el-input placeholder="请填写身份证号" v-model="idNumber"></el-input>
+      </div>
+      <div class="id_img_title">公司营业执照</div>
+      <!--公司营业执照-->
+      <div class="id_img_upload">
+        <div @click="postPhofs" class="showPho phof">+请上传公司营业执照</div>
+        <input type="file" class="postFilephofs" @change="selectChangefs" style="display:none;">
+        <div class="imgUrl" style="float:right;">
+          <img :src="imagesfs" style="text-align:center;">
+        </div>
+      </div>
+      </div>
+
       <div class="add_shopman_btns">
         <el-button @click="DisplayNone">取消</el-button>
         <el-button type="primary" @click="addShopman">添加</el-button>
       </div>
     </div>
-
     <div class="block">
       <el-pagination
         @current-change="handleCurrentChange"
@@ -158,7 +172,6 @@
       return {
         tableData: [],
         modifyMessage: "升级到公司店主",
-        value: '',
         teamState: '',
         shopmanMessage: {},
         currentPage: 1,
@@ -179,8 +192,8 @@
         imagesf: '',
         imgFilesf: '',
         imagesfs: '',
-        imgFilesfs: ''
-
+        imgFilesfs: '',
+        teLevel:''
       }
     },
 
@@ -333,7 +346,7 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.userVO
-
+              this.count11=res.body.data.count
               //店主级别
               let arr = [];
               for (let i = 0; i < data.length; i++) {
@@ -359,7 +372,7 @@
         let formData = new FormData();
         formData.append('common', 1)
         formData.append('account', this.shopmanAccount)
-        formData.append('level', this.value)
+        formData.append('level', this.teLevel)
         formData.append('realName', this.relName)
         formData.append('idNumber', this.idNumber)
         formData.append('pictureUrl', this.imgFiles)
@@ -493,22 +506,19 @@
   .showPho {
     width: 150px;
     height: 80px;
-    border: dotted 5px #aaa;
+    border: solid 3px #ccc;
     float: left;
     margin: 10px;
-    z-index: 0;
     text-align: center;
     line-height: 80px;
-    color: #FFFFFF;
+    color: #000;
   }
-
   .phof {
     width: 150px;
     height: 80px;
-    border: dotted 5px #aaa;
+    border: solid 3px #ccc;
     margin-top: 20px;
   }
-
   .postFilepho {
     display: none;
   }

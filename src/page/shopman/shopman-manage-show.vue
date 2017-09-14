@@ -41,7 +41,7 @@
 
 
         <div class="operation_btn">
-          <el-button type="primary" size="small" @click="DisplayBlock">修改店主资料</el-button>
+          <!--<el-button type="primary" size="small" @click="DisplayBlock">修改店主资料</el-button>-->
           <el-button type="primary" @click="DisplayBlock">升级到公司店主</el-button>
         </div>
 
@@ -49,19 +49,35 @@
       </div>
     </div>
 
-    <!--修改-->
-    <!--<div class="mask"></div>-->
-    <!--<div class="popup change_ticheng">-->
-    <!--<div class="popup_title">修改<span style="font-weight:bold;" v-text="updataText"></span></div>-->
-    <!--<div class="popup_form">-->
-    <!--<div class="popup_form_title"></div>-->
-    <!--<el-input  v-model="updateData" placeholder="请输入内容"></el-input>-->
-    <!--</div>-->
-    <!--<div class="popup_btn">-->
-    <!--<el-button @click="DisplayNone">取消</el-button>-->
-    <!--<el-button type="primary" @click="updateYes">确定</el-button>-->
-    <!--</div>-->
-    <!--</div>-->
+
+    <div class="mask"></div>
+
+    <div class="popup change_ticheng">
+    <div class="popup_title">请补充下面的店主资料，将此人升级到公司店主<span style="font-weight:bold;" v-text="updataText"></span></div>
+    <div class="popup_form">
+    <div class="popup_form_title"></div>
+      <p class="text_left">公司名称</p>
+      <el-input placeholder="请填写公司名称" style="display:block;" v-model="companyName"></el-input>
+      <p class="text_left">公司注册号</p>
+      <el-input placeholder="请填写公司注册账号" style="display:block;" v-model="companyNum"></el-input>
+      <p class="text_left">公司营业执照</p>
+      <div style="width:85%;">
+      <div style="height:200px;border:solid 1px #ccc;margin-left:70px;etxt-align:center;line-height:200px;
+       font-size:20px;" @click="showPo">+请上传营业执照图片</div>
+      <input type="file" style="display:none;" @change="selectChange" class="showfilePo">
+        <div class="imgUrl" style="float:left;">
+          <img :src="images" style="text-align:center;">
+        </div>
+      </div>
+
+
+
+  </div>
+    <div class="popup_btn">
+    <el-button @click="DisplayNone">取消</el-button>
+    <el-button type="primary" @click="updateYes">补充完毕，升级到公司店主</el-button>
+    </div>
+    </div>
 
 
   </div>
@@ -75,10 +91,13 @@
     data() {
       return {
         shopmanManage: '',
-//        updateData: '',
-//        updataText: '',
-//        clickIndex: '',
-        account: ''
+        account: '',
+        images:'',
+        imgFiles:'',
+        companyName:'',
+        companyNum:'',
+        pictureUrl:'',
+        updataText:''
       }
     },
     created() {
@@ -86,6 +105,61 @@
       this.showAccount()
     },
     methods: {
+      showPo(){
+        $('.showfilePo').click()
+      },
+      //上传营业执照
+      selectChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files);
+      },
+      createImage(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        console.log(file)
+        let leng = file.length;
+        let vm = this;
+
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.images = e.target.result;
+            vm.imgFiles = $('.showfilePo')[0].files[0];
+          };
+        }
+      },
+      updateYes(){
+        let url=http.apiMap.modifyCompany;
+        let formData = new FormData();
+        formData.append('common', 1)
+        formData.append('account', this.account)
+        formData.append('companyName', this.companyName)
+        formData.append('companyNum', this.companyNum)
+        formData.append('pictureUrl', this.imgFiles)
+        this.$http.post(url, formData).then(
+          function (res) {
+            if (res.body.result) {
+              this.DisplayNone()
+              this.$message({
+                type: 'info',
+                message: '添加成功'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '添加失败'
+              })
+            }
+          }
+        )
+      },
+
+
+
       stataFilter(value) {
         if (value == 1) {
           return '个人店主'
@@ -112,8 +186,8 @@
         )
       },
       DisplayBlock() {
-        this.updateData = this.tableData[index].invoiceType;
-        this.clickIndex = index;
+//        this.updateData = this.tableData[index].invoiceType;
+//        this.clickIndex = index;
         $('.mask').css('display', 'block');
         $('.change_ticheng').css('display', 'block');
       },
@@ -121,40 +195,7 @@
         $('.mask').css('display', 'none');
         $('.change_ticheng').css('display', 'none');
       },
-      updateYes() {
-        for (let i = 0; i < this.tableData.length; i++) {
-          if (i == this.clickIndex) {
-            this.tableData[i].invoiceType = this.updateData;
-          }
-        }
-        let updateurl = http.apiMap.modifyInvoiceList;
-        let updatedata = {
-          common: 2,
-          id: this.tableData[0].id,
-          invoiceType: this.tableData[0].invoiceType
-        };
-        this.$http.post(updateurl, updatedata).then(
-          function (res) {
-            if (res.body.result) {
-              this.$message({
-                type: 'success',
-                message: '操作成功!'
-              });
-              $('.mask').css('display', 'none');
-              $('.change_ticheng').css('display', 'none');
-              this.getData();
-            } else {
-              this.$message({
-                type: 'waring',
-                message: '修改失败'
-              });
-            }
-            ;
-            $('.mask').css('display', 'none');
-            $('.change_ticheng').css('display', 'none');
-          }
-        );
-      },
+
     }
   }
 </script>
@@ -198,7 +239,12 @@
     line-height: 32px;
     font-size: 14px;
   }
-
+  .text_left{
+    line-height:30px;
+    font-size:15px;
+    text-align:left;
+    margin-left:75px;
+  }
   .shopman_data1 li i {
     display: inline-block;
     float: left;
