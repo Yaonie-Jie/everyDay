@@ -41,6 +41,9 @@ const apiMap={
   'findSystemRecommendById':hosts.api+'systemRecommend/findSystemRecommendById',    //根据系统推荐id查询商品详情
 
   'addSystemRecommend':hosts.api+'systemRecommend/addSystemRecommend',    //添加商品到系统推荐列表商品详情
+  'modifyProPos':hosts.api+'product/modifyProductPosition',    //商品管理上移下移
+  'modifyProTop':hosts.api+'product/modifyProductTop',    //商品管理置顶
+  'modifyRec':hosts.api+'systemRecommend/addSystemRecommend',    //商品管理置底
 
 
 
