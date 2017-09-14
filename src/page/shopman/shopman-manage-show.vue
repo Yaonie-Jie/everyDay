@@ -53,30 +53,30 @@
     <div class="mask"></div>
 
     <div class="popup change_ticheng">
-    <div class="popup_title">请补充下面的店主资料，将此人升级到公司店主<span style="font-weight:bold;" v-text="updataText"></span></div>
-    <div class="popup_form">
-    <div class="popup_form_title"></div>
-      <p class="text_left">公司名称</p>
-      <el-input placeholder="请填写公司名称" style="display:block;" v-model="companyName"></el-input>
-      <p class="text_left">公司注册号</p>
-      <el-input placeholder="请填写公司注册账号" style="display:block;" v-model="companyNum"></el-input>
-      <p class="text_left">公司营业执照</p>
-      <div style="width:85%;">
-      <div style="height:200px;border:solid 1px #ccc;margin-left:70px;etxt-align:center;line-height:200px;
-       font-size:20px;" @click="showPo">+请上传营业执照图片</div>
-      <input type="file" style="display:none;" @change="selectChange" class="showfilePo">
-        <div class="imgUrl" style="float:left;">
-          <img :src="images" style="text-align:center;">
+      <div class="popup_title">请补充下面的店主资料，将此人升级到公司店主<span style="font-weight:bold;" v-text="updataText"></span></div>
+      <div class="popup_form">
+        <div class="popup_form_title"></div>
+        <p class="text_left">公司名称</p>
+        <el-input placeholder="请填写公司名称" style="display:block;" v-model="companyName"></el-input>
+        <p class="text_left">公司注册号</p>
+        <el-input placeholder="请填写公司注册账号" style="display:block;" v-model="companyNum"></el-input>
+        <p class="text_left">公司营业执照</p>
+        <div style="width:85%;">
+          <div style="height:200px;border:solid 1px #ccc;margin-left:70px;etxt-align:center;line-height:200px;
+       font-size:20px;" @click="showPo">+请上传营业执照图片
+          </div>
+          <input type="file" style="display:none;" @change="selectChange" class="showfilePo">
+          <div class="imgUrl" style="float:left;">
+            <img :src="images" style="text-align:center;">
+          </div>
         </div>
+
+
       </div>
-
-
-
-  </div>
-    <div class="popup_btn">
-    <el-button @click="DisplayNone">取消</el-button>
-    <el-button type="primary" @click="updateYes">补充完毕，升级到公司店主</el-button>
-    </div>
+      <div class="popup_btn">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary" @click="updateYes">补充完毕，升级到公司店主</el-button>
+      </div>
     </div>
 
 
@@ -92,12 +92,12 @@
       return {
         shopmanManage: '',
         account: '',
-        images:'',
-        imgFiles:'',
-        companyName:'',
-        companyNum:'',
-        pictureUrl:'',
-        updataText:''
+        images: '',
+        imgFiles: '',
+        companyName: '',
+        companyNum: '',
+        pictureUrl: '',
+        updataText: ''
       }
     },
     created() {
@@ -105,7 +105,7 @@
       this.showAccount()
     },
     methods: {
-      showPo(){
+      showPo() {
         $('.showfilePo').click()
       },
       //上传营业执照
@@ -132,8 +132,8 @@
           };
         }
       },
-      updateYes(){
-        let url=http.apiMap.modifyCompany;
+      updateYes() {
+        let url = http.apiMap.modifyCompany;
         let formData = new FormData();
         formData.append('common', 1)
         formData.append('account', this.account)
@@ -157,7 +157,6 @@
           }
         )
       },
-
 
 
       stataFilter(value) {
@@ -218,6 +217,7 @@
     margin-top: 30px;
   }
 
+
   .shopman_data_title span {
     float: right;
     font-size: 14px;
@@ -233,18 +233,20 @@
     margin-top: 30px;
   }
 
-  .shopman_data1 li {
+  .shopman_data1 li ,.shopman_data li{
     width: 100%;
     height: 32px;
     line-height: 32px;
     font-size: 14px;
   }
-  .text_left{
-    line-height:30px;
-    font-size:15px;
-    text-align:left;
-    margin-left:75px;
+
+  .text_left {
+    line-height: 30px;
+    font-size: 15px;
+    text-align: left;
+    margin-left: 75px;
   }
+
   .shopman_data1 li i {
     display: inline-block;
     float: left;
@@ -324,11 +326,14 @@
 
   .positive_img, .opposite_img {
     width: 200px;
-    min-height: 100px;
+    height: 100px;
     border: 1px solid #dddddd;
-    background: #cccccc;
     float: left;
     margin-top: 10px;
+  }
+
+  .positive_img img, .opposite_img img {
+    width: 100%;
   }
 
   .positive_img {

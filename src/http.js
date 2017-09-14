@@ -1,6 +1,6 @@
 const hosts = {
-  api: 'http://test.sunxung.cn:3083/'
-  // api: 'http://meirimeic.com/'
+  // api: 'http://test.sunxung.cn:3083/'
+  api: 'http://meirimeic.com/'
 
 }
 const apiMap={
@@ -10,7 +10,8 @@ const apiMap={
 
   'addProductType':hosts.api+'productType/addProductType',   //添加商品分类
   'updataProductType':hosts.api+'productType/modifyProductType',   //修改商品分类
-  'deleteProductType':hosts.api+'productType/removeTwoProductType',   //删除分类
+  'deleteProductType':hosts.api+'productType/removeTwoProductType',   //删除二级分类
+  'deleteProductOne':hosts.api+'productType/removeOneProductType',   //删除一级分类
   'numProductType':hosts.api+'productType/modifyProductTypePosition',   //移动分类
 
   'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表

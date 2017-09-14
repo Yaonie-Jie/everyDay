@@ -306,7 +306,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let url = http.apiMap.deleteProductType;
+          let url = http.apiMap.deleteProductOne;
           let data={
             common:1,
             id:item.id

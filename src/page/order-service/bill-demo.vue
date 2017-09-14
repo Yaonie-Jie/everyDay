@@ -240,6 +240,14 @@
         this.inputValue = '';
       },
       addFreightTemplate() {
+        if(this.template==''){
+          this.$message({
+            type: 'info',
+            message: '请填写运费模版'
+          });
+        }else {
+
+        }
         let url = http.apiMap.addFreight;
         let data = {
           common: 1,
@@ -256,6 +264,11 @@
                 type: 'success',
                 message: '添加成功!'
               });
+              this.template='';
+              this.freight='';
+              this.full='';
+              this.tableData=[];
+              this.freeShipping='';
               $(".add_template").hide();
               $(".mask").hide();
               this.getList()
@@ -269,6 +282,7 @@
           }
         );
       },
+//      删除运费模版
       open2(row) {
         this.$confirm('此操作将删除运费模版, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -333,7 +347,7 @@
           this.freeShipping = '0';
           $(".fullmoney").hide()
         } else {
-          this.freeShipping = '1'
+          this.freeShipping = '1';
           $(".fullmoney").show()
         }
       },
@@ -356,7 +370,11 @@
               let arr = [];
               let num = 0;
               for (let i = 0; i < data.length; i++) {
-                data[i].region = '除' + data[i].region + '之外所有地区'
+                if(data[i].region){
+                  data[i].region = '除' + data[i].region + '之外所有地区'
+                }else {
+                  data[i].region = '所有地区'
+                }
                 if (data[i].freeShipping == 0) {
                   data[i].freeShipping = '不免邮'
                 } else {

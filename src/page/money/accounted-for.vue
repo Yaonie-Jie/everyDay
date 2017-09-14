@@ -197,7 +197,6 @@
 
   .accounted_for_form {
     width: 80%;
-    margin: 0 10%;
   }
 
   .current_balance {
@@ -205,7 +204,6 @@
     margin-left: 10%;
     text-align: right;
     line-height: 42px;
-    font-style: 14px;
     font-weight: bold;
     color: #000000;
   }

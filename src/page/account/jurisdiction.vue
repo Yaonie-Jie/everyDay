@@ -112,11 +112,8 @@
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  import Element from 'element-ui'
-  import 'element-ui/lib/theme-default/index.css'
+  import '../../http'
 
-  Vue.use(Element)
   export default {
     data() {
       return {
@@ -396,7 +393,7 @@
           'menuIds': this.ChangeID,
           'menus': this.ChangeValue,
           'common': this.GLOBAL.common,
-          'loginAccount': 'admin',
+          'loginAccount': sessionStorage.getItem('account'),
           'id': 1
         }
         var that = this;
@@ -405,19 +402,29 @@
           data: data,
           url: this.ChangeRoleUrl,
           success: function (data) {
-            console.log(data)
             if (data.result) {
               that.RoleID = '';
               that.ChangeID = '';
               that.ChangeValue = '';
               that.getTable();
+              that.$message({
+                type: 'success',
+                message: '修改成功'
+              });
             } else {
               that.ChangeID = '';
               that.ChangeValue = '';
+              that.$message({
+                type: 'error',
+                message: '修改失败'
+              });
             }
-            this.$message({
+
+          },
+          error: function () {
+            that.$message({
               type: 'error',
-              message: data.msg
+              message: '修改失败'
             });
           }
         })
