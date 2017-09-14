@@ -248,9 +248,9 @@
   .shopman_data1 li i {
     display: inline-block;
     float: left;
-    width: 15%;
+    width: 20%;
     text-align: left;
-    margin-left: 27%;
+    margin-left: 20%;
   }
 
   .shopman_data1 li span {
@@ -286,14 +286,14 @@
 
   .data2_name i {
     width: 15%;
-    margin-left: 27%;
+    margin-left: 20%;
     float: left;
     text-align: left;
   }
 
   .data2_name span {
-    width: 55%;
-    float: right;
+    width: 50%;
+    float: left;
     text-align: left;
   }
 

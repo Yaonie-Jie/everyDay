@@ -58,13 +58,12 @@
           </el-table-column>
           <el-table-column
             :span="5"
-            fixed="right"
             label="操作">
             <template scope="scope">
-            <!--  <el-button type="text" size="small">上移</el-button>
-              <el-button type="text" size="small">下移</el-button>
-              <el-button type="text" size="small">置顶</el-button>
-              <el-button type="text" size="small">置底</el-button>-->
+             <el-button type="text" size="small" @click="Up(scope.row)">上移</el-button>
+              <el-button type="text" size="small" @click="Down(scope.row)">下移</el-button>
+              <el-button type="text" size="small" @click="Top(scope.row)">置顶</el-button>
+              <el-button type="text" size="small" @click="Bottom(scope.row)">置底</el-button>
               <el-button type="text" size="small" @click="DisplayBlock(scope.row)">修改</el-button>
               <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
             </template>
@@ -108,6 +107,102 @@
       this.findTypeList()
     },
     methods: {
+      //上移
+      Up(row) {
+        var nowID = row.id;
+        var nowNumber = row.number;
+        var table = this.dataList;
+        var FrontID;
+        var FrontNumber;
+        for (var i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i - 1].id;
+            FrontNumber = table[i - 1].number;
+          }
+        }
+        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
+        let url = http.apiMap.modifyProPos;
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getList();
+              this.$message({
+                type: 'info',
+                message: '上移成功！'
+              });
+            }
+          }
+        );
+      },
+      //下移
+      Down(row) {
+        let nowID = row.id;
+        let nowNumber = row.number;
+        let table = this.dataList;
+        let FrontID;
+        let FrontNumber;
+        for (let i = 0; i < table.length; i++) {
+          if (table[i].id == nowID) {
+            FrontID = table[i + 1].id;
+            FrontNumber = table[i + 1].number;
+          }
+        }
+        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let data = {'list': JSON.stringify(arr), 'common': 1};
+        let url = http.apiMap.modifyProPos;
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getList();
+              this.$message({
+                type: 'info',
+                message: '下移成功！'
+              });
+            }
+          }
+        );
+      },
+      //置顶
+      Top(row) {
+        let url = http.apiMap.modifyProTop;
+        let data = {
+          id: row.id,
+          number: row.number,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getList();
+              this.$message({
+                type: 'info',
+                message: '置顶成功！'
+              });
+
+            }
+          }
+        );
+      },
+      //置底
+      Bottom(row) {
+        let url = http.apiMap.modifyRec;
+        let data = {
+          common: 1,
+          number: row.number
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'info',
+                message: '置底成功！'
+              });
+              this.getList()
+            }
+          }
+        )
+      },
       find(){
         let url = http.apiMap.findShop;
         let data = {

@@ -52,11 +52,11 @@
               label="当前级别">
             </el-table-column>
             <el-table-column
-              prop="alipay"
+              prop=""
               label="累计销售金">
             </el-table-column>
             <el-table-column
-              prop="alipay"
+              prop=""
               label="所属团队">
             </el-table-column>
             <el-table-column
