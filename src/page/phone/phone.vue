@@ -8,7 +8,9 @@
       <div class="phone">
         <div class="phone_title">客服电话</div>
         <div class="current_phone">
-          <p>当前客服电话：<i class="current_phonenumber">18858594797</i><el-button type="primary" @click="DisplayBlock">修改</el-button></p>
+          <p>当前客服电话：<i class="current_phonenumber">{{sysPhon}}</i>
+            <el-button type="primary" @click="DisplayBlock">修改</el-button>
+          </p>
         </div>
 
       </div>
@@ -17,11 +19,11 @@
     <div class="modify_phone popup">
       <div class="modify_ipt">
         <div class="modify_ipt_title">当前电话修改：</div>
-        <el-input placeholder="手机号或座机号"></el-input>
+        <el-input placeholder="手机号或座机号" v-model="modefiyPhonenum"></el-input>
       </div>
       <div class="modify_btns">
         <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary">修改</el-button>
+        <el-button type="primary" @click="modifyPhone">修改</el-button>
       </div>
     </div>
   </div>
@@ -73,8 +75,57 @@
 </style>
 
 <script>
+  import http from '../../http'
   export default{
+    data(){
+      return{
+        common:1,
+        sysPhon:'',
+        modefiyPhonenum:''
+      }
+    },
+    created(){
+      this.getPhonenum();
+    },
     methods: {
+      getPhonenum(){
+        let url=http.apiMap.findPhon;
+        let data={
+           common:1,
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              this.sysPhon=res.body.data.systemPhone
+            }
+          }
+        )
+      },
+      modifyPhone(){
+        let url=http.apiMap.modifyPhon;
+        let data={
+          common:1,
+          phone:this.modefiyPhonenum,
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+             this.sysPhon=this.modefiyPhonenum;
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+            }else{
+              this.$message({
+                type: 'waring',
+                message: '修改失败'
+              });
+            }
+            $('.mask').css('display','none');
+            $('.modify_phone').css('display','none');
+          }
+        )
+      },
       DisplayBlock:function(){
         $('.mask').css('display','block');
         $('.modify_phone').css('display','block');

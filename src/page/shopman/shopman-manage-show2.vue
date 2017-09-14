@@ -24,9 +24,9 @@
 
 
 
-        <div class="operation_btn">
-          <el-button type="primary">修改高级店主资料</el-button>
-        </div>
+        <!--<div class="operation_btn">-->
+          <!--<el-button type="primary">修改高级店主资料</el-button>-->
+        <!--</div>-->
       </div>
     </div>
     <div class="mask"></div>

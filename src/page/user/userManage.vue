@@ -30,15 +30,15 @@
         <div class="add_regular_users_tip">谨慎操作，如此添加用户，用户不需注册即可直接用账号密码登录app。</div>
         <div class="add_regular_users_account">
           <div class="add_regular_users_account_title">账号</div>
-          <el-input placeholder="未注册过的手机号"></el-input>
+          <el-input placeholder="未注册过的手机号" v-model="phoneNum"></el-input>
         </div>
         <div class="add_regular_users_password">
           <div class="add_regular_users_password_title">密码</div>
-          <el-input value="123456"></el-input>
+          <el-input type="password" v-model="psd"></el-input>
         </div>
         <div class="add_regular_users_btns">
           <el-button @click="DisplayNone">取消</el-button>
-          <el-button type="primary">添加普通用户</el-button>
+          <el-button type="primary" @click="addUserMessage">添加普通用户</el-button>
         </div>
       </div>
     </div>
@@ -62,18 +62,47 @@
   import http from '../../http'
  // Vue.use(Element)
   export default {
-    name: 'userManage',
+    //name: 'userManage',
     data() {
       return {
         tableData: [],
         currentPage:1,
-        count11:1
+        count11:1,
+        phoneNum:'',
+        psd:''
       }
     },
     created(){
         this.getUserManage()
     },
     methods: {
+      addUserMessage(){
+        let url=http.apiMap.addreg;
+        let data={
+          common:1,
+          account:this.phoneNum,
+          password:this.psd
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              this.$message({
+                type: 'success',
+                message: '添加成功!'
+              });
+            }else{
+              this.$message({
+                type: 'waring',
+                message: '添加失败！'
+              });
+            }
+            this.phoneNum='';
+            this.psd='';
+            $('.mask').css('display','none');
+            $('.add_regular_users').css('display','none');
+          }
+        )
+      },
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
@@ -89,7 +118,7 @@
         this.$http.post(url,data).then(
           function(res){
             if(res.body.result){
-              console.log(res.body.data.userList)
+              this.count11 = res.body.data.count
               this.tableData=res.body.data.userList
             }
           }

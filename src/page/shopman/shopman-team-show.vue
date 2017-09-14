@@ -10,9 +10,9 @@
         <p class="team_information_title">团队信息</p>
         <div class="team_data">
           <div class="team_data_title">团队资料</div>
-          <div class="team_level">团队级别：<span>{{data1}}</span></div>
+          <div class="team_level">团队级别：<span>{{teamLevel}}</span></div>
           <div class="team_number">
-            团队人数（算团长）：<span></span>人,其中高级店主<span>0</span>人,公司店主<span>1</span>人,个人店主<span>60</span>人
+            团队人数（算团长）：<span>{{teamNum}}</span>人
           </div>
           <div class="team_total_money">团队累计销售金：<span>￥{{teamMoney}}</span></div>
           <div class="team_month_money">团队上月销售金：<span>￥{{teamLastMoney}}</span></div>
@@ -69,9 +69,9 @@
       <p>添加下级团员</p>
       <el-form ref="form" label-width="80px">
         <el-form-item label="活动名称">
-          <el-input></el-input>
+          <el-input v-model="account"></el-input>
         </el-form-item>
-        <el-button type="primary">查找</el-button>
+        <el-button type="primary" @click="findTeamaccount">查找</el-button>
       </el-form>
 
 
@@ -79,19 +79,19 @@
       <div class="junior_menber_information">
         <p>团员信息</p>
         <ul>
-          <li>账号：12345678901</li>
-          <li>昵称：----</li>
-          <li>注册时间：2015-01-01  12:00</li>
-          <li>店主级别：高级店主</li>
-          <li>升级到高级店主时间：2015-01-01  12:00</li>
-          <li>累计销售金：￥1000</li>
-          <li>上月销售金：￥100</li>
-          <li>累计所得奖励：￥100</li>
-          <li>上月所得奖励：￥10</li>
+          <li><i>账号：</i><span>{{shopmanManagey.account}}</span></li>
+          <li><i>昵称：</i><span>{{shopmanManagey.name}}</span></li>
+          <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
+          <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
+          <li><i>升级到高级店主时间：</i><span>{{shopmanManagey.modifiedOn}}</span></li>
+          <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney}}</span></li>
+          <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney}}</span></li>
+          <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
+          <li><i>上月所得奖励：</i><span>{{shopmanManagey.lastMonthBonus}}</span></li>
         </ul>
         <div class="add_junior_member_btn">
           <el-button @click="DisplayNone">取消</el-button>
-          <el-button type="primary">添加下级团员</el-button>
+          <el-button type="primary" @click="addTeamaccount">添加下级团员</el-button>
         </div>
       </div>
     </div>
@@ -107,10 +107,15 @@
       return {
         id: '',
         tableData: [],
+        account:'',
+        teamAccount:'',//团长账号
         teamLevel: '',   //团队等级
         teamLastMoney: '', //上月累计销售金
         teamMoney: '',     //团队累计销售金
-        data1: ''       //团队级别
+        data1: ''  ,     //团队级别
+        teamNum:'',//团队人数
+        shopmanManagey: '',
+
       }
     },
     created() {
@@ -127,6 +132,7 @@
         $('.mask').css('display', 'none');
         $('.add_junior_member').css('display', 'none');
       },
+
       showId() {
         let url = http.apiMap.getTeamMessage
         let data = {
@@ -137,22 +143,84 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data;
-              this.tableData = data.list
               this.teamLastMoney = data.headManage.lastMonthMoney;
               this.teamMoney = data.headManage.money;
-
-              let data1 = data.headManage.level;
+              this.teamNum=data.otm.teamNum;
+              this.teamAccount=data.headManage.account;//团长账号
+              let data1 = data.otm.teamLevel;
               if (data1 == 0) {
                 data1 = '公司店主团队_美日美C'
               } else if (data1 == 1) {
-                data1 = '公司店主团队'      //level=3   ???
+                data1 = '公司店主团队'
               } else if (data1 == 2) {
                 data1 = '高级店主团队'
               }
+              this.teamLevel=data1;
             }
           }
         );
-      }
+      },
+       //查询
+      findTeamaccount(){
+        let url = http.apiMap.findTeamli;
+        let data = {
+          common: 2,
+          account:this.account,
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.userVO
+              this.shopmanManagey = data
+
+              if (data.level == 1) {
+                data.level = '个人店主'
+              } else if (data.level == 2) {
+                data.level = '公司店主'
+              } else if (data.level == 3) {
+                data.level = '高级店主'
+              }
+              this.shopmanManagey = data
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.body.msg
+              });
+            }
+          }
+        )
+      },
+
+      addTeamaccount(){
+        let url = http.apiMap.addTeamliy;
+        let data = {
+          common: 2,
+          account: this.account,
+          userAccount:this.teamAccount,
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            this.shopmanManagey=''
+            this.account=''
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: res.body.msg
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.body.msg
+              });
+            }
+            $('.mask').css('display', 'none');
+            $('.add_junior_member').css('display', 'none');
+          }
+        )
+      },
+
+
+
 
     }
   }

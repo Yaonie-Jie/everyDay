@@ -22,40 +22,10 @@
           <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
         </ul>
 
-        <div class="shopman_data3">
-        <div class="data3_title">公司店主资料</div>
-        <div class="data3_name"><i>公司名称: </i><span>{{shopmanManage.companyName}}</span></div>
-        <div class="data3_number"><i>公司注册号：</i><span>{{shopmanManage.companyNum}}-</span></div>
-        <div class="data3_license">
-        <p class="data3_license_title">公司营业执照</p>
-        <div class="data3_license_img">{{shopmanManage.idCardPhoto}}</div>
-        </div>
-        </div>
 
         <div class="operation_btn">
-          <el-button type="primary">修改公司店主资料</el-button>
-          <el-button type="primary">升级到高级店主</el-button>
+          <el-button type="primary" @click="showp">升级到高级店主</el-button>
         </div>
-      </div>
-    </div>
-    <div class="mask"></div>
-    <div class="supplement_information popup">
-      <div class="supplement_information_title popup_title">请补充下面的店主资料，将此人升级到公司店主</div>
-      <div class="corporate_name">
-        <div class="corporate_name_title">公司名称</div>
-        <el-input placeholder="请填写公司名称"></el-input>
-      </div>
-      <div class="company_number">
-        <div class="company_number_title">公司注册号</div>
-        <el-input placeholder="请填写公司注册号"></el-input>
-      </div>
-      <div class="corporation_license">
-        <div class="corporation_license_title">公司营业执照</div>
-        <div class="corporation_license_upload">上传营业执照图片</div>
-      </div>
-      <div class="supplement_information_btn">
-        <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary">补充完毕，升级到公司店主</el-button>
       </div>
     </div>
   </div>
@@ -329,6 +299,30 @@
       this.showAccount()
     },
     methods: {
+      showp(){
+        let url=http.apiMap.modifyHigh
+        let data={
+          common:1,
+          account:this.account
+        };
+        console.log(this.account)
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+             //this.DisplayNone()
+              this.$message({
+                type: 'info',
+                message: '升级成功'
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: '升级失败'
+              })
+            }
+          }
+        )
+      },
       showAccount(){
         let url=http.apiMap.findOwnerMessage
         let data={
