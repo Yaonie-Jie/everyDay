@@ -73,7 +73,7 @@
           :on-remove="handleRemove"
           :auto-upload="false">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
         </el-upload>
 
       </div>
@@ -100,21 +100,17 @@
       <div class="popup_title">修改商品信息</div>
       <div class="popup_form">
         <div class="popup_form_title">品牌logo</div>
-        <el-upload
-          class="avatar-uploader"
-          ref="upadd"
-          :show-file-list="false"
-          :action="updataUrl"
-          name="pictureUrl"
-          :on-change="addd1"
-          :data={name:this.updataName,common:this.GLOBAL.common,details:this.updataDetails,id:this.id}
-          :on-success="addSuccess1"
-          :on-preview="handlePreview1"
-          :on-remove="handleRemove1"
-          :auto-upload="false">
-          <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+
+        <div class="id_img_upload">
+          <div @click="postPhofs" class="el-icon-plus label" style="width:100px;height:100px;border:dotted 1px #ccc;"></div>
+          <input class="input-loc-img postFilephofs" name="pictureUrl" type='file' accept="image/*"
+                 @change="selectChangefs" style="display:none;"/>
+          <div class="imgUrl" style="float:right;border:solid #ccc 1px;width:100px;height:100px;">
+            <img :src="imageUrl2" style="text-align:center;width:100%;height:100%;">
+          </div>
+        </div>
+
+
       </div>
       <div class="popup_form">
         <div class="popup_form_title">品牌名称</div>
@@ -134,6 +130,18 @@
         <el-button type="primary" @click="submitUpload1">确认</el-button>
       </div>
     </div>
+
+    <div class="block">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
+
+
   </div>
 </template>
 
@@ -152,8 +160,11 @@
         UpDownUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandPosition',
         DeleteUrl: this.GLOBAL.baseUrl + 'productBrand/removeProductBrandByIdL',
         AddUrl: this.GLOBAL.baseUrl + 'productBrand/addProductBrand',
+        ModifyUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrand',
         DataLength: '',
         currentChange: 1,
+        currentPage:1,
+        count11:1,
         imageUrl: '',
         imageUrl2: '',
         name: '',
@@ -162,24 +173,50 @@
         updataUrl: http.apiMap.updataProductBrand,
         updataName: '',
         updataDetails: '',
-        id:'',
+        id: '',
+
       }
     },
     created: function () {
       this.getTable()//定义方法
     },
     methods: {
+      postPhofs(){
+        $(".postFilephofs").click()
+      },
+      selectChangefs(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImagefs(files);
+      },
+      createImagefs(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.imageUrl2 = e.target.result;
+            vm.imgFilesfs = $('.postFilephofs')[0].files[0];
+          };
+        }
+      },
       //获取列表信息
       getTable: function () {
         var tableList = [];
         var sumPage;
         $.ajax({
           type: 'POST',
-          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentChange},
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentPage},
           async: false,
           url: this.TableDataUrl,
           success: function (data) {
             if (data.result) {
+              this.count11 = data.data.count
               tableList = data.data.productBrandList;
             } else {
               swal({title: '', text: data.msg})
@@ -188,6 +225,11 @@
         })
         this.tableData = tableList;
         this.DataLength = tableList[tableList.length - 1].number;
+      },
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getTable()  //页面 加载数据
       },
       //上移
       Up: function (row) {
@@ -323,13 +365,15 @@
         $('.mask').css('display', 'none');
         $('.add_commodity_brand').css('display', 'none');
       },
-      DisplayBlock2(row){
+      DisplayBlock2(row) {
         $('.mask').css('display', 'block');
         $('.change_brand').css('display', 'block');
         this.updataName = row.name;
         this.updataDetails = row.details;
         this.imageUrl2 = row.picture;
         this.id = row.id;
+
+
       },
 
       DisplayNone2: function () {
@@ -347,10 +391,10 @@
       handlePreview(file) {
         console.log(file);
       },
-      addd(event, file, fileList){
+      addd(event, file, fileList) {
         this.imageUrl = file[file.length - 1].url
       },
-      addSuccess(response){
+      addSuccess(response) {
         this.getTable()
         this.DisplayNone()
         if (response.result == true) {
@@ -367,45 +411,52 @@
           this.DisplayNone()
         }
       },
+
       //修改商品品牌
       submitUpload1() {
-        this.$refs.upadd.submit();
+        let url=this.ModifyUrl;
+        let formData = new FormData();
+        formData.append('common',1);
+        formData.append('id',this.id);
+        formData.append('name',this.updataName);
+        formData.append('pictureUrl',this.imgFilesfs);
+        formData.append('details',this.updataDetails);
+        this.$http.post(url,formData).then(
+          function(res){
+            if (res.body.result) {
+              this.$message({
+                type: 'info',
+                message: '修改成功'
+              });
+              this.DisplayNone2()
+              this.getTable()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.body.msg
+              });
+              this.DisplayNone2()
+            }
+          }
+        )
       },
-      handleRemove1(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview1(file) {
-        console.log(file);
-      },
-      addd1(event, file, fileList){
-        this.imageUrl2 = file[file.length - 1].url
-      },
-      addSuccess1(response){
-        this.getTable()
-        this.DisplayNone()
-        if (response.result == true) {
-          this.$message({
-            type: 'info',
-            message: '修改成功'
-          });
-          this.DisplayNone2()
-        } else {
-          this.$message({
-            type: 'error',
-            message: response.msg
-          });
-          this.DisplayNone2()
-        }
-      }
-    },
 
+    }
   }
 </script>
 <style>
   .el-button + .el-button {
     margin: 10px 10px 0px !important;
   }
-
+.label{
+  width: 100px;
+  height: 100px;
+  font-size: 30px;
+  text-align: center;
+  line-height: 100px;
+  border: 1px dashed #000;
+  margin-right: 10px;
+}
   .el-button {
     margin: 10px 10px 0px !important;
   }

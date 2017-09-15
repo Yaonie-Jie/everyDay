@@ -143,6 +143,7 @@
           <img :src="imagesfs" style="text-align:center;">
         </div>
       </div>
+
       </div>
 
       <div class="add_shopman_btns">

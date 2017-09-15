@@ -7,9 +7,9 @@
         <el-breadcrumb-item>店主资料</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <div class="shopman_data" v-bind="shopmanManage">
+      <div class="shopman_data4" v-bind="shopmanManage">
         <p class="shopman_data_title">团队资料<span>所属团队：无</span></p>
-        <ul class="shopman_data1">
+        <ul class="shopman_data3">
           <li><i>账号：</i><span>{{shopmanManage.account}}</span></li>
           <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
@@ -223,7 +223,7 @@
     font-size: 14px;
   }
 
-  .shopman_data1 {
+  .shopman_data3{
     border: 1px solid #303030;
     width: 80%;
     margin-left: 10%;
@@ -233,7 +233,7 @@
     margin-top: 30px;
   }
 
-  .shopman_data1 li ,.shopman_data li{
+  .shopman_data3 li ,.shopman_data li{
     width: 100%;
     height: 32px;
     line-height: 32px;
@@ -247,7 +247,7 @@
     margin-left: 75px;
   }
 
-  .shopman_data1 li i {
+  .shopman_data3 li i {
     display: inline-block;
     float: left;
     width: 20%;
@@ -255,7 +255,7 @@
     margin-left: 20%;
   }
 
-  .shopman_data1 li span {
+  .shopman_data3 li span {
     display: inline-block;
     float: right;
     width: 55%;
@@ -276,7 +276,7 @@
     text-align: left;
     line-height: 28px;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 20px;
     font-weight: bold;
     padding-left: 27%;
   }
@@ -284,31 +284,36 @@
   .data2_name, .data2_id {
     width: 100%;
     height: 32px;
+    margin-top:10px;
   }
 
   .data2_name i {
-    width: 15%;
+    display:block;
+    width: 10%;
     margin-left: 20%;
     float: left;
     text-align: left;
   }
 
   .data2_name span {
+    display:block;
     width: 50%;
     float: left;
     text-align: left;
   }
 
   .data2_id i {
-    width: 15%;
-    margin-left: 27%;
+    display:block;
+    width: 10%;
+    margin-left: 20%;
     float: left;
     text-align: left;
   }
 
   .data2_id span {
-    width: 55%;
-    float: right;
+    display:block;
+    width: 40%;
+    float: left;
     text-align: left;
   }
 
