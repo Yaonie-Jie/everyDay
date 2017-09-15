@@ -69,6 +69,7 @@ import AddShopmanTeam from './page/shopman/AddShopmanTeam.vue'
 import User from './page/user/user.vue'
 import ChangePass from './page/user/changepassword.vue'
 import userManage from './page/user/userManage.vue'
+import userAdvice from './page/user/userAdvice.vue'
 import login from './components/login.vue'
 import home from './home.vue'
 
@@ -248,6 +249,9 @@ export default [
       },
       {
         path: '/User', component: User,
+      },
+      {
+        path: '/userAdvice', component: userAdvice,
       },
       {
         path: '/ChangePass', component: ChangePass,

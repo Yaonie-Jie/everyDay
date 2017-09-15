@@ -1,6 +1,6 @@
 const hosts = {
-  // api: 'http://test.sunxung.cn:3083/'
-  api: 'http://meirimeic.com/'
+ api: 'http://test.sunxung.cn:3083/'
+ // api: 'http://meirimeic.com/'
 
 }
 const apiMap={

@@ -59,6 +59,7 @@
           <i class="el-icon-menu"></i>美日美C用户管理
         </template>
         <el-menu-item index="/userManage">用户管理</el-menu-item>
+        <el-menu-item index="/userAdvice">用户意见反馈</el-menu-item>
       </el-submenu>
       <el-submenu index="7">
         <template slot="title" ><i class="el-icon-message"></i>美日美C客服电话</template>

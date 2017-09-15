@@ -144,7 +144,7 @@
       },
       //提现成功
       successDra(){
-           let url=http.apiMap.modifyReject;
+           let url=http.apiMap.modifyPass;
            let data={
              common:1,
              id:this.id,
