@@ -32,7 +32,7 @@
               border
               style="width: 100%">
               <el-table-column
-                prop="memberAccount"
+                prop="account"
                 label="团员账号">
               </el-table-column>
               <el-table-column
@@ -52,8 +52,8 @@
                 label="上月销售金">
               </el-table-column>
               <el-table-column
-                prop="address"
-                label="下级团员">
+                prop="lowerMember"
+                label="下级团员人数">
               </el-table-column>
               <!--<el-table-column-->
                 <!--label="操作">-->
@@ -131,7 +131,8 @@
         data1: ''  ,     //团队级别
         teamNum:'',//团队人数
         shopmanManagey: '',
-        shopmanManage:''
+        shopmanManage:'',
+        userAccount:''
       }
     },
     created() {
@@ -194,7 +195,6 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data;
-              //this.tableData=res.body.data.list
               this.teamLastMoney = data.headManage.lastMonthMoney;
               this.teamMoney = data.headManage.money;
               this.teamNum=data.otm.teamNum;
@@ -212,6 +212,7 @@
               let data2 = data.list;
               let arr1 = [];
               for (let i = 0; i < data2.length; i++) {
+                this.userAccount=data2[0].account
                 if (data2[i].level == 0) {
                   data2[i].level = '个人店主'
                 } else if (data2[i].level == 1) {
@@ -259,11 +260,12 @@
       },
 
       addTeamaccount(){
-        let url = http.apiMap.addTeamliy;
+        let url = http.apiMap.addTuan;
         let data = {
           common: 2,
           account: this.account,
-          userAccount:this.teamAccount,
+          userAccount:this.teamAccount,//给团长添加
+//          userAccount:this.userAccount,
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -374,7 +376,7 @@
   }
 
   .junior_league_menber {
-    width: 80%;
+    width: 85%;
     margin-left: 10%;
   }
 

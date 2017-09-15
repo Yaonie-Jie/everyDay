@@ -21,7 +21,7 @@
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
                 <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
-                  class="pink">{{listData.price + listData.freigh / 100}}</span>
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -68,9 +68,9 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button @click="DisplayBlock(listData.orderNum)">审核同意</el-button>
-                <el-button @click="Delete(listData.orderNum)">审核驳回</el-button>
-                <el-button @click="Delete(listData.orderNum)">退款成功</el-button>
+                <el-button v-show="listData.refundState == 1" @click="Reject(i)">审核驳回{{listData.refundState}}</el-button>
+                <el-button v-show="listData.refundState == 1" @click="open3(i)">审核同意</el-button>
+                <el-button v-show="listData.refundState ==1" @click="open4(i)">退款成功</el-button>
 
               </div>
             </div>
@@ -79,18 +79,173 @@
       </div>
     </div>
     <div class="mask"></div>
-    <div class="change_price popup">
-      <div class="change_nowprice">
-        <div class="change_nowprice_title">修改当前订单价格</div>
-        <el-input placeholder="" v-model="price"></el-input>
-      </div>
-      <div class="deliver_goods_btns">
-        <el-button @click="DisplayNone">取消</el-button>
-        <el-button type="primary" @click="updata">订单改价</el-button>
-      </div>
-    </div>
   </div>
 </template>
+<script>
+  import http from '../../http'
+
+  export default {
+    data() {
+      return {
+        orderNum: '',    //订单号
+        listData: '',
+        price: ''
+      }
+    },
+    created() {
+      this.orderNum = this.$route.params.orderNum;
+      this.getshow()
+    },
+    methods: {
+      stataFilter(value) {
+        if (value == 0) {
+          return '待付款'
+        } else if (value == 1) {
+          return '待发货'
+        } else if (value == 2) {
+          return '待收货'
+        } else if (value == 3) {
+          return '已完成'
+        } else if (value == 4) {
+          return '已退款'
+        } else if (value == 5) {
+          return '已超时'
+        }
+      },
+      getshow() {
+        let url = http.apiMap.showOrder;
+        let data = {
+          orderNum: this.orderNum,
+          common: this.GLOBAL.common
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.order;
+              this.listData = data
+
+            }
+          }
+        );
+      },
+      //审核同意
+      open3(i) {
+        this.$confirm('审核同意, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: i.orderNum,
+            refundState: 1,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getList()
+                this.$message({
+                  type: 'success',
+                  message: '已审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+
+      },
+      //点击退款成功
+      open4(i) {
+        $(".deliver_goods").show();
+        $(".mask").show();
+        this.orderNum = i.orderNum
+        let url = http.apiMap.gettuikuan;
+        let data = {
+          orderNum: this.orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.msg;
+              this.backincomeMent = data.incomeMent;
+              this.backincomeMent = data.incomeMent;
+
+              if (data.incomeMent == 1) {
+                data.incomeMent = '支付宝'
+              } else {
+                data.incomeMent = '微信'
+              }
+              this.msg = data
+            } else {
+              console.log('暂无物流信息')
+            }
+          }
+        );
+      },
+      //审核驳回
+      Reject(i) {
+        this.$confirm('驳回退款？驳回后用户只能通过客服电话与我们联系!, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: i.orderNum,
+            refundState: 0,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getList()
+                this.$message({
+                  type: 'success',
+                  message: '已驳回审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+      },
+      DisplayNone: function () {
+        $('.mask').css('display', 'none');
+        $('.change_price').css('display', 'none');
+      },
+      DisplayBlock(orderNum) {
+        this.orderNum = orderNum;
+        console.log(orderNum)
+        $('.mask').css('display', 'block');
+        $('.change_price').css('display', 'block');
+      },
+    }
+  }
+
+
+</script>
+
 <style>
   .wlxq {
     display: flex;
@@ -153,129 +308,4 @@
     box-sizing: border-box;
   }
 </style>
-<script>
-  import http from '../../http'
-
-  export default {
-    data() {
-      return {
-        orderNum: '',    //订单号
-        listData: '',
-        price: ''
-      }
-    },
-    created() {
-      this.orderNum = this.$route.params.orderNum;
-      this.getshow()
-    },
-    methods: {
-      stataFilter(value) {
-        if (value == 0) {
-          return '待付款'
-        } else if (value == 1) {
-          return '待发货'
-        } else if (value == 2) {
-          return '待收货'
-        } else if (value == 3) {
-          return '已完成'
-        } else if (value == 4) {
-          return '已退款'
-        } else if (value == 5) {
-          return '已超时'
-        }
-      },
-      getshow() {
-        let url = http.apiMap.showOrder;
-        let data = {
-          orderNum: this.orderNum,
-          common: this.GLOBAL.common
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              let data = res.body.data.order;
-              this.listData = data
-
-            }
-          }
-        );
-      },
-      DisplayNone: function () {
-        $('.mask').css('display', 'none');
-        $('.change_price').css('display', 'none');
-      },
-      DisplayBlock(orderNum) {
-        this.orderNum = orderNum;
-        console.log(orderNum)
-        $('.mask').css('display', 'block');
-        $('.change_price').css('display', 'block');
-      },
-      //改价
-      updata() {
-        let url = http.apiMap.updataOrderNum;
-        let data = {
-          orderNum: this.orderNum,
-          price: this.price,
-          common: this.GLOBAL.common
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.DisplayNone();
-              this.$message({
-                type: 'success',
-                message: '订单修改成功!'
-              });
-              this.getshow()
-            } else {
-              this.DisplayNone();
-              this.$message({
-                type: 'warning',
-                message: '订单修改失败!'
-              });
-            }
-          }
-        );
-      },
-      Delete(orderNum) {
-        this.$confirm('此操作将取消订单, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let url = http.apiMap.removeOrder;
-          let data = {
-            orderNum: orderNum,
-            common: this.GLOBAL.common
-          };
-          this.$http.post(url, data).then(
-            function (res) {
-              if (res.body.result) {
-                this.$message({
-                  type: 'success',
-                  message: '取消订单成功!'
-                });
-
-                this.getList()
-              } else {
-                this.$message({
-                  type: 'warning',
-                  message: '取消订单失败'
-                });
-              }
-            }
-          );
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          });
-        });
-      },
-    }
-  }
-
-
-</script>
-
 

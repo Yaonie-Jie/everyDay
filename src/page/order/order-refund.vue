@@ -69,11 +69,11 @@
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>{{i.price / 100}}</span></p>
+                <p>订单总额：<span>{{(i.price + i.freigh ) / 100}}</span></p>
                 <p>包含运费：<span>{{i.freigh / 100}}</span></p>
-                <el-button v-show="i.refundType == 1" @click="Reject(i)">审核驳回</el-button>
-                <el-button v-show="i.refundType == 1" @click="open3(i)">审核同意</el-button>
-                <el-button v-show="i.refundType == 1" @click="open4(i)">退款成功</el-button>
+                <el-button v-show="i.refundState == 1" @click="Reject(i)">审核驳回</el-button>
+                <el-button v-show="i.refundState == 1" @click="open3(i)">审核同意</el-button>
+                <el-button v-show="i.orderState != 4" @click="open4(i)">退款成功</el-button>
                 <el-button @click="shows(i)">订单详情</el-button>
               </div>
             </div>
@@ -309,7 +309,7 @@
       backMoney() {
         let url = http.apiMap.tuikuan;
         let data = {
-          Reason: this.orderNum,
+          orderNum: this.orderNum,
           outMent: this.backincomeMent,
           incomeAccount: this.msg.payAccount,
           outAccount: this.outAccount,
@@ -331,6 +331,8 @@
                 message: res.body.msg
               });
             }
+            $(".deliver_goods").hide();
+            $(".mask").hide();
           }
         );
       }

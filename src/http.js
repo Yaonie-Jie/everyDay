@@ -111,7 +111,8 @@ const apiMap={
   'findTeamli':hosts.api+'ownerTeamManage/findUserTeamByAccount',   //查询店主信息
   'addTeamli':hosts.api+'headManage/addHeadManage',   //添加团长
   'findTeamy':hosts.api+'ownerTeamManage/findMemberByAccount',   //查询店主信息
-  'addTeamliy':hosts.api+'companyMemberManage/addCompanyMemberManage',   //添加tuanyuan
+  'addTeamliy':hosts.api+'companyMemberManage/addCompanyMemberManage',   //添加第一个下级团员
+  'addTuan':hosts.api+'ownerTeamManage/addMemberManage',   //添加第一个下级团员
 
 
 

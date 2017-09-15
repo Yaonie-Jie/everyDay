@@ -212,7 +212,7 @@
         },
 
         open2(row) {
-          this.$confirm('此操作将通过改申请, 是否继续?', '提示', {
+          this.$confirm('此操作将通过该申请, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

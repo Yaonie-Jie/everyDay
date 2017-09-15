@@ -32,8 +32,10 @@
             label="用户账号">
           </el-table-column>
           <el-table-column
-            prop="money"
             label="结算金额">
+            <template scope="scope">
+              <span>{{scope.row.money/100}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="remarks"
@@ -55,19 +57,20 @@
     <div class="modifypass popup">
       <el-row >
         <el-col :span="24" style="margin-top:20px;">
-          <span style="float:left;margin-left:21%;">提现方式:</span>:
+          <span style="float:left;margin-left:21%;">提现方式:</span>
           <select name="" id="orderState" v-model="orderState" style="width:50%;">
-            <option value="">请选择</option>
             <option value="1">支付宝</option>
             <option value="2">微信</option>
           </select>
         </el-col>
         <el-col :span="24" style="margin-top:20px;">
-          <span>用户支付宝账号</span>:
+          <span v-show="orderState == 1">用户支付宝账号：</span>
+          <span v-show="orderState == 2">用户微信账号：</span>
           <el-input style="width:50%;" v-model="userzfb"></el-input>
         </el-col>
         <el-col :span="24" style="margin-top:20px;">
-          <span>退款支付宝账号</span>:
+          <span v-show="orderState == 1">退款支付宝账号：</span>
+          <span v-show="orderState == 2">退款微信账号：</span>
           <el-input style="width:50%;" v-model="tkzfb"></el-input>
         </el-col>
         <el-button type="info" @click="DisplayNone">取消</el-button>
@@ -119,7 +122,7 @@
         count11:1,
         time:'',  //时间搜索
         tableData: [],
-        orderState:'',
+        orderState:'1',
         userzfb:'',
         tkzfb:'',
         id:'',
@@ -144,7 +147,7 @@
       },
       //提现成功
       successDra(){
-           let url=http.apiMap.modifyReject;
+           let url=http.apiMap.modifyPass;
            let data={
              common:1,
              id:this.id,
@@ -154,6 +157,7 @@
              userAccount:this.userzfb,//用户账号
              outMoney:this.money,//出账金额
            };
+
            this.$http.post(url,data).then(
              function(res){
                if(res.body.result){
@@ -164,8 +168,8 @@
                  this.getWithdrawals()
                }else{
                  this.$message({
-                   type: 'danger',
-                   message: '申请失败!'
+                   type: 'info',
+                   message: res.body.msg
                  });
                }
                $('.mask').css('display','none');
@@ -229,12 +233,8 @@
         };
         this.$http.post(url,data).then(
           function (res) {
-            console.log(res)
             if (res.body.result) {
-              console.log(1)
-              console.log(res)
               this.count11 = res.body.data.count
-              console.log(res.body.data.list)
               this.tableData = res.body.data.list
             }
           }
@@ -266,7 +266,6 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              console.log(res.body.data)
               let data = res.body.data.list;
               this.tableData = data;
             }
