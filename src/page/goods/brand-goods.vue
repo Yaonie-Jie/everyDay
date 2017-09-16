@@ -10,7 +10,7 @@
         <div class="titlee" style='border:0;'>
           商品品牌列表
         </div>
-        <el-button type="success" @click="DisplayBlock" class="right">添加商品品牌</el-button>
+        <el-button type="success" @click="add" class="right">添加商品品牌</el-button>
         <div class="brand_form">
           <el-table
             :data="tableData"
@@ -56,25 +56,19 @@
     </div>
     <div class="mask"></div>
 
-    <div class="add_commodity_brand popup">
+    <div class="add_brand popup">
       <div class="add_commodity_brands_title popup_title">添加商品品牌</div>
       <div class="brand_logo">
         <div class="brand_logo_title">品牌logo</div>
-        <el-upload
-          class="avatar-uploader"
-          ref="upload"
-          name="pictureUrl"
-          :show-file-list="false"
-          :on-change="addd"
-          :data={name:this.name,common:this.GLOBAL.common,details:this.details}
-          :action="updloadUrl"
-          :on-success="addSuccess"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :auto-upload="false">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <!--<i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-        </el-upload>
+        <div class="id_img_upload">
+          <div @click="addlaber" class="el-icon-plus label"
+               style="width:100px;height:100px;border:dotted 1px #ccc;"></div>
+          <input class="input-loc-img postFiles" name="pictureUrl" type='file' accept="image/*"
+                 @change="selectChange" style="display:none;"/>
+          <div class="imgUrl" style="float:right;border:solid #ccc 1px;width:100px;height:100px;">
+            <img :src="addimgUrl" style="width:100%">
+          </div>
+        </div>
 
       </div>
       <div class="brand_name">
@@ -91,7 +85,7 @@
         </el-input>
       </div>
       <div class="add_commodity_brand_btn">
-        <el-button @click="DisplayNone">取消</el-button>
+        <el-button @click="Disnone">取消</el-button>
         <el-button type="primary" @click="submitUpload">确认</el-button>
       </div>
     </div>
@@ -102,7 +96,8 @@
         <div class="popup_form_title">品牌logo</div>
 
         <div class="id_img_upload">
-          <div @click="postPhofs" class="el-icon-plus label" style="width:100px;height:100px;border:dotted 1px #ccc;"></div>
+          <div @click="postPhofs" class="el-icon-plus label"
+               style="width:100px;height:100px;border:dotted 1px #ccc;"></div>
           <input class="input-loc-img postFilephofs" name="pictureUrl" type='file' accept="image/*"
                  @change="selectChangefs" style="display:none;"/>
           <div class="imgUrl" style="float:right;border:solid #ccc 1px;width:100px;height:100px;">
@@ -154,7 +149,6 @@
     data() {
       return {
         tableData: [],
-        TableDataUrl: this.GLOBAL.baseUrl + 'productBrand/findProductBrandList',
         TopUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandTop',
         BottomUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandBottom',
         UpDownUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandPosition',
@@ -162,9 +156,8 @@
         AddUrl: this.GLOBAL.baseUrl + 'productBrand/addProductBrand',
         ModifyUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrand',
         DataLength: '',
-        currentChange: 1,
-        currentPage:1,
-        count11:1,
+        currentPage: 1,
+        count11: 1,
         imageUrl: '',
         imageUrl2: '',
         name: '',
@@ -174,16 +167,23 @@
         updataName: '',
         updataDetails: '',
         id: '',
+        addimgUrl: '',
+        imgFiles: '',
 
       }
     },
-    created: function () {
+    created() {
       this.getTable()//定义方法
     },
     methods: {
-      postPhofs(){
+      postPhofs() {
         $(".postFilephofs").click()
       },
+      addlaber() {
+        $(".postFiles").click()
+      },
+
+      //修改品牌
       selectChangefs(e) {
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
@@ -206,25 +206,43 @@
         }
       },
       //获取列表信息
+<<<<<<< HEAD
+      getTable() {
+        let url = http.apiMap.getBrand;
+        let data = {
+          nowpage: this.currentPage,
+          size: 10,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              let data = res.body.data.productBrandList;
+              this.tableData = data
+              this.DataLength = this.tableData[this.tableData.length - 1].number;
+
+=======
       getTable: function () {
         var tableList = [];
         var sumPage;
         $.ajax({
           type: 'POST',
-          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentPage},
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage':this.currentPage},
           async: false,
           url: this.TableDataUrl,
           success: function (data) {
             if (data.result) {
+              console.log(data.data.count)
               this.count11 = data.data.count
               tableList = data.data.productBrandList;
             } else {
               swal({title: '', text: data.msg})
+>>>>>>> 908d6de6f2eb9112ea276d7784632b156e47d67d
             }
           }
-        })
-        this.tableData = tableList;
-        this.DataLength = tableList[tableList.length - 1].number;
+        );
+
       },
       //分页跳转
       handleCurrentChange(val) {
@@ -356,11 +374,10 @@
           });
         });
       },
-      DisplayBlock: function () {
+      DisplayBlock() {
         $('.mask').css('display', 'block');
         $('.add_commodity_brand').css('display', 'block');
       },
-
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.add_commodity_brand').css('display', 'none');
@@ -375,54 +392,81 @@
 
 
       },
-
-      DisplayNone2: function () {
+      DisplayNone2() {
         $('.mask').css('display', 'none');
         $('.change_brand').css('display', 'none');
       },
 
+
+      //添加品牌
+      add() {
+        $(".add_brand").show();
+        $(".mask").show()
+      },
+      Disnone(){
+        $(".add_brand").hide();
+        $(".mask").hide()
+      },
+      selectChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files);
+      },
+      createImage(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.addimgUrl = e.target.result;
+            vm.imgFiles = $('.postFiles')[0].files[0];
+          };
+        }
+      },
       //添加商品品牌
       submitUpload() {
-        this.$refs.upload.submit();
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      addd(event, file, fileList) {
-        this.imageUrl = file[file.length - 1].url
-      },
-      addSuccess(response) {
-        this.getTable()
-        this.DisplayNone()
-        if (response.result == true) {
-          this.$message({
-            type: 'info',
-            message: '添加成功'
-          });
-          this.DisplayNone()
-        } else {
-          this.$message({
-            type: 'error',
-            message: response.msg
-          });
-          this.DisplayNone()
-        }
+        let url = http.apiMap.AddProductBrand;
+        let formData = new FormData();
+        formData.append('common', 1);
+        formData.append('name', this.name);
+        formData.append('pictureUrl', this.imgFiles);
+        formData.append('details', this.details);
+        this.$http.post(url, formData).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '添加成功'
+              });
+              this.Disnone()
+              this.getTable()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.body.msg
+              });
+              this.Disnone()
+            }
+          }
+        )
       },
 
       //修改商品品牌
       submitUpload1() {
-        let url=this.ModifyUrl;
+        let url = this.ModifyUrl;
         let formData = new FormData();
-        formData.append('common',1);
-        formData.append('id',this.id);
-        formData.append('name',this.updataName);
-        formData.append('pictureUrl',this.imgFilesfs);
-        formData.append('details',this.updataDetails);
-        this.$http.post(url,formData).then(
-          function(res){
+        formData.append('common', 1);
+        formData.append('id', this.id);
+        formData.append('name', this.updataName);
+        formData.append('pictureUrl', this.imgFilesfs);
+        formData.append('details', this.updataDetails);
+        this.$http.post(url, formData).then(
+          function (res) {
             if (res.body.result) {
               this.$message({
                 type: 'info',
@@ -448,15 +492,17 @@
   .el-button + .el-button {
     margin: 10px 10px 0px !important;
   }
-.label{
-  width: 100px;
-  height: 100px;
-  font-size: 30px;
-  text-align: center;
-  line-height: 100px;
-  border: 1px dashed #000;
-  margin-right: 10px;
-}
+
+  .label {
+    width: 100px;
+    height: 100px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 100px;
+    border: 1px dashed #000;
+    margin-right: 10px;
+  }
+
   .el-button {
     margin: 10px 10px 0px !important;
   }

@@ -274,7 +274,6 @@
         $(".change_left").show();
         $(".mask").show();
         this.orderNum = i.orderNum;
-        console.log(i)
       },
       noneblock() {
         $(".change_left").hide();
@@ -472,7 +471,6 @@
             if (res.body.result) {
               let data = res.body.data.expressList
               this.expressList = data
-              console.log(data)
             }
           }
         );

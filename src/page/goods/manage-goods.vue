@@ -13,7 +13,7 @@
       <div class="goods_search">
         <div class="left">
           <i style="margin-top: 10px;">搜索</i>
-          <select name="" class="select" id="oneType" @change="OneTypeListChange">
+          <select name="" class="select" id="oneType" @change="OneTypeListChange" v-model="oneTypeId">
             <option value="">一级分类</option>
             <option v-for="option in OneTypeList" v-bind:value="option.id">
               {{ option.name }}
@@ -99,7 +99,8 @@
         OneTypeList:[],
         TwoypeList:[],
         typeId:'-1',
-        name:''
+        name:'',
+        oneTypeId:''
       }
     },
     created() {
@@ -205,6 +206,11 @@
       },
       find(){
         let url = http.apiMap.findShop;
+        if(this.oneTypeId == ''){
+
+        }else {
+          this.typeId=this.oneTypeId
+        }
         let data = {
           nowpage: this.currentPage,
           size: 10,

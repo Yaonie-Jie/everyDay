@@ -19,8 +19,9 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price/100}}</span> 包含运费：￥<span>{{listData.freigh/100}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span class="pink">{{listData.price/100+listData.freigh / 100}}</span>
+                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
+                  class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -57,9 +58,9 @@
                       <p>{{i.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{i.unitPrice/100}}</span></p>
+                      <p>商品单价：<span>{{i.unitPrice / 100}}</span></p>
                       <p>购买数量：X<span>{{i.amount}}</span></p>
-                      <p>总价：<span>{{i.amount * i.unitPrice/100}}</span></p>
+                      <p>总价：<span>{{i.amount * i.unitPrice / 100}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -67,7 +68,7 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button>发货</el-button>
+                <el-button @click="addExpress">发货</el-button>
                 <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
 
               </div>
@@ -77,6 +78,45 @@
       </div>
     </div>
 
+    <!--发货-->
+    <div class="popup change_left">
+      <div class="popup_title">发货</div>
+      <el-row style="text-align: left;">
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">订单号：</span>
+          </div>
+          <span style="line-height: 36px;">{{orderNum}}</span>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">运单号：</span>
+          </div>
+          <el-input type="text" style="width: 30%" v-model="ExpressNum"></el-input>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">快递公司：</span>
+          </div>
+          <select name="" id="addwuliu" v-model="Abbreviation">
+            <option v-for="option in expressList" v-bind:value="option.abbreviation">
+              {{ option.company }}
+            </option>
+          </select>
+        </el-col>
+        <el-col :span="24" style="margin-bottom: 20px">
+          <div class="fahuo">
+            <span style="padding-right: 20px">手机号：</span>
+          </div>
+          <el-input type="text" style="width: 30%" v-model="phone"></el-input>
+        </el-col>
+      </el-row>
+      <div class="popup_btn">
+        <el-button type="primary" @click="addfa">发货</el-button>
+        <el-button @click="noneblock">取消</el-button>
+      </div>
+    </div>
+    <div class="mask"></div>
   </div>
 </template>
 <style>
@@ -143,11 +183,17 @@
 </style>
 <script>
   import http from '../../http'
-  export default{
-    data(){
+
+  export default {
+    data() {
       return {
         orderNum: '',    //订单号
-        listData: ''
+        listData: '',
+        ExpressNum: '',
+        Abbreviation: '',
+        expressList: [],
+        phone: '',
+
       }
     },
     created() {
@@ -155,7 +201,7 @@
       this.getshow()
     },
     methods: {
-      stataFilter(value){
+      stataFilter(value) {
         if (value == 0) {
           return '待付款'
         } else if (value == 1) {
@@ -170,7 +216,7 @@
           return '已超时'
         }
       },
-      getshow(){
+      getshow() {
         let url = http.apiMap.showOrder;
         let data = {
           orderNum: this.orderNum,
@@ -187,11 +233,64 @@
           }
         );
       },
+      //发货
+      addfa() {
+        let url = http.apiMap.addExpressOrder;
+        let data = {
+          common: 1,
+          ExpressNum: this.ExpressNum,
+          OrderNum: this.orderNum,
+          Abbreviation: this.Abbreviation,
+          company: $("#addwuliu :selected").text().replace(/\s+/g, ''),
+          phone: this.phone
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '发货成功!'
+              });
+              this.$router.push('/OrderList/');
+              this.noneblock()
+            } else {
+              this.$message({
+                type: 'warning',
+                message: res.body.msg
+              });
+            }
+          }
+        );
+      },
+      addExpress() {
+        this.findExpressList();
+        $(".change_left").show();
+        $(".mask").show();
+      },
+      noneblock() {
+        $(".change_left").hide();
+        $(".mask").hide();
+      },
+      //快递公司列表
+      findExpressList() {
+        let url = http.apiMap.findExpressList;
+        let data = {
+          common: 1
+        }
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.expressList
+              this.expressList = data
+            }
+          }
+        );
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
       },
-      Delete(orderNum){
+      Delete(orderNum) {
         this.$confirm('此操作将取消订单, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -210,7 +309,7 @@
                   message: '取消订单成功!'
                 });
 
-                this.getList()
+                this.getshow()
               } else {
                 this.$message({
                   type: 'warning',

@@ -1,6 +1,6 @@
 const hosts = {
- api: 'http://test.sunxung.cn:3083/'
- // api: 'http://meirimeic.com/'
+ // api: 'http://test.sunxung.cn:3083/'
+ api: 'http://meirimeic.com/'
 
 }
 const apiMap={
@@ -17,6 +17,7 @@ const apiMap={
   'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
+  'getBrand':hosts.api+'productBrand/findProductBrandList',    //获取商品品牌分类
 
   'listSystemRecommend':hosts.api+'systemRecommend/findSystemRecommendList',    //系统推荐列表
   'addInterestRecommend':hosts.api+'interestRecommend/addInterestRecommend',    //添加商品到根据兴趣推荐列表商品详情
@@ -113,6 +114,8 @@ const apiMap={
   'findTeamy':hosts.api+'ownerTeamManage/findMemberByAccount',   //查询店主信息
   'addTeamliy':hosts.api+'companyMemberManage/addCompanyMemberManage',   //添加第一个下级团员
   'addTuan':hosts.api+'ownerTeamManage/addMemberManage',   //添加第一个下级团员
+  'findTuan':hosts.api+'ownerTeamManage/findLowerMember',   //查看公司店主下的团员
+  'removeTuan':hosts.api+'ownerManage/removeUsers',   //删除
 
 
 
