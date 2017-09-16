@@ -236,7 +236,7 @@ export default [
         path: '/ShopmanTeamShow/:id', component: ShopmanTeamShow
       },
       {
-        path: '/ShopmanTeamShow2', component: ShopmanTeamShow2
+        path: '/ShopmanTeamShow2/:id', component: ShopmanTeamShow2
       },
       {
         path: '/ShopmanTeamShow3', component: ShopmanTeamShow3

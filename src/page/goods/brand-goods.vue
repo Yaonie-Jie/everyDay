@@ -211,11 +211,12 @@
         var sumPage;
         $.ajax({
           type: 'POST',
-          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentPage},
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage':this.currentPage},
           async: false,
           url: this.TableDataUrl,
           success: function (data) {
             if (data.result) {
+              console.log(data.data.count)
               this.count11 = data.data.count
               tableList = data.data.productBrandList;
             } else {

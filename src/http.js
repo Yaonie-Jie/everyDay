@@ -113,6 +113,8 @@ const apiMap={
   'findTeamy':hosts.api+'ownerTeamManage/findMemberByAccount',   //查询店主信息
   'addTeamliy':hosts.api+'companyMemberManage/addCompanyMemberManage',   //添加第一个下级团员
   'addTuan':hosts.api+'ownerTeamManage/addMemberManage',   //添加第一个下级团员
+  'findTuan':hosts.api+'ownerTeamManage/findLowerMember',   //查看公司店主下的团员
+  'removeTuan':hosts.api+'ownerManage/removeUsers',   //删除
 
 
 

@@ -21,7 +21,6 @@
           </el-table-column>
           <el-table-column
             prop="proName"
-
             label="商品">
           </el-table-column>
           <el-table-column
@@ -37,14 +36,12 @@
             :min-width="200"
             label="操作">
             <template scope="scope">
-
               <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>
               <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移</el-button>
               <el-button type="text" size="small" @click=Top(scope.row) v-if="scope.row.num!=1">置顶</el-button>
               <el-button type="text" size="small" @click="removeBottom(scope.row)" v-if="scope.row.num!=DataLength">置底</el-button>
               <el-button type="text" size="small" @click="updataALl(scope.row)">修改</el-button>
               <el-button type="text" size="small" @click="Delete(scope.row)">删除</el-button>
-
             </template>
           </el-table-column>
         </el-table>

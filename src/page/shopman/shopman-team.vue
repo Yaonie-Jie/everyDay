@@ -158,7 +158,7 @@
       },
 
 
-      AddshopmanTeam: function () {
+      AddshopmanTeam () {
         this.$router.push('/AddShopmanTeam/')
       },
       //分页跳转
@@ -167,7 +167,11 @@
         this.getTeamList()
       },
       shows(row) {
-        this.$router.push('/ShopmanTeamShow/' + row.teamAccount);
+        if(row.teamLevel == '高级店主团队') {
+          this.$router.push('/ShopmanTeamShow/' + row.teamAccount);//高级
+        }else if(row.teamLevel == '公司店主团队'){
+          this.$router.push('/ShopmanTeamShow2/' + row.teamAccount);//公司
+        }
       }
     }
   }
