@@ -53,6 +53,9 @@
           <el-table-column
             prop="outMoney"
             label="出账金额">
+            <template scope="scope">
+              <span type="text" >{{scope.row.outMoney/100}}</span>
+            </template>
           </el-table-column>
         </el-table>
       </div>

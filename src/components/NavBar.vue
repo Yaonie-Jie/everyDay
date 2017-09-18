@@ -113,7 +113,6 @@
             }
           }
         }
-        console.log(newarr)
 
         this.arr = newarr
       }

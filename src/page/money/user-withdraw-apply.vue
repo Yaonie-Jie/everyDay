@@ -147,7 +147,7 @@
       },
       //提现成功
       successDra(){
-           let url=http.apiMap.modifyPass;
+           let url=http.apiMap.tuikuan;
            let data={
              common:1,
              id:this.id,

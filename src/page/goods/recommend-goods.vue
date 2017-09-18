@@ -32,7 +32,6 @@
             label="添加时间">
           </el-table-column>
           <el-table-column
-            fixed="right"
             :min-width="200"
             label="操作">
             <template scope="scope">

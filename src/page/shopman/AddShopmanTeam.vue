@@ -83,34 +83,42 @@
     },
     methods: {
       findTeamli() {
-        let url = http.apiMap.findTeamli;
-        let data = {
-          common: 2,
-          account: this.account
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              $('.add_team_li').css('display', 'block');
-              $(".add_this_teamer").show()
-              let data = res.body.data.userVO
-              if (data.level == 1) {
-                data.level = '个人店主'
-              } else if (data.level == 2) {
-                data.level = '公司店主'
-              } else if (data.level == 3) {
-                data.level = '高级店主'
-              }
+        if(this.account==''){
+          this.$message({
+            type: 'info',
+            message: '请输入账号查询'
+          });
+        }else {
+          let url = http.apiMap.findTeamli;
+          let data = {
+            common: 2,
+            account: this.account
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                $('.add_team_li').css('display', 'block');
+                $(".add_this_teamer").show()
+                let data = res.body.data.userVO
+                if (data.level == 1) {
+                  data.level = '个人店主'
+                } else if (data.level == 2) {
+                  data.level = '公司店主'
+                } else if (data.level == 3) {
+                  data.level = '高级店主'
+                }
 
-              this.shopmanManage = data
-            } else {
-              this.$message({
-                type: 'error',
-                message: res.body.msg
-              });
+                this.shopmanManage = data
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
             }
-          }
-        )
+          )
+        }
+
       },
 
       addTeamli() {

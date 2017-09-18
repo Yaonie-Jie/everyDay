@@ -180,7 +180,7 @@
         options: [
           {text: '全部', value: ''},
           {text: '有团队店主', value: '1'},
-          {text: '无团队店主', value: '2'}
+          {text: '无团队店主', value: '0'}
         ],
         account: '',
         relName: '', //真实姓名

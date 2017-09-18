@@ -159,7 +159,7 @@
         let data = {
           nowpage: this.currentPage,
           size: 10,
-          common: 1
+          common: 2
         };
         this.$http.post(url, data).then(
           function (res) {

@@ -140,8 +140,8 @@
         loginPass: '',
         ChangeID: '',
         ChangeValue: '',
-        currentPage:1,
-        count11:1,
+        currentPage: 1,
+        count11: 1,
         RoleID: ''
       }
     },
@@ -156,14 +156,14 @@
         let url = http.apiMap.findAccountList;
         let data = {
           size: 10,
-          nowpage:this.currentPage,
+          nowpage: this.currentPage,
           common: 1
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               let data = res.body.data.accountList;
-              this.tableData=data;
+              this.tableData = data;
             } else {
               console.log('暂无物流信息')
             }
@@ -176,13 +176,14 @@
         this.getTable()
       },
       //修改密码
-      ChangePass: function () {
+      ChangePass() {
         if (this.newPass == '') {
           this.$message({
             type: 'error',
             message: '密码不能为空'
           });
         } else {
+          let that=this
           var data = {'account': this.ChangePassAccount, 'common': this.GLOBAL.common, 'password': this.newPass};
           $.ajax({
             type: 'POST',
@@ -190,15 +191,15 @@
             data: data,
             success: function (data) {
               if (data.result) {
-                this.newPass = '';
-                this.$message({
+                that.newPass = '';
+                that.$message({
                   type: 'success',
-                  message: data.msg
+                  message: '修改成功'
                 });
                 $('.mask').css('display', 'none');
                 $('.change_password').css('display', 'none');
               } else {
-                this.$message({
+                that.$message({
                   type: 'error',
                   message: data.msg
                 });

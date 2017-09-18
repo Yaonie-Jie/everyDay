@@ -32,7 +32,7 @@
             label="添加时间">
           </el-table-column>
           <el-table-column
-            fixed="right"
+
             label="操作">
             <template scope="scope">
               <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>

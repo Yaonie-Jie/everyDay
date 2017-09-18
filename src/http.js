@@ -68,7 +68,6 @@ const apiMap={
   'findExpress':hosts.api+'express/findExpressByOrderNum',    //查看物流
   'Reject':hosts.api+'refund/modifyRefundStateReject',    //审核驳回
   'gettuikuan':hosts.api+'refund/findRefundeAccount',    //点击退款成功获取信息
-  'tuikuan':hosts.api+'refund/addRefundeSuccess',    //确定退款
 
 
 
@@ -124,6 +123,8 @@ const apiMap={
   'findOutFinance':hosts.api+'finance/findOutFinanceList', //出账记录
   'findWithdrawals':hosts.api+'withdrawals/findWithdrawalsList', //提现申请
   'modifyPass':hosts.api+'withdrawals/modifyWithdrawalsPass', //提现成功
+  'tuikuan':hosts.api+'refund/addRefundeSuccess',    //确定提现退款
+
   'modifyReject':hosts.api+'withdrawals/modifyWithdrawalsRejectById', //提现驳回
 
 
