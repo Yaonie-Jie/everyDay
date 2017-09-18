@@ -89,10 +89,8 @@ const apiMap={
   'addShopman':hosts.api+'ownerManage/addNoTeamOwner',   //添加无店主团队(店主申请管理)
   'modifyCompany':hosts.api+'ownerManage/modifyOwnerToCompany',   //升级到公司店主(店主申请管理)
   'modifyHigh':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主申请管理)
-
-
-
-
+  'findFeed':hosts.api+'feedback/findFeedbackList', //用户意见反馈列表
+  'findFeedback':hosts.api+'feedback/findFeedbackListByCon', //用户意见反馈列表
 
 
   'searchShopmanData':hosts.api+'ownerApplication/findApplication',   //搜索店主申请管理表(店主管理)

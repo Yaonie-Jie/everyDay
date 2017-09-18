@@ -155,8 +155,6 @@
                 arr.push(data[i])
              this.feedbackList = arr;
               }
-
-              this.createdList()
             }
           }
         );

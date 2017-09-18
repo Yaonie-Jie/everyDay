@@ -42,7 +42,7 @@
             label="入款账号">
           </el-table-column>
           <el-table-column
-            prop="payAccount"
+            prop="userAccount"
             label="用户账号">
           </el-table-column>
           <el-table-column
