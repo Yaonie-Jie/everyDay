@@ -152,28 +152,6 @@
     methods: {
       //获取列表
       getTable: function () {
-//        var tableList = [];
-//        var sumPage;
-//        $.ajax({
-//          type: 'POST',
-//          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentChange},
-//          async: false,
-//          url: this.TableDataUrl,
-//          success: function (data) {
-//            if (data.result) {
-//              tableList = data.data.accountList;
-//              sumPage = data.data.count;
-//            } else {
-//              this.$message({
-//                type: 'error',
-//                message: data.msg
-//              });
-//            }
-//          }
-//        })
-//        this.tableData = tableList;
-//        this.SumPage = sumPage;
-
 
         let url = http.apiMap.findAccountList;
         let data = {
@@ -186,7 +164,6 @@
             if (res.body.result) {
               let data = res.body.data.accountList;
               this.tableData=data;
-
             } else {
               console.log('暂无物流信息')
             }
@@ -406,15 +383,16 @@
           url: this.ChangeRoleUrl,
           success: function (data) {
             if (data.result) {
-              this.$message({
+              that.$message({
                 type: 'success',
                 message: '修改成功'
               });
+              that.getTable();
               that.ChangeID = '';
               that.ChangeValue = '';
               that.RoleID = '';
             } else {
-              this.$message({
+              that.$message({
                 type: 'error',
                 message: '修改失败'
               });

@@ -14,7 +14,7 @@
           <el-form-item label="设置每个高级店主下最多公司店主数量" >
             <el-input type="number" v-model="companyOwnerNum"></el-input>
           </el-form-item>
-          <el-form-item label="设置每个公司店主下最多公司店主数量" >
+          <el-form-item label="设置每个公司店主下最多个人店主数量" >
             <el-input type="number" v-model="personalOwnerNum"></el-input>
           </el-form-item>
           <div class="bill_demo_btn">

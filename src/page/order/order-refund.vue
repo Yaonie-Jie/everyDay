@@ -185,6 +185,10 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '查询成功'
+              });
               this.count = res.body.data.count;
               let data = res.body.data.orderList;
               this.dataList = data;

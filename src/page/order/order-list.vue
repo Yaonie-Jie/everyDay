@@ -456,6 +456,10 @@
               this.count11 = res.body.data.count;
               let data = res.body.data.orderList;
               this.dataList = data;
+              this.$message({
+                type: 'success',
+                message: '查询成功!'
+              });
             }
           }
         );

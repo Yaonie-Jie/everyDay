@@ -230,10 +230,10 @@
       add() {
         $(".add_brand").show();
         $(".mask").show();
-        this.name='';
-        this.imgFiles='';
-        this.details='';
-        this.addimgUrl=''
+        this.name = '';
+        this.imgFiles = '';
+        this.details = '';
+        this.addimgUrl = ''
       }
       ,
       Disnone() {
@@ -297,7 +297,7 @@
       }
       ,
       //上移
-      Up: function (row) {
+      Up (row) {
         var nowID = row.id;
         var nowNumber = row.number;
         var table = this.tableData;
@@ -309,7 +309,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         var that = this;
         $.ajax({
@@ -328,7 +328,7 @@
       }
       ,
       //下移
-      Down: function (row) {
+      Down (row) {
         var nowID = row.id;
         var nowNumber = row.number;
         var table = this.tableData;
@@ -340,7 +340,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        var arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         var that = this;
         $.ajax({

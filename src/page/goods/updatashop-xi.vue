@@ -9,7 +9,7 @@
 
       <!--添加到商品详情弹窗-->
       <div class="leftshow">
-        <div class="titlee">修改系统推荐-链接到商品详情（优品推荐）</div>
+        <div class="titlee">修改系统推荐-链接到商品详情</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">

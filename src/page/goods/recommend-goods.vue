@@ -56,7 +56,7 @@
       </el-row>
       <!--添加到商品详情弹窗-->
       <div class="leftshow popup">
-        <div class="titlee">添加系统推荐-链接到商品详情（优品推荐）</div>
+        <div class="titlee">添加系统推荐-链接到商品详情</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">
@@ -86,7 +86,7 @@
 
       <!--添加到图文详情弹窗-->
       <div class="rightshow popup">
-        <div class="titlee">添加系统推荐-链接到图文详情（人气爆款）</div>
+        <div class="titlee">添加系统推荐-链接到图文详情</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">
@@ -259,30 +259,6 @@
           }
         )
       },
-      //修改系统推荐数量
-      updatapopAmount() {
-        let url = http.apiMap.updataProductNums;
-        let data = {
-          common: 1,
-          amount: this.pAmount
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.$message({
-                type: 'success',
-                message: '修改成功'
-              });
-              this.findProductNum()
-            }else {
-              this.$message({
-                type: 'error',
-                message: '修改失败'
-              });
-            }
-          }
-        )
-      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_recommend').css('display', 'none');
@@ -300,7 +276,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemRecommend;
         this.$http.post(url, data).then(
@@ -324,7 +300,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let arr = [{'id': nowID, 'number': FrontNumber }, {'id': FrontID, 'number':  nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.moveSystemRecommend;
         this.$http.post(url, data).then(
@@ -445,24 +421,10 @@
           }
         )
       },
-      //查询推荐数量
-      findProductNum() {
-        let url = http.apiMap.findProductNum;
-        let data = {
-          common: 1,
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.popAmount = res.body.data.popAmount;
-              this.pAmount = res.body.data.pAmount;
-            }
-          }
-        )
-      },
+
       //修改图文推荐数量
       updatapopAmount() {
-        let url = http.apiMap.updataProductNum;
+        let url = http.apiMap.updataProductNums;
         let data = {
           common: 1,
           amount: this.pAmount
@@ -471,21 +433,15 @@
           function (res) {
             if (res.body.result) {
               this.findProductNum()
-            }
-          }
-        )
-      },
-      //修改商品详情数量
-      updatapopAmountpop() {
-        let url = http.apiMap.updataProductNumpop;
-        let data = {
-          common: 1,
-          amount: this.popAmount
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.findProductNum()
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              });
+            }else {
+              this.$message({
+                type: 'error',
+                message: '修改失败'
+              });
             }
           }
         )
@@ -651,7 +607,7 @@
           size: 10,
           name: this.name,
           typeId: -1,
-          nowpage: 1
+          nowpage: this.currentPage22
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -691,7 +647,7 @@
       },
       //xiao分页跳转
       handleCurrentChange22(val) {
-        this.currentPage = val;
+        this.currentPage22 = val;
         this.selectShowOne()
       },
       labe() {

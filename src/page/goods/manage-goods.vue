@@ -121,7 +121,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.modifyProPos;
         this.$http.post(url, data).then(
@@ -149,7 +149,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.modifyProPos;
         this.$http.post(url, data).then(

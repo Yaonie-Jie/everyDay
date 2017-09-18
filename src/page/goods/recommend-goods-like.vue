@@ -56,13 +56,13 @@
       </div>
       <el-row>
         <el-col :span="24">
-          <span style="padding-right: 20px">设置推荐页的链接到图文推荐（人气爆款）最多展示数量：</span>
+          <span style="padding-right: 20px">设置推荐页的链接到商品推荐（优品推荐）最多展示数量：</span>
           <el-input type="text" style="width: 10%"
                     v-model="pAmount"></el-input>
           <el-button type="primary" @click="updatapopAmount">确定</el-button>
         </el-col>
         <el-col :span="24">
-          <span style="padding-right: 20px">设置推荐页的链接到商品推荐（优品推荐）最多展示数量：</span>
+          <span style="padding-right: 20px">设置推荐页的链接到图文推荐（人气爆款）最多展示数量：</span>
           <el-input type="text" style="width: 10%"
                     v-model="popAmount"></el-input>
           <el-button type="primary" @click="updatapopAmountpop">确定</el-button>
@@ -609,7 +609,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        var arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemxing;
         this.$http.post(url, data).then(
@@ -633,7 +633,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemxing;
         this.$http.post(url, data).then(
@@ -717,7 +717,7 @@
           size: 10,
           name: this.name,
           typeId: -1,
-          nowpage: 1
+          nowpage: this.currentPage22
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -738,7 +738,7 @@
           size: 10,
           name: this.picName,
           typeId: -1,
-          nowpage: 1
+          nowpage: this.currentPage22
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -757,8 +757,12 @@
       },
       //xiao分页跳转
       handleCurrentChange22(val) {
-        this.currentPage = val;
-        this.selectShowOne()
+        this.currentPage22 = val;
+        if(this.flag = 1){
+          this.selectShowOne()
+        }else {
+          this.selectShowTwo()
+        }
       },
       labe() {
         $(".imgLocal").click()

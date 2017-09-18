@@ -1,18 +1,17 @@
 const hosts = {
-  api: 'http://test.sunxung.cn:3083/'
- 
+  // api: 'http://test.sunxung.cn:3083/'
+  api: 'http://meirimeic.com/'
+
 }
 const apiMap={
   'login':hosts.api+'account/login',   //登陆
 
   'findAccountList':hosts.api+'account/findAccountList',   //查找账号列表
-
   'addProductType':hosts.api+'productType/addProductType',   //添加商品分类
   'updataProductType':hosts.api+'productType/modifyProductType',   //修改商品分类
   'deleteProductType':hosts.api+'productType/removeTwoProductType',   //删除二级分类
   'deleteProductOne':hosts.api+'productType/removeOneProductType',   //删除一级分类
   'numProductType':hosts.api+'productType/modifyProductTypePosition',   //移动分类
-
   'findBrandList':hosts.api+'productBrand/findProductBrandList',   //查询商品品牌列表
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
@@ -30,7 +29,7 @@ const apiMap={
   'SystemRecommendBottom':hosts.api+'systemRecommend/modifySystemRecommendBottom',    //系统推荐商品置底
   'findProductList':hosts.api+'interestRecommend/findInterestRecommendList',    //兴趣列表
   'findProductNum':hosts.api+'interestRecommend/findRecommendAmount',    //兴趣推荐数量查询
-  'updataProductNums':hosts.api+'/systemRecommend/modifySystemRecommendPamount',    //系统推荐数量修改
+  'updataProductNums':hosts.api+'/systemRecommend/modifySystemRecommendP',    //系统推荐数量修改
   'updataSystemRecommend':hosts.api+'systemRecommend/modifySystemRecommend',    //修改系统推荐商品详情
   'updataProductNum':hosts.api+'interestRecommend/modifyInterestRecommendProAmount',    //修改人气爆款推荐数量
   'updataProductNumpop':hosts.api+'interestRecommend/modifyInterestRecommendAmount',    //修改商品详情推荐数量
@@ -120,10 +119,6 @@ const apiMap={
   'modifytTeam':hosts.api+'ownerManage/modifyPsOwner',   //公司店主升级
   // 'canLevel':hosts.api+'ownerManage/canLevels',   //判断能否个人店主升级
   'modifytLevel':hosts.api+'ownerManage/modifyLevels',   //个人店主升级
-
-
-
-
 
 
   'findTeam':hosts.api+'ownerTeamManage/findOwnerTeamManage', //搜索

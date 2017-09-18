@@ -151,8 +151,8 @@
                    that.AddInterest='';
                    that.getTable();
                  }
-                 this.$message({
-                   type: 'error',
+                 that.$message({
+                   type: 'success',
                    message: data.msg
                  });
 
@@ -174,7 +174,7 @@
         $('.add_interests2').css('display','block');
       },
       //修改兴趣
-      ChangesInterest:function(){
+      ChangesInterest(){
           var data={'common':this.GLOBAL.common,'interest':this.ChangeInterest,'id':this.ChangeID};
           var that=this;
           $.ajax({
@@ -189,8 +189,8 @@
                   $('.mask').css('display','none');
                   $('.add_interests2').css('display','none');
                 }
-              this.$message({
-                type: 'error',
+              that.$message({
+                type: 'success',
                 message: data.msg
               });
             }
@@ -217,7 +217,6 @@
             data:{'common':this.GLOBAL.common,'id':row.id},
             url:thats.DelectUrl,
             success:function (data) {
-                console.log(data)
               if(data.result){
                 that.$message({
                   type: 'success',

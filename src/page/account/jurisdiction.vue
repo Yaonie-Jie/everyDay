@@ -62,16 +62,18 @@
       </div>
     </div>
     <div class="mask"></div>
+
+
     <div class="assign_role_permissions popup">
       <div class="assign_role_permissions_title popup_title">分配角色权限</div>
       <div class="checkbox_box">
         <div class="assign_checkbox">
           <ul>
             <li v-for="item in jurData" class="lis">
-              <input type="checkbox" class="checks checkAll" v-bind:value="item.id"><span v-text="item.name"></span>
+              <input type="checkbox" class="checks checkAll" :value="item.id"><span>{{item.name}}</span>
               <ul style="padding-left:30px;">
                 <li v-for="list in item.data" class="listLi">
-                  <input type="checkbox" class="checks checkList" v-bind:value="list.id"><span
+                  <input type="checkbox" class="checks checkList" :value="list.id"><span
                   v-text="list.name"></span>
                 </li>
               </ul>
@@ -85,18 +87,20 @@
         <el-button type="primary" @click="SumbitAdd">确定</el-button>
       </div>
     </div>
+
+    <!--修改分配权限-->
     <div class="assign_role_permissions2 popup">
       <div class="assign_role_permissions_title popup_title">分配角色权限</div>
       <div class="checkbox_box">
         <div class="assign_checkbox">
           <ul>
             <li v-for="item in jurData" class="lis">
-              <input type="checkbox" class="check checkAll" v-bind:value="item.id"><span v-text="item.name"
-                                                                                         class="roleValue"></span>
+              <input type="checkbox" class="check checkAll" :value="item.id" >
+              <span class="roleValue">{{item.name}}</span>
               <ul style="padding-left:30px;">
                 <li v-for="list in item.data" class="listLi">
-                  <input type="checkbox" class="check checkList" v-bind:value="list.id"><span v-text="list.name"
-                                                                                              class="roleValue"></span>
+                  <input type="checkbox" class="check checkList" :value="list.id">
+                  <span class="roleValue">{{list.name}}</span>
                 </li>
               </ul>
             </li>
@@ -132,7 +136,8 @@
         AddValue: '',
         ChangeID: '',
         ChangeValue: '',
-        RoleID: ''
+        RoleID: '',
+//        AllList:[]
       }
     },
     created: function () {
@@ -141,7 +146,7 @@
     },
     methods: {
       //获取列表信息
-      getTable: function () {
+      getTable() {
         var tableList = [];
         var sumPage;
         $.ajax({
@@ -170,7 +175,7 @@
         this.getTable()
       },
       //获取权限列表
-      getJurisdiction: function () {
+      getJurisdiction() {
         var list = [];
         var that = this;
         $.ajax({
@@ -341,13 +346,14 @@
         $('.assign_role_permissions').css('display', 'none');
       },
       //取消
-      DisplayNone: function () {
+      DisplayNone () {
         $('.mask').css('display', 'none');
         $('.assign_role_permissions').css('display', 'none');
         $('.assign_role_permissions2').css('display', 'none');
+        window.location.reload()
       },
       //修改权限
-      DisplayBlock2: function (row) {
+      DisplayBlock2(row) {
         var roleID = row.id;
         this.RoleID = roleID;
         var data = {'roleId': roleID, 'common': this.GLOBAL.common}
@@ -359,16 +365,18 @@
             if (data.result) {
               var list = data.data.authorityList;
               var IdList = [];
+              let arr=[];
               for (var i = 0; i < list.length; i++) {
                 IdList.push(list[i].id)
               }
               $(".check").each(function () {
                 for (var j = 0; j < IdList.length; j++) {
                   if ($(this).val() == IdList[j]) {
-                    $(this).attr('checked', true)
+                    $(this).attr('checked',true)
                   }
                 }
               })
+
             }
           }
         })
@@ -389,12 +397,11 @@
         this.ChangeID = ChecksID;
         this.ChangeValue = ChecksValue;
         var data = {
-          'roleId': this.RoleID,
           'menuIds': this.ChangeID,
           'menus': this.ChangeValue,
           'common': this.GLOBAL.common,
           'loginAccount': sessionStorage.getItem('account'),
-          'id': 1
+          'id': this.RoleID
         }
         var that = this;
         $.ajax({
@@ -407,6 +414,7 @@
               that.ChangeID = '';
               that.ChangeValue = '';
               that.getTable();
+              window.location.reload()
               that.$message({
                 type: 'success',
                 message: '修改成功'

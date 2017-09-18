@@ -28,8 +28,8 @@
 
                 <el-button type="primary" @click="updataOne(item)">修改</el-button>
                 <el-button type="danger" @click="deleteOne(item)">删除</el-button>
-                <el-button :plain="true" type="info" @click="oneUp(item)" v-show="item.number!=1">上移</el-button>
-                <el-button :plain="true" type="info"  @click="oneDowm(item)" >下移</el-button>
+                <el-button :plain="true" type="info" @click="oneUp(item)">上移</el-button>
+                <el-button :plain="true" type="info" @click="oneDowm(item)">下移</el-button>
               </div>
               <div class="boxright">
                 <el-button type="success" class="right" @click="DisplayBlock2(item)" style="float: left;">添加二级商品分类
@@ -37,12 +37,13 @@
 
                 <ul class="left lists" style="clear:both;">
                   <li v-for="list in item.data">
-                    <div style="width: 50px;float: left;line-height: 46px;" v-text="list.name">
-                      </div>
+                    <div style="width: 150px;float: left;line-height: 46px;" v-text="list.name">
+                    </div>
                     <el-button type="info" @click="updataTwoShow(list,item)">修改</el-button>
                     <el-button type="danger" @click="deleteTwo(list,item)">删除</el-button>
-                    <el-button :plain="true" type="info" @click="twoUp(list,item)" v-show="item.number!=1">上移</el-button>
-                    <el-button :plain="true" type="info"  @click="twoDowm(list,item)" >下移</el-button>
+                    <el-button :plain="true" type="info" @click="twoUp(list,item)" v-show="item.number!=1">上移
+                    </el-button>
+                    <el-button :plain="true" type="info" @click="twoDowm(list,item)">下移</el-button>
                   </li>
                 </ul>
               </div>
@@ -153,9 +154,8 @@
         nameTwo: '',//二级商品名字
         idTwo: '',  //二级分类用的当前一级分类id
         updataTwoname: '',   //修改二级分类名字
-        idTypeid:'',      //二级分类id
+        idTypeid: '',      //二级分类id
 
-        DataLength:''
       }
 
 
@@ -165,7 +165,7 @@
     },
     methods: {
       //一级分类上移
-      oneUp(row){
+      oneUp(row) {
         console.log(row)
         let nowID = row.id;
         let nowNumber = row.number;
@@ -178,7 +178,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.numProductType;
         this.$http.post(url, data).then(
@@ -189,7 +189,7 @@
                 message: '上移成功!'
               });
               this.getTable();
-            }else {
+            } else {
               this.$message({
                 type: 'info',
                 message: res.body.msg
@@ -199,7 +199,7 @@
         );
       },
       //一级分类下移
-      oneDowm(row){
+      oneDowm(row) {
         let nowID = row.id;
         let nowNumber = row.number;
         let table = this.tableData;
@@ -211,7 +211,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.numProductType;
         this.$http.post(url, data).then(
@@ -222,7 +222,7 @@
                 message: '下移成功!'
               });
               this.getTable();
-            }else {
+            } else {
               this.$message({
                 type: 'info',
                 message: res.body.msg
@@ -232,7 +232,7 @@
         );
       },
       //二级分类上移
-      twoUp(row,item){
+      twoUp(row, item) {
         console.log(row)
         let nowID = row.id;
         let nowNumber = row.number;
@@ -245,7 +245,7 @@
             FrontNumber = item.data[i - 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber - 1}, {'id': FrontID, 'number': FrontNumber + 1}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.numProductType;
         this.$http.post(url, data).then(
@@ -256,7 +256,7 @@
                 message: '上移成功!'
               });
               this.getTable();
-            }else {
+            } else {
               this.$message({
                 type: 'info',
                 message: res.body.msg
@@ -265,8 +265,8 @@
           }
         );
       },
-      //er 级分类下移
-      twoDowm(row,item){
+      //二级分类下移
+      twoDowm(row, item) {
         let nowID = row.id;
         let nowNumber = row.number;
         let table = this.tableData;
@@ -279,7 +279,7 @@
             FrontNumber = item.data[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': nowNumber + 1}, {'id': FrontID, 'number': FrontNumber - 1}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.numProductType;
         this.$http.post(url, data).then(
@@ -290,7 +290,7 @@
                 message: '下移成功!'
               });
               this.getTable();
-            }else {
+            } else {
               this.$message({
                 type: 'info',
                 message: res.body.msg
@@ -300,18 +300,18 @@
         );
       },
       //删除一级分类
-      deleteOne(item){
+      deleteOne(item) {
         this.$confirm('是否删除一级分类?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let url = http.apiMap.deleteProductOne;
-          let data={
-            common:1,
-            id:item.id
+          let data = {
+            common: 1,
+            id: item.id
           };
-          this.$http.post(url,data).then(
+          this.$http.post(url, data).then(
             function (res) {
               if (res.body.result) {
                 this.$message({
@@ -319,7 +319,7 @@
                   message: '删除成功!'
                 });
                 this.getTable()
-              }else {
+              } else {
                 this.$message({
                   type: 'info',
                   message: res.body.msg
@@ -335,18 +335,18 @@
         });
       },
       //删除二级分类
-      deleteTwo(list,item){
+      deleteTwo(list, item) {
         this.$confirm('是否删除二级分类?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let url = http.apiMap.deleteProductType;
-          let data={
-            common:1,
-            id:list.id
+          let data = {
+            common: 1,
+            id: list.id
           };
-          this.$http.post(url,data).then(
+          this.$http.post(url, data).then(
             function (res) {
               if (res.body.result) {
                 this.$message({
@@ -354,7 +354,7 @@
                   message: '删除成功!'
                 });
                 this.getTable()
-              }else {
+              } else {
                 this.$message({
                   type: 'info',
                   message: res.body.msg
@@ -370,11 +370,11 @@
         });
       },
       //修改二级分类
-      updataTwoShow(list,item) {
+      updataTwoShow(list, item) {
         $('.mask').css('display', 'block');
         $('.add_Class_c').css('display', 'block');
         this.updataTwoname = list.name
-        this.idTypeid=list.id
+        this.idTypeid = list.id
         this.idTwo = item.id;
       },
       DisplayNone3() {
@@ -596,7 +596,6 @@
           }
         })
         this.tableData = tableList;
-        this.DataLength = tableList.length;
 
 //        this.SumPage=sumPage;
       },
@@ -608,7 +607,6 @@
       //上移
       MoveUp() {
         let obj = $(this).parent('li');
-        console.log(obj)
       },
 
       open2() {
@@ -642,7 +640,7 @@
 
       DisplayBlock2(item) {
         this.idTwo = item.id;
-        this.nameTwo=''
+        this.nameTwo = ''
         $('.mask').css('display', 'block');
         $('.add_Class_b').css('display', 'block');
       },
@@ -661,12 +659,12 @@
 </script>
 <style>
   .boxleft {
-    width: 50%;
+    width: 40%;
     float: left;
   }
 
   .boxright {
-    width: 50%;
+    width: 58%;
     float: left;
   }
 
@@ -711,7 +709,7 @@
     width: 100%;
     float: left;
     display: flex;
-    padding:20px;
+    padding: 20px;
   }
 
   .img-box {

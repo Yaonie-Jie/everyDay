@@ -11,9 +11,9 @@
         <p class="shopman_data_title">团队资料<span>所属团队：无</span></p>
         <ul class="shopman_data1" >
           <li><i>账号：</i><span>{{shopmanManage.account}}</span></li>
-          <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
+          <li><i>昵称：</i><span>{{shopmanManage.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
-          <li><i>店主级别：</i><span>{{shopmanManage.canLevel}}</span></li>
+          <li><i>店主级别：</i><span>{{stataFilter(shopmanManage.level)}}</span></li>
           <li><i>升级到高级店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
           <li><i>所属团队：</i><span></span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.sumPrice}}</span></li>
@@ -83,13 +83,12 @@
   .shopman_data1 li i{
     display: inline-block;
     float: left;
-    width: 15%;
     text-align: left;
     margin-left: 27%;
   }
   .shopman_data1 li span{
     display: inline-block;
-    float: right;
+    float: left;
     width: 55%;
     text-align: left;
   }
@@ -338,7 +337,15 @@
           }
         )
       },
-
+      stataFilter(value) {
+        if (value == 1) {
+          return '个人店主'
+        } else if (value == 2) {
+          return '公司店主'
+        } else if (value == 3) {
+          return '高级店主'
+        }
+      },
       showAccount(){
         let url=http.apiMap.findOwnerMessage
         let data={

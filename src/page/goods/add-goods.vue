@@ -158,7 +158,7 @@
                 fixed="right"
                 label="操作">
                 <template scope="scope">
-                  <el-button type="primary" icon="edit" @click="DisplayBlock2(scope.row)"></el-button>
+                  <!--<el-button type="primary" icon="edit" @click="DisplayBlock2(scope.row)"></el-button>-->
                   <el-button type="primary" icon="delete" @click="deleteParam(scope.row)"></el-button>
                 </template>
               </el-table-column>

@@ -8,7 +8,7 @@
 
 
       <div class="rightshow">
-        <div class="titlee">修改系统推荐-链接到图文详情（人气爆款）</div>
+        <div class="titlee">修改系统推荐-链接到图文详情</div>
         <div class="show-shop">
           <el-row>
             <el-col :span="24" style="text-align: left">
