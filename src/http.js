@@ -1,12 +1,11 @@
 const hosts = {
-api: 'http://test.sunxung.cn:3083/'
- //api: 'http://meirimeic.com/'
-
+  api: 'http://test.sunxung.cn:3083/'
+ 
 }
 const apiMap={
   'login':hosts.api+'account/login',   //登陆
 
-
+  'findAccountList':hosts.api+'account/findAccountList',   //查找账号列表
 
   'addProductType':hosts.api+'productType/addProductType',   //添加商品分类
   'updataProductType':hosts.api+'productType/modifyProductType',   //修改商品分类
@@ -96,6 +95,7 @@ const apiMap={
 
 
 
+
   'searchShopmanData':hosts.api+'ownerApplication/findApplication',   //搜索店主申请管理表(店主管理)
   'rejectShopmanData':hosts.api+'ownerManage/rejectAudit',   //驳回店主申请(店主管理)
   'passShopmanData':hosts.api+'ownerManage/passOwnerAudit',   //通过店主申请(店主管理)
@@ -147,7 +147,6 @@ const apiMap={
 
   'findPhon':hosts.api+'systemPhone/findSystemPhone', //客服电话
   'modifyPhon':hosts.api+'systemPhone/modifySystemPhone', //修改客服电话
-
 
 
 
