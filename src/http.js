@@ -1,12 +1,11 @@
 const hosts = {
- // api: 'http://test.sunxung.cn:3083/'
- api: 'http://meirimeic.com/'
-
+  api: 'http://test.sunxung.cn:3083/'
+ 
 }
 const apiMap={
   'login':hosts.api+'account/login',   //登陆
 
-
+  'findAccountList':hosts.api+'account/findAccountList',   //查找账号列表
 
   'addProductType':hosts.api+'productType/addProductType',   //添加商品分类
   'updataProductType':hosts.api+'productType/modifyProductType',   //修改商品分类
@@ -89,8 +88,9 @@ const apiMap={
   'passAudit':hosts.api+'ownerManage/passOwnerAudit',   //通过申请(店主申请管理)
   'rejectAudit':hosts.api+'ownerManage/rejectAudit',   //驳回申请(店主申请管理)
   'addShopman':hosts.api+'ownerManage/addNoTeamOwner',   //添加无店主团队(店主申请管理)
-  'modifyCompany':hosts.api+'ownerManage/modifyOwnerToCompanyLevel',   //升级到公司店主(店主申请管理)
+  'modifyCompany':hosts.api+'ownerManage/modifyOwnerToCompany',   //升级到公司店主(店主申请管理)
   'modifyHigh':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主申请管理)
+
 
 
 
@@ -116,6 +116,10 @@ const apiMap={
   'addTuan':hosts.api+'ownerTeamManage/addMemberManage',   //添加第一个下级团员
   'findTuan':hosts.api+'ownerTeamManage/findLowerMember',   //查看公司店主下的团员
   'removeTuan':hosts.api+'ownerManage/removeUsers',   //删除
+  'modifyCom':hosts.api+'ownerManage/modifyCmmyOwner',   //公司店主升级
+  'modifytTeam':hosts.api+'ownerManage/modifyPsOwner',   //公司店主升级
+  // 'canLevel':hosts.api+'ownerManage/canLevels',   //判断能否个人店主升级
+  'modifytLevel':hosts.api+'ownerManage/modifyLevels',   //个人店主升级
 
 
 
@@ -143,7 +147,6 @@ const apiMap={
 
   'findPhon':hosts.api+'systemPhone/findSystemPhone', //客服电话
   'modifyPhon':hosts.api+'systemPhone/modifySystemPhone', //修改客服电话
-
 
 
 
