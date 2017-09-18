@@ -8,111 +8,161 @@
 
     <div class="header">
 
-
-      <select id="orderState" class="chosetime" style="margin-left:10%;">
-        <option>请选择版本</option>
-        <option>版本1.0.1</option>
-        <option>版本1.0.2</option>
-        <option>版本1.0.3</option>
+      <select id="orderState" class="chosetime" style="margin-left:10%;" v-model="choseba">
+        <!--<option>请选择版本</option>-->
+        <option value="1">版本1.0.1</option>
+        <option value="2">版本1.0.2</option>
+        <option value="3">版本1.0.3</option>
       </select>
 
-
-
       <div class="block chosetime">
-        <span class="demonstration">选择时间</span>
+        发生时间：
         <el-date-picker
-          v-model="value1"
+          v-model="time"
           type="daterange"
           placeholder="选择日期范围">
         </el-date-picker>
+        <el-button type="success" @click="findOrder">搜索</el-button>
       </div>
-
 
     </div>
     <div style="clear:both;"></div>
     <div>
       <h3>意见反馈</h3>
-      <div class="advice">
-      <hr>
-      <div class="usertext">
-        <p class="textleft">这个app目前用起来还是很流畅，各位加油</p>
-        <p class="textright">版本2.0.1</p>
-      </div>
-      <div class="useradvice">
-        <span>用户18733665522</span>
-        <span>2017年8月23日</span>
-      </div>
-    </div>
-      <div class="advice">
+      <div class="advice" v-for="i in feedbackList">
         <hr>
         <div class="usertext">
-          <p class="textleft">这个app目前用起来还是很流畅，各位加油</p>
-          <p class="textright">版本2.0.1</p>
+          <p class="textleft">{{i.content}}</p>
+          <p class="textright">{{i.version}}</p>
         </div>
         <div class="useradvice">
-          <span>用户18733665522</span>
-          <span>2017年8月23日</span>
+          <span>{{i.createBy}}</span>
+          <span>{{i.createOn}}</span>
         </div>
       </div>
     </div>
 
-
-
-
-  <!--<div class="block">-->
-    <!--<el-pagination-->
-      <!--@current-change="handleCurrentChange"-->
-      <!--:current-page.sync="currentPage"-->
-      <!--:page-size="10"-->
-      <!--layout="prev, pager, next, jumper"-->
-      <!--:total="count11">-->
-    <!--</el-pagination>-->
-  <!--</div>-->
+  <div class="block">
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="10"
+      layout="prev, pager, next, jumper"
+      :total="count11">
+    </el-pagination>
+  </div>
 
 
   </div>
 </template>
 
 <script>
+  import http from '../../http'
+
   export default{
     data(){
       return{
-        pickerOptions: {
-          disabledDate(time) {
-            return time.getTime() < Date.now() - 8.64e7;
-          }
-        },
-        value1: '',
-//        currentPage: 1,
-//        count11: 1,
-
+        currentPage: 1,
+        count11: 1,
+        time: '',  //时间搜索
+        startTime: '',
+        endTime: '',
+        feedbackList:[],
+        choseba:'',
       }
     },
     created(){
-//      this.createdList()
+      this.createdList()
     },
-    motheds:{
-//      //分页跳转
-//      handleCurrentChange(val) {
-//        this.currentPage = val;
-//        this.getOutfinance()
-//      },
-//      createdList(){
-//        let url=http.apiMap
-//        let data={
-//          nowpage: this.currentPage,
-//          size: 10,
-//          common:1
-//        };
-//        this.$http.post(url,data).then(
-//          function(res){
-//            if(res.body.result){
-//              this.count11 = res.body.data.count
-//            }
-//          }
-//        )
-//      }
+    methods:{
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.createdList()
+      },
+      createdList(){
+        let url=http.apiMap.findFeed
+        let data={
+          nowpage: this.currentPage,
+          size: 10,
+          common:1
+        };
+        this.$http.post(url,data).then(
+          function(res){
+            if(res.body.result){
+              this.count11 = res.body.data.count
+
+
+              let data = res.body.data.feedbackList;
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].version == 1) {
+                  data[i].version = '版本1.0.1'
+                } else if (data[i].version == 2) {
+                  data[i].version = '版本1.0.2'
+                } else if (data[i].version == 3) {
+                  data[i].version = '版本1.0.3'
+                }
+                arr.push(data[i])
+                this.feedbackList = arr;
+              }
+
+
+
+            }
+          }
+        )
+      },
+      //搜索订单
+      findOrder() {
+        var paddNum = function (num) {    //如果是一位数就补一个0
+          num += "";
+          return num.replace(/^(\d)$/, "0$1");
+        }
+
+        function FormatDate(strTime) {  //转换时间格式
+          if (strTime) {
+            var date = new Date(strTime);
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
+            return ''
+          }
+        }
+        let url = http.apiMap.findFeedback;
+        let data = {
+          common: 1,
+          size: 10,
+          nowpage: this.currentPage,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
+          version:this.choseba
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+
+              let data = res.body.data.feedbackList;
+              let arr = [];
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].version == 1) {
+                  data[i].version = '版本1.0.1'
+                } else if (data[i].version == 2) {
+                  data[i].version = '版本1.0.2'
+                } else if (data[i].version == 3) {
+                  data[i].version = '版本1.0.3'
+                }
+                arr.push(data[i])
+             this.feedbackList = arr;
+              }
+
+              this.createdList()
+            }
+          }
+        );
+      },
     },
+
   }
 </script>
 
