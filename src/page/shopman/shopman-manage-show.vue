@@ -185,8 +185,6 @@
         )
       },
       DisplayBlock() {
-//        this.updateData = this.tableData[index].invoiceType;
-//        this.clickIndex = index;
         $('.mask').css('display', 'block');
         $('.change_ticheng').css('display', 'block');
       },

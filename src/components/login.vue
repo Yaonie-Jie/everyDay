@@ -59,7 +59,8 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              sessionStorage.setItem('account', this.account)
+              sessionStorage.setItem('account', this.account);
+              sessionStorage.setItem('router',JSON.stringify(res.body.data.menus));
               this.$router.push('/');
             } else {
               this.$message({

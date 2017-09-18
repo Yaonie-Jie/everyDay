@@ -1,8 +1,14 @@
 <template>
   <div id="box">
     <el-menu default-active="/" class="el-menu-vertical-demo" :router="true">
-      <!--<el-menu-item index="/activePublic">活动发布</el-menu-item>-->
-      <!--<el-menu-item index="/activeManage">活动管理</el-menu-item>-->
+      <!--<el-submenu index="1" v-for="i in arr" :index="i.id+'a'">-->
+      <!--<template slot="title">-->
+      <!--<i :class="i.icon"></i>{{i.name}}-->
+      <!--</template>-->
+      <!--<el-menu-item index="/Jurisdiction" v-for="q in i.list">{{q.name}}</el-menu-item>-->
+      <!--</el-submenu>-->
+
+
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-setting"></i>后台账号管理
@@ -11,7 +17,7 @@
         <el-menu-item index="/ManageAccount">后台账号管理</el-menu-item>
         <el-menu-item index="/RecordAccount">后台账号操作记录</el-menu-item>
       </el-submenu>
-      <el-submenu index="/">
+      <el-submenu index="2">
         <template slot="title">
           <i class="el-icon-menu"></i>商品管理
         </template>
@@ -46,7 +52,7 @@
         <el-menu-item index="/ShopmanManage">店主管理</el-menu-item>
         <el-menu-item index="/ShopmanTeam">店主团队管理</el-menu-item>
       </el-submenu>
-      <el-submenu index="5" >
+      <el-submenu index="5">
         <template slot="title">
           <i class="el-icon-edit"></i>店主结算中心
         </template>
@@ -62,7 +68,7 @@
         <el-menu-item index="/userAdvice">用户意见反馈</el-menu-item>
       </el-submenu>
       <el-submenu index="7">
-        <template slot="title" ><i class="el-icon-message"></i>美日美C客服电话</template>
+        <template slot="title"><i class="el-icon-message"></i>美日美C客服电话</template>
         <el-menu-item index="/Phone">客服电话</el-menu-item>
       </el-submenu>
     </el-menu>
@@ -72,10 +78,42 @@
   import Vue from 'vue'
   import Element from 'element-ui'
   import 'element-ui/lib/theme-default/index.css'
+  import http from '../http'
 
   Vue.use(Element)
 
   export default {
-    name: 'box'
+    name: 'box',
+    data() {
+      return {
+        arr: []
+      }
+    },
+    created() {
+      this.setRouter()
+    },
+    methods: {
+      setRouter() {
+        let arr = JSON.parse(sessionStorage.getItem('router'));
+        let newarr = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].pId == 0) {
+            arr[i].icon = 'el-icon-menu'
+            newarr.push(arr[i])
+          }
+        }
+        for (let i = 0; i < newarr.length; i++) {
+          newarr[i].list = [];
+          for (let j = 0; j < arr.length; j++) {
+            if (newarr[i].id == arr[j].pId) {
+              newarr[i].list.push(arr[j])
+            }
+          }
+        }
+//        console.log(newarr)
+
+        this.arr = newarr
+      }
+    }
   }
 </script>

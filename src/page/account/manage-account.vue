@@ -46,11 +46,11 @@
         <!--分页-->
         <div class="block">
           <el-pagination
-            layout="prev, pager, next"
-            :page-size="5"
-            :total="SumPage"
             @current-change="handleCurrentChange"
-          >
+            :current-page.sync="currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="count11">
           </el-pagination>
         </div>
       </div>
@@ -80,7 +80,6 @@
 
           <input type="radio" v-bind:value="item.id" class="check" name="check"><span v-text="item.role"
                                                                                       style="margin-left:20px;"></span>
-
         </li>
       </ul>
       <div class="assign_role_btn">
@@ -119,12 +118,13 @@
   </div>
 </template>
 <script>
+  import http from '../../http'
+
   export default {
     data() {
       return {
         tableData: [],
         RoledList: [],
-        TableDataUrl: this.GLOBAL.baseUrl + 'account/findAccountList',
         ChangePassUrl: this.GLOBAL.baseUrl + 'account/modifyAccountPassword',
         DelectData: this.GLOBAL.baseUrl + 'account/removeAccountL',
         RoledUrl: this.GLOBAL.baseUrl + 'role/findRoleList',
@@ -140,6 +140,8 @@
         loginPass: '',
         ChangeID: '',
         ChangeValue: '',
+        currentPage:1,
+        count11:1,
         RoleID: ''
       }
     },
@@ -150,27 +152,46 @@
     methods: {
       //获取列表
       getTable: function () {
-        var tableList = [];
-        var sumPage;
-        $.ajax({
-          type: 'POST',
-          data: {'common': this.GLOBAL.common, 'size': 5, 'nowpage': this.currentChange},
-          async: false,
-          url: this.TableDataUrl,
-          success: function (data) {
-            if (data.result) {
-              tableList = data.data.accountList;
-              sumPage = data.data.count;
+//        var tableList = [];
+//        var sumPage;
+//        $.ajax({
+//          type: 'POST',
+//          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentChange},
+//          async: false,
+//          url: this.TableDataUrl,
+//          success: function (data) {
+//            if (data.result) {
+//              tableList = data.data.accountList;
+//              sumPage = data.data.count;
+//            } else {
+//              this.$message({
+//                type: 'error',
+//                message: data.msg
+//              });
+//            }
+//          }
+//        })
+//        this.tableData = tableList;
+//        this.SumPage = sumPage;
+
+
+        let url = http.apiMap.findAccountList;
+        let data = {
+          size: 10,
+          nowpage:this.currentPage,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.accountList;
+              this.tableData=data;
+
             } else {
-              this.$message({
-                type: 'error',
-                message: data.msg
-              });
+              console.log('暂无物流信息')
             }
           }
-        })
-        this.tableData = tableList;
-        this.SumPage = sumPage;
+        );
       },
       //分页
       handleCurrentChange(val) {
@@ -299,7 +320,6 @@
             url: this.DelectData,
             data: data,
             success: function (data) {
-              console.log(data)
               if (data.result) {
                 that.$message({
                   type: 'success',

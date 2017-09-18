@@ -60,7 +60,7 @@
                 <template scope="scope">
                   <el-button type="text" size="small" @click="DisplayBlock2(scope.row)">查看</el-button>
                   <el-button type="text" size="small" @click="DisplayBlock1(scope.row)">添加下级团员</el-button>
-                  <el-button type="text" size="small" @click="modifyTeam(scope.row)">升级</el-button>
+                  <el-button type="text" size="small" @click="aaa(scope.row)">升级</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -152,8 +152,16 @@
           prop="lastMonthMoney"
           label="上月销售金">
         </el-table-column>
+        <el-table-column
+          label="操作">
+          <template scope="scope">
+            <el-button type="text" size="small" @click="modifyTeam(scope.row)">升级</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-button @click="DisplayNone2">取消</el-button>
+
+
     </div>
   </div>
 </template>
@@ -177,7 +185,8 @@
         shopmanManagey: '',
         shopmanManage:'',
         userAccount:'',
-        dataYuan:[]
+        dataYuan:[],
+        companyAccount:''
       }
     },
     created() {
@@ -365,9 +374,79 @@
           }
         )
       },
-      //升级店主
-      modifyTeam(){},
+      //升级公司店主
+      aaa(row){
+        let url = http.apiMap.modifyCom;
+        let data = {
+          common: 2,
+          account:row.account,
+        };
+        this.$confirm('此操作将升级该店主, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '升级成功!'
+                });
+                this.showId()
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '升级失败!'
+                });
+              }
+            }
+          )
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消升级'
+          });
+        });
 
+      },
+     //升级个人店主
+      modifyTeam(row){
+        let url = http.apiMap.modifytTeam;
+        let data = {
+          common: 2,
+          account:row.memberAccount,
+          //companyAccount:this.companyAccount,
+        };
+        this.$confirm('此操作将升级该店主, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '升级成功!'
+                });
+                this.DisplayNone2()
+                this.showId()
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '升级失败!'
+                });
+              }
+            }
+          )
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消升级'
+          });
+        });
+      },
     }
   }
 </script>
