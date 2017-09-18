@@ -149,7 +149,6 @@
     data() {
       return {
         tableData: [],
-        TableDataUrl: this.GLOBAL.baseUrl + 'productBrand/findProductBrandList',
         TopUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandTop',
         BottomUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandBottom',
         UpDownUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrandPosition',
@@ -157,7 +156,6 @@
         AddUrl: this.GLOBAL.baseUrl + 'productBrand/addProductBrand',
         ModifyUrl: this.GLOBAL.baseUrl + 'productBrand/modifyProductBrand',
         DataLength: '',
-        currentChange: 1,
         currentPage: 1,
         count11: 1,
         imageUrl: '',
@@ -171,15 +169,21 @@
         id: '',
         addimgUrl: '',
         imgFiles: '',
+
       }
     },
-    created: function () {
+    created() {
       this.getTable()//定义方法
     },
     methods: {
       postPhofs() {
         $(".postFilephofs").click()
       },
+      addlaber() {
+        $(".postFiles").click()
+      },
+
+      //修改品牌
       selectChangefs(e) {
         let files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
@@ -202,6 +206,7 @@
         }
       },
       //获取列表信息
+<<<<<<< HEAD
       getTable() {
         let url = http.apiMap.getBrand;
         let data = {
@@ -216,14 +221,34 @@
               let data = res.body.data.productBrandList;
               this.tableData = data
               this.DataLength = this.tableData[this.tableData.length - 1].number;
+
+=======
+      getTable: function () {
+        var tableList = [];
+        var sumPage;
+        $.ajax({
+          type: 'POST',
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage':this.currentPage},
+          async: false,
+          url: this.TableDataUrl,
+          success: function (data) {
+            if (data.result) {
+              console.log(data.data.count)
+              this.count11 = data.data.count
+              tableList = data.data.productBrandList;
+            } else {
+              swal({title: '', text: data.msg})
+>>>>>>> 908d6de6f2eb9112ea276d7784632b156e47d67d
             }
-          })
-      }
-      ,
+          }
+        );
+
+      },
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
         this.getTable()  //页面 加载数据
+<<<<<<< HEAD
       }
       ,
       //添加品牌
@@ -296,6 +321,9 @@
         )
       }
       ,
+=======
+      },
+>>>>>>> parent of 3801a75... 修改合并错误代码
       //上移
       Up (row) {
         var nowID = row.id;
@@ -325,8 +353,7 @@
           }
         })
 
-      }
-      ,
+      },
       //下移
       Down (row) {
         var nowID = row.id;
@@ -355,8 +382,7 @@
             }
           }
         })
-      }
-      ,
+      },
       //置顶
       Top: function (row) {
         var data = {'id': row.id, 'number': row.number, 'common': this.GLOBAL.common};
@@ -371,8 +397,7 @@
             }
           }
         })
-      }
-      ,
+      },
       //置底
       Bottom: function (row) {
         var data = {'number': row.number, 'common': this.GLOBAL.common};
@@ -387,8 +412,7 @@
             }
           }
         })
-      }
-      ,
+      },
       //删除
       open2(row) {
         var data = {'id': row.id, 'common': this.GLOBAL.common}
@@ -424,19 +448,15 @@
             message: '已取消删除'
           });
         });
-      }
-      ,
-      DisplayBlock: function () {
+      },
+      DisplayBlock() {
         $('.mask').css('display', 'block');
         $('.add_commodity_brand').css('display', 'block');
-      }
-      ,
-
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.add_commodity_brand').css('display', 'none');
-      }
-      ,
+      },
       DisplayBlock2(row) {
         $('.mask').css('display', 'block');
         $('.change_brand').css('display', 'block');
@@ -446,15 +466,70 @@
         this.id = row.id;
 
 
-      }
-      ,
-
-      DisplayNone2: function () {
+      },
+      DisplayNone2() {
         $('.mask').css('display', 'none');
         $('.change_brand').css('display', 'none');
-      }
+      },
 
-      ,
+
+      //添加品牌
+      add() {
+        $(".add_brand").show();
+        $(".mask").show()
+      },
+      Disnone(){
+        $(".add_brand").hide();
+        $(".mask").hide()
+      },
+      selectChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files);
+      },
+      createImage(file) {
+        if (typeof FileReader === 'undefined') {
+          alert('您的浏览器不支持图片上传，请升级您的浏览器');
+          return false;
+        }
+        let vm = this;
+        let leng = file.length;
+        for (let i = 0; i < leng; i++) {
+          let reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.addimgUrl = e.target.result;
+            vm.imgFiles = $('.postFiles')[0].files[0];
+          };
+        }
+      },
+      //添加商品品牌
+      submitUpload() {
+        let url = http.apiMap.AddProductBrand;
+        let formData = new FormData();
+        formData.append('common', 1);
+        formData.append('name', this.name);
+        formData.append('pictureUrl', this.imgFiles);
+        formData.append('details', this.details);
+        this.$http.post(url, formData).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '添加成功'
+              });
+              this.Disnone()
+              this.getTable()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.body.msg
+              });
+              this.Disnone()
+            }
+          }
+        )
+      },
 
       //修改商品品牌
       submitUpload1() {
@@ -483,8 +558,7 @@
             }
           }
         )
-      }
-      ,
+      },
 
     }
   }
