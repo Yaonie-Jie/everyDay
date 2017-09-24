@@ -71,7 +71,7 @@
                   </li>
                 </ul>
                 <div class="Pic">
-                  <p>共<span class="pink">{{i.orderProduct.length}}</span>件商品</p>
+                  <p>共<span class="pink">{{i.num}}</span>件商品</p>
                   <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
                 </div>
               </div>
@@ -391,8 +391,14 @@
             if (res.body.result) {
               this.count11 = res.body.data.count;
               let data = res.body.data.orderList;
+              for (let i = 0; i < data.length; i++) {
+                let num=0
+                for (let q = 0; q < data[i].orderProduct.length; q++) {
+                  num+=data[i].orderProduct[q].amount
+                }
+                data[i].num=num
+              }
               this.dataList = data;
-
             }
           }
         );
@@ -455,6 +461,14 @@
             if (res.body.result) {
               this.count11 = res.body.data.count;
               let data = res.body.data.orderList;
+              for (let i = 0; i < data.length; i++) {
+                let num=0
+                for (let q = 0; q < data[i].orderProduct.length; q++) {
+                  num+=data[i].orderProduct[q].amount
+
+                }
+                data[i].num=num
+              }
               this.dataList = data;
               this.$message({
                 type: 'success',

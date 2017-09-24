@@ -61,7 +61,7 @@
       </div>
 
       <div class="accumulated_account">
-        当前后台余额:￥<span>{{OutMoney}}</span>
+        当前后台余额:￥<span>{{OutMoney/100}}</span>
       </div>
     </div>
 

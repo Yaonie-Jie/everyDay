@@ -3,7 +3,7 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>已退款订单</el-breadcrumb-item>
+        <el-breadcrumb-item>退款订单</el-breadcrumb-item>
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -20,8 +20,8 @@
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
-                  class="pink">{{listData.price + listData.freigh / 100}}</span>
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -66,6 +66,14 @@
                 </ul>
               </div>
             </div>
+            <div class="TopTitle NoBorderTop NoBorderBottom">
+              <div class="right">
+                <el-button v-show="listData.refundState == 1" @click="Reject">审核驳回</el-button>
+                <el-button v-show="listData.refundState == 1" @click="open3">审核同意</el-button>
+                <el-button v-show="listData.refundState !=4" @click="open4">退款成功</el-button>
+
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -75,29 +83,52 @@
           <div class="TopTitle NoBorderTop NoPadding NoBorderBottom">
             <ul class="left width100">
               <div class="titlee">退款信息</div>
-              <li class="marginTopLeft">申请退款时间：<span>2017-12-22   12：00:00</span></li>
-              <li class="marginTopLeft">退款类型：退货退款</li>
-              <li class="marginTopLeft">退款金额：￥21323.00</li>
-              <li class="marginTopLeft">用户备注：-----</li>
-              <li class="marginTopLeft">用户支付宝/微信账号：132231321232</li>
+              <li class="marginTopLeft">申请退款时间：<span>{{tui.createOn}}</span></li>
+              <li class="marginTopLeft" v-show="tui.type == 0">退款类型：仅退款</li>
+              <li class="marginTopLeft" v-show="tui.type == 1">退款类型：退货退款</li>
+              <li class="marginTopLeft">退款金额：{{tui.price}}</li>
+              <li class="marginTopLeft">用户备注：{{tui.remarks}}</li>
+              <li class="marginTopLeft" >用户支付账号：{{pay.income_account}}</li>
             </ul>
 
           </div>
-          <div class="TopTitle NoPadding NoBorderBottom">
-            <ul class="left width100">
-              <div class="titlee">退款记录</div>
-              <ul style="overflow: auto;">
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-                <li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>
-              </ul>
+          <!--<div class="TopTitle NoPadding NoBorderBottom">-->
+            <!--<ul class="left width100">-->
+              <!--<div class="titlee">退款记录</div>-->
+              <!--<ul style="overflow: auto;">-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+              <!--</ul>-->
 
-            </ul>
-          </div>
+            <!--</ul>-->
+          <!--</div>-->
         </div>
+      </div>
+    </div>
+
+    <div class="mask"></div>
+    <div class="deliver_goods popup" style="text-align: left">
+      <el-row>
+        <el-col :span="24" style="text-align: left">
+          <span style="padding-right: 50px">退款方式</span>
+          <span>{{msg.incomeMent}}</span>
+        </el-col>
+        <el-col :span="24" style="text-align: left;margin-top: 20px">
+          <span style="padding-right: 50px">用户账号</span>
+          <span>{{msg.payAccount}}</span>
+        </el-col>
+        <el-col :span="24" style="text-align: left;margin-top: 20px">
+          <span style="padding-right: 50px">退款账号</span>
+          <el-input style="width: 30%;" v-model="outAccount"></el-input>
+        </el-col>
+      </el-row>
+      <div class="deliver_goods_btns" style="text-align: center">
+        <el-button type="primary" @click="backMoney" style="float:none;">确定退款成功</el-button>
+        <el-button @click="DisplayNone3" style="float:none;">取消</el-button>
       </div>
     </div>
   </div>
@@ -172,6 +203,9 @@
       return {
         orderNum: '',    //订单号
         listData: '',
+        outAccount:'',
+        msg:'',
+        tui:'',
       }
     },
     created() {
@@ -204,15 +238,153 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
+              this.tui=res.body.data.refund;
+              this.pay=res.body.data.outfinance;
               this.listData = data
 
             }
           }
         );
       },
+      //审核同意
+      open3() {
+        this.$confirm('审核同意, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: this.orderNum,
+            refundState: 1,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getshow()
+                this.$message({
+                  type: 'success',
+                  message: '已审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+
+      },
+      //点击退款成功
+      open4() {
+        $(".deliver_goods").show();
+        $(".mask").show();
+        let url = http.apiMap.gettuikuan;
+        let data = {
+          orderNum: this.orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.msg;
+              this.backincomeMent = data.incomeMent;
+              this.backincomeMent = data.incomeMent;
+
+              if (data.incomeMent == 1) {
+                data.incomeMent = '支付宝'
+              } else {
+                data.incomeMent = '微信'
+              }
+              this.msg = data
+            } else {
+              console.log('暂无物流信息')
+            }
+          }
+        );
+      },
+      //审核驳回
+      Reject() {
+        this.$confirm('驳回退款？驳回后用户只能通过客服电话与我们联系!, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: this.orderNum,
+            refundState: 0,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getshow()
+                this.$message({
+                  type: 'success',
+                  message: '已驳回审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+      },
+      //点击确认退款成功
+      backMoney() {
+        let url = http.apiMap.tuikuan;
+        let data = {
+          orderNum: this.orderNum,
+          outMent: this.backincomeMent,
+          incomeAccount: this.msg.payAccount,
+          outAccount: this.outAccount,
+          userAccount: this.msg.userAccount,
+          outMoney: this.msg.incomeMoney,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getList();
+              this.$message({
+                type: 'success',
+                message: '退款成功!'
+              });
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.body.msg
+              });
+            }
+            $(".deliver_goods").hide();
+            $(".mask").hide();
+          }
+        );
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
+      },
+      DisplayNone3() {
+        $('.mask').css('display', 'none');
+        $('.deliver_goods').css('display', 'none');
       },
     }
   }

@@ -165,37 +165,7 @@
             </el-table>
           </div>
         </el-col>
-        <div class="modify_specifications popup">
-          <div class="popup_form">
-            <div class="popup_form_title">规格名称</div>
-            <el-input v-model="paramName" placeholder="请输入内容"></el-input>
-          </div>
-          <el-tag
-            :key="tag"
-            v-for="tag in dynamicTags"
-            :closable="true"
-            :close-transition="false"
-            @close="handleClose(tag)"
-          >
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="mini"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">添加规格</el-button>
 
-          <div class="add_specifications_btn">
-            <el-button @click="DisplayNone2">取消</el-button>
-            <el-button type="primary" @click="updataParam">修改</el-button>
-          </div>
-        </div>
         <el-col :span="24" style="margin-top: 20px">
 
           <div class="add_goods_commission">
@@ -236,7 +206,7 @@
         </select>
       </div>
       <el-col :span="24" style="margin-top: 20px;text-align: center">
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">修改商品</el-button>
+        <el-button style="margin-left: 10px;" type="success" @click="submitUpload">修改商品</el-button>
       </el-col>
       <!--<div class="add_goods_btn">-->
       <!--<el-button>取消</el-button>-->
@@ -391,30 +361,34 @@
         this.inputValue = '';
       },
       finish() {
-        let arr = {
-          paramName: this.paramName,
-          parameters: this.dynamicTags.join(',')
+        if (this.paramName == '') {
+          this.$message({
+            type: 'info',
+            message: '请填写规格名称'
+          });
+        }else {
+          if(this.dynamicTags==''){
+            this.$message({
+              type: 'info',
+              message: '请填写规格参数'
+            });
+          }else {
+            let arr = {
+              paramName: this.paramName,
+              parameters: this.dynamicTags.join(',')
+            }
+            this.paramlist.push(arr);
+            this.paramName = '';
+            this.dynamicTags = [];
+            $('.mask').css('display', 'none');
+            $('.add_specifications').css('display', 'none');
+          }
         }
-        this.paramlist.push(arr);
-        this.paramName = '';
-        this.dynamicTags = [];
-        $('.mask').css('display', 'none');
-        $('.add_specifications').css('display', 'none');
       },
       deleteParam(row) {
         this.paramlist.splice(this.paramlist.indexOf(row), 1);
       },
-      updataParam() {
-        let arr = {
-          paramName: this.paramName,
-          parameters: this.dynamicTags.join(',')
-        }
-        this.paramlist.push(arr);
-        this.paramName = '';
-        this.dynamicTags = [];
-        $('.mask').css('display', 'none');
-        $('.modify_specifications').css('display', 'none');
-      },
+
 
       //查询分类
       findTypeList() {//查询一级分类列表

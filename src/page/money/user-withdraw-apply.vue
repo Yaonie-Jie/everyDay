@@ -146,15 +146,15 @@
         $('.modifypass').css('display','none');
       },
       //提现成功
-      successDra(){
-           let url=http.apiMap.tuikuan;
+      successDra(row){
+           let url=http.apiMap.modifyPass;
            let data={
              common:1,
              id:this.id,
              outMent:this.orderState,//出账方式
              outAccount:this.tkzfb,//出账账号
-             incomeAccount:this.userAccount,//收款账号
-             userAccount:this.userzfb,//用户账号
+             incomeAccount:this.userzfb,//收款账号
+             userAccount:this.userAccount,//用户账号
              outMoney:this.money,//出账金额
            };
 

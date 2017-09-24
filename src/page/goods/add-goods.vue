@@ -275,20 +275,20 @@
 
         contentCan: '',
         editorOptionCan: {
-          modules:{
+          modules: {
             toolbar: [
               ['bold', 'italic', 'underline', 'strike'],
               ['blockquote', 'code-block'],
-              [{ 'header': 1 }, { 'header': 2 }],
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-              [{ 'script': 'sub'}, { 'script': 'super' }],
-              [{ 'indent': '-1'}, { 'indent': '+1' }],
-              [{ 'direction': 'rtl' }],
-              [{ 'size': ['small', false, 'large', 'huge'] }],
-              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-              [{ 'color': [] }, { 'background': [] }],
-              [{ 'font': [] }],
-              [{ 'align': [] }],
+              [{'header': 1}, {'header': 2}],
+              [{'list': 'ordered'}, {'list': 'bullet'}],
+              [{'script': 'sub'}, {'script': 'super'}],
+              [{'indent': '-1'}, {'indent': '+1'}],
+              [{'direction': 'rtl'}],
+              [{'size': ['small', false, 'large', 'huge']}],
+              [{'header': [1, 2, 3, 4, 5, 6, false]}],
+              [{'color': []}, {'background': []}],
+              [{'font': []}],
+              [{'align': []}],
               ['clean'],
               ['link']
             ]
@@ -348,19 +348,36 @@
         this.inputValue = '';
       },
       finish() {
-        let arr = {
-          paramName: this.paramName,
-          parameters: this.dynamicTags.join(',')
+        if (this.paramName == '') {
+          this.$message({
+            type: 'info',
+            message: '请填写规格名称'
+          });
+        } else {
+          if (this.dynamicTags == '') {
+            this.$message({
+              type: 'info',
+              message: '请填写规格参数'
+            });
+          } else {
+            let arr = {
+              paramName: this.paramName,
+              parameters: this.dynamicTags.join(',')
+            }
+            this.paramlist.push(arr);
+            this.paramName = '';
+            this.dynamicTags = [];
+            $('.mask').css('display', 'none');
+            $('.add_specifications').css('display', 'none');
+            l
+          }
         }
-        this.paramlist.push(arr);
-        this.paramName = '';
-        this.dynamicTags = [];
-        $('.mask').css('display', 'none');
-        $('.add_specifications').css('display', 'none');
-      },
+      }
+      ,
       deleteParam(row) {
         this.paramlist.splice(this.paramlist.indexOf(row), 1);
-      },
+      }
+      ,
       updataParam() {
         let arr = {
           paramName: this.paramName,
@@ -371,15 +388,18 @@
         this.dynamicTags = [];
         $('.mask').css('display', 'none');
         $('.modify_specifications').css('display', 'none');
-      },
+      }
+      ,
 
       onEditorReady(editor) {
 //        console.log('editor ready!', editor)
-      },
+      }
+      ,
       onEditorReadyCan(editor) {
 
 //        console.log('editor ready!', editor)
-      },
+      }
+      ,
       //查询分类
       findTypeList() {//查询一级分类列表
         let url = http.apiMap.findTypeList;
@@ -391,7 +411,8 @@
             }
           }
         );
-      },
+      }
+      ,
       OneTypeListChange() {//一级分类改变
         let url = http.apiMap.findTypeListTwo;
         let data = {
@@ -406,11 +427,13 @@
             }
           }
         );
-      },
+      }
+      ,
       TwoTypeListChange() {//二级分类改变
         this.typeId = $("#TwoType :selected").attr('value')
         console.log(this.typeId)
-      },
+      }
+      ,
       findBrandList() {//查询商品品牌分类
         let url = http.apiMap.findBrandList;
         let data = {
@@ -426,37 +449,45 @@
             }
           }
         );
-      },
+      }
+      ,
       handleRemove(file, fileList) {
         console.log(file, fileList);
-      },
+      }
+      ,
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
-      },
+      }
+      ,
       DisplayBlock: function () {
         $('.mask').css('display', 'block');
         $('.add_specifications').css('display', 'block');
-      },
+      }
+      ,
 
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.add_specifications').css('display', 'none');
-      },
+      }
+      ,
       DisplayBlock2(row) {
         $('.mask').css('display', 'block');
         $('.modify_specifications').css('display', 'block');
         this.paramName = row.paramName;
         this.dynamicTags = row.parameters.split(',')
-      },
+      }
+      ,
 
       DisplayNone2: function () {
         $('.mask').css('display', 'none');
         $('.modify_specifications').css('display', 'none');
-      },
+      }
+      ,
       labe() {
         $(".imgLocal").click()
-      },
+      }
+      ,
       //上传图片
       deletes(e) {
         let el = e.target;
@@ -476,7 +507,8 @@
         }
         this.images = arrUrl;
         this.imgFiles = arrimg;
-      },
+      }
+      ,
       submitUpload() {
         if (this.typeId == '') {
           this.$message({

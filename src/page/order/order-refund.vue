@@ -59,7 +59,7 @@
                 </ul>
                 <div class="Pic">
                   <div class="left">
-                    <p>共<span class="pink">{{i.orderProduct.length}}</span>件商品</p>
+                    <p>共<span class="pink">{{i.num}}</span>件商品</p>
                     <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
                   </div>
                   <div class="right">
@@ -166,6 +166,14 @@
             if (res.body.result) {
               this.count = res.body.data.count;
               let data = res.body.data.orderList;
+              for (let i = 0; i < data.length; i++) {
+                let num=0
+                for (let q = 0; q < data[i].orderProduct.length; q++) {
+                  num+=data[i].orderProduct[q].amount
+
+                }
+                data[i].num=num
+              }
               this.dataList = data;
             }
           }
@@ -191,6 +199,14 @@
               });
               this.count = res.body.data.count;
               let data = res.body.data.orderList;
+              for (let i = 0; i < data.length; i++) {
+                let num=0
+                for (let q = 0; q < data[i].orderProduct.length; q++) {
+                  num+=data[i].orderProduct[q].amount
+
+                }
+                data[i].num=num
+              }
               this.dataList = data;
             }
           }
@@ -237,7 +253,12 @@
         });
       },
       shows(i) {
-        this.$router.push('/OrderRefundShow/' + i.orderNum);
+        console.log(i)
+        if(i.orderState == '4'){
+          this.$router.push('/OrderRefundShow/' + i.orderNum);
+        }else {
+          this.$router.push('/OrderMoney/' + i.orderNum);
+        }
       },
       //审核同意
       open3(i) {

@@ -118,33 +118,45 @@
         )
       },
       findTeam() {
-        let url = http.apiMap.findTeam
-        let data = {
-          teamAccount: this.teamAccount,
-          common: 2
-        }
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              let arr = []
-              let data = res.body.data.ownerTeamManage;
-              if (data.teamLevel == 0) {
-                data.teamLevel = '公司店主团队_美日美C'
-              } else if (data.teamLevel == 1) {
-                data.teamLevel = '公司店主团队'
-              } else if (data.teamLevel == 2) {
-                data.teamLevel = '高级店主团队'
-              }
-              arr.push(data)
-              this.tableData = arr
-            } else {
-              this.$message({
-                type: 'warning',
-                message: res.body.msg
-              });
-            }
+        if(this.teamAccount == ''){
+          this.$message({
+            type: 'info',
+            message: '请输入账号搜索'
+          });
+        }else {
+          let url = http.apiMap.findTeam
+          let data = {
+            teamAccount: this.teamAccount,
+            common: 2
           }
-        )
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.$message({
+                  type: 'success',
+                  message: '查询成功'
+                });
+                let arr = []
+                let data = res.body.data.ownerTeamManage;
+                if (data.teamLevel == 0) {
+                  data.teamLevel = '公司店主团队_美日美C'
+                } else if (data.teamLevel == 1) {
+                  data.teamLevel = '公司店主团队'
+                } else if (data.teamLevel == 2) {
+                  data.teamLevel = '高级店主团队'
+                }
+                arr.push(data)
+                this.tableData = arr
+              } else {
+                this.$message({
+                  type: 'warning',
+                  message: res.body.msg
+                });
+              }
+            }
+          )
+        }
+
       },
 
       DisplayBlock2: function () {

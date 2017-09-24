@@ -47,6 +47,8 @@ import OrderMoneychao from './page/order/order-chao.vue'
 
 import BillDemo from './page/order-service/bill-demo.vue'
 import FreightManage from './page/order-service/freight-manage.vue'
+import addFreight from './page/order-service/add-freight.vue'
+import updataFreight from './page/order-service/updata-freight.vue'
 
 import Phone from './page/phone/phone.vue'
 
@@ -199,6 +201,12 @@ export default [
       },
       {
         path: '/BillDemo', component: BillDemo,
+      },
+      {
+        path: '/addFreight', component: addFreight,
+      },
+      {
+        path: '/updataFreight', component: updataFreight,
       },
       {
         path: '/FreightManage', component: FreightManage,

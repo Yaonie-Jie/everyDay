@@ -258,7 +258,7 @@
           }
         )
       },
-      DisplayNone: function () {
+      DisplayNone () {
         $('.mask').css('display', 'none');
         $('.change_recommend').css('display', 'none');
       },
@@ -295,6 +295,7 @@
         let FrontNumber;
         for (let i = 0; i < table.length; i++) {
           if (table[i].id == nowID) {
+            console.log(table[i])
             FrontID = table[i + 1].id;
             FrontNumber = table[i + 1].number;
           }
@@ -362,6 +363,7 @@
 
 
       addOneShow() {
+        this.currentPage22=1
         $(".leftshow").show();
         $(".mask").show();
       },
@@ -370,6 +372,7 @@
         $(".mask").hide();
       },
       addTwoShow() {
+        this.currentPage22=1
         $(".rightshow").show();
         $(".mask").show();
       },

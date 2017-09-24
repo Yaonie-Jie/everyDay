@@ -30,8 +30,8 @@
         <div class="submited_information clear_">
           <div class="left_">提交资料</div>
           <div class="right_ information">
-            <div>姓名：<span>{{shopmanApply.account}}</span></div>
-            <div>身份证号：<span>{{shopmanApply.account}}</span></div>
+            <div>姓名：<span>{{shopmanApply.name}}</span></div>
+            <div>身份证号：<span>{{shopmanApply.idNumber}}</span></div>
             <div class="id_positive_img">
               <img :src="shopmanApply.idCardPhoto" alt="">
             </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="accumulated_sales clear_">
           <div class="left_">累计销售金：</div>
-          <div class="right_">¥1232.00</div>
+          <div class="right_">¥{{shopmanApply.money}}</div>
         </div>
         <div class="subordinate_team clear_">
           <div class="left_">所属团队：</div>

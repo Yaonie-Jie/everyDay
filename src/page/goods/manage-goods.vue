@@ -19,7 +19,7 @@
               {{ option.name }}
             </option>
           </select>
-          <select name="" class="select" id="TwoType"  v-model="typeId">
+          <select name="" class="select" id="TwoType" v-model="typeId">
             <option value="">二级分类</option>
             <option v-for="option in TwoypeList" v-bind:value="option.id">
               {{ option.name }}
@@ -60,7 +60,7 @@
             :span="5"
             label="操作">
             <template scope="scope">
-             <el-button type="text" size="small" @click="Up(scope.row)">上移</el-button>
+              <el-button type="text" size="small" @click="Up(scope.row)">上移</el-button>
               <el-button type="text" size="small" @click="Down(scope.row)">下移</el-button>
               <el-button type="text" size="small" @click="Top(scope.row)">置顶</el-button>
               <el-button type="text" size="small" @click="Bottom(scope.row)">置底</el-button>
@@ -96,11 +96,11 @@
         count11: 1,
         currentPage: 1,
         dataList: [],
-        OneTypeList:[],
-        TwoypeList:[],
-        typeId:'-1',
-        name:'',
-        oneTypeId:''
+        OneTypeList: [],
+        TwoypeList: [],
+        typeId: '-1',
+        name: '',
+        oneTypeId: ''
       }
     },
     created() {
@@ -149,7 +149,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.modifyProPos;
         this.$http.post(url, data).then(
@@ -204,18 +204,18 @@
           }
         )
       },
-      find(){
+      find() {
         let url = http.apiMap.findShop;
-        if(this.oneTypeId == ''){
+        if (this.oneTypeId == '') {
 
-        }else {
-          this.typeId=this.oneTypeId
+        } else {
+          this.typeId = this.oneTypeId
         }
         let data = {
           nowpage: this.currentPage,
           size: 10,
-          name:this.name,
-          typeId:this.typeId,
+          name: this.name,
+          typeId: this.typeId,
           common: 1
         };
         this.$http.post(url, data).then(
@@ -378,7 +378,6 @@
   .goods_search .el-button {
     margin-left: 10px;
   }
-
 
   .add_goods_form table tr td {
     text-align: center;

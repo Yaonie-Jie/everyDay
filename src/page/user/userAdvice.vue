@@ -36,7 +36,7 @@
           <p class="textright">{{i.version}}</p>
         </div>
         <div class="useradvice">
-          <span>{{i.createBy}}</span>
+          <span>{{i.userAccount}}</span>
           <span>{{i.createOn}}</span>
         </div>
       </div>

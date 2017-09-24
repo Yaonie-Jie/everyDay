@@ -75,6 +75,7 @@ const apiMap={
   'freightList':hosts.api+'freightTemplate/findfreightTemplateList',    //运费模板列表
   'updataFreight':hosts.api+'freightTemplate/modifyfreightTemplate',    //修改运费模板
   'deleteFreight':hosts.api+'freightTemplate/removefreightTemplateL',    //删除运费模板
+  'findFreight':hosts.api+'freightTemplate/findFreightById',    //根据id查询运费模板
 
 
   'teamData':hosts.api+'teamNumLimit/findTeamNum',    //查询团队人数限制
@@ -87,7 +88,7 @@ const apiMap={
   'rejectAudit':hosts.api+'ownerManage/rejectAudit',   //驳回申请(店主申请管理)
   'addShopman':hosts.api+'ownerManage/addNoTeamOwner',   //添加无店主团队(店主申请管理)
   'modifyCompany':hosts.api+'ownerManage/modifyOwnerToCompany',   //升级到公司店主(店主申请管理)
-  'modifyHigh':hosts.api+'ownerManage/modifyHighOwnerLevel',   //升级到高级店主(店主申请管理)
+  'modifyHigh':hosts.api+'ownerManage/modifyHighOwner',   //升级到高级店主(店主申请管理)
   'findFeed':hosts.api+'feedback/findFeedbackList', //用户意见反馈列表
   'findFeedback':hosts.api+'feedback/findFeedbackListByCon', //用户意见反馈列表
 

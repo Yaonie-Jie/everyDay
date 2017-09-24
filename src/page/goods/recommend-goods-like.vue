@@ -5,7 +5,7 @@
         <el-breadcrumb-item>商品管理</el-breadcrumb-item>
         <el-breadcrumb-item>系统推荐商品</el-breadcrumb-item>
       </el-breadcrumb>
-      <div class="titlee" style="border:none;">系统推荐列表</div>
+      <div class="titlee" style="border:none;">兴趣推荐列表</div>
       <div style="margin-bottom: 20px;padding-bottom: 20px">
         <el-button type="success" @click="addOneShow">添加到商品详情</el-button>
         <el-button type="success" @click="addTwoShow">添加到图文详情</el-button>
@@ -347,6 +347,7 @@
     },
     methods: {
       addOneShow() {
+        this.currentPage22=1
         $(".leftshow").show();
         $(".mask").show();
       },
@@ -355,6 +356,7 @@
         $(".mask").hide();
       },
       addTwoShow() {
+        this.currentPage22=1
         $(".rightshow").show();
         $(".mask").show();
       },

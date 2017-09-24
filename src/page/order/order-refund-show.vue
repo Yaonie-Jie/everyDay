@@ -66,14 +66,7 @@
                 </ul>
               </div>
             </div>
-            <div class="TopTitle NoBorderTop NoBorderBottom">
-              <div class="right">
-                <el-button v-show="listData.refundState == 1" @click="Reject(i)">审核驳回{{listData.refundState}}</el-button>
-                <el-button v-show="listData.refundState == 1" @click="open3(i)">审核同意</el-button>
-                <el-button v-show="listData.refundState ==1" @click="open4(i)">退款成功</el-button>
 
-              </div>
-            </div>
           </li>
         </ul>
       </div>
@@ -129,7 +122,7 @@
         );
       },
       //审核同意
-      open3(i) {
+      open3() {
         this.$confirm('审核同意, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -137,7 +130,7 @@
         }).then(() => {
           let url = http.apiMap.Reject;
           let data = {
-            orderNum: i.orderNum,
+            orderNum: this.orderNum,
             refundState: 1,
             common: 1
           };
@@ -166,10 +159,10 @@
 
       },
       //点击退款成功
-      open4(i) {
+      open4() {
         $(".deliver_goods").show();
         $(".mask").show();
-        this.orderNum = i.orderNum
+        this.orderNum = this.orderNum
         let url = http.apiMap.gettuikuan;
         let data = {
           orderNum: this.orderNum,

@@ -21,7 +21,7 @@
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
                 <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
-                  class="pink">{{listData.price/100 + listData.freigh/100}}</span>
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
-                <el-button @click="DisplayBlock(listData.orderNum)">订单改价</el-button>
+                <el-button @click="DisplayBlock(listData)">订单改价</el-button>
                 <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
 
               </div>
@@ -193,7 +193,9 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
+
               this.listData = data
+
 
             }
           }
@@ -203,9 +205,9 @@
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
       },
-      DisplayBlock(orderNum) {
-        this.orderNum = orderNum;
-        console.log(orderNum)
+      DisplayBlock(i) {
+        this.orderNum = i.orderNum;
+        this.price = i.price / 100
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -214,7 +216,7 @@
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
-          price: this.price,
+          price: this.price * 100,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(

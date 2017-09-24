@@ -43,7 +43,7 @@
               label="操作">
               <template scope="scope">
 
-                <el-button type="text" size="small" @click="DisplayBlock3(scope.row)">修改</el-button>
+                <el-button type="text" size="small" @click="updataf(scope.row)">修改</el-button>
                 <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
 
               </template>
@@ -82,7 +82,6 @@
           <el-table-column
             label="操作">
             <template scope="scope">
-              <el-button type="text" size="small" @click="DisplayBlock3">修改</el-button>
               <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -105,84 +104,7 @@
         <el-button type="primary" @click="addFreightTemplate">添加</el-button>
       </div>
     </div>
-    <div class="add_noDefaultarea popup">
-      <div class="add_noDefaultarea_title popup_title">添加非默认运费地区</div>
-      <!--<div class="add_noDefaultarea_list_title">非默认运费地区选择</div>-->
-      <!--<div class="add_noDefaultarea_list">-->
-      <!--<dl>-->
-      <!--<dt><el-checkbox label="浙江省" name="type"></el-checkbox></dt>-->
-      <!--<dd><el-checkbox label="杭州市" name="type"></el-checkbox></dd>-->
-      <!--<dd><el-checkbox label="舟山市" name="type"></el-checkbox></dd>-->
-      <!--</dl>-->
-      <!--<dl>-->
-      <!--<dt><el-checkbox label="辽宁省" name="type"></el-checkbox></dt>-->
-      <!--<dd><el-checkbox label="葫芦岛市" name="type"></el-checkbox></dd>-->
-      <!--<dd><el-checkbox label="大连市" name="type"></el-checkbox></dd>-->
-      <!--</dl>-->
-      <!--</div>-->
-      <el-row style="margin-top: 20px">
-        <el-col :span="24" style="margin-bottom: 20px">
-          <span style="padding-right: 20px">地区</span>
-          <el-tag
-            :key="tag"
-            v-for="tag in dynamicTags"
-            :closable="true"
-            :close-transition="false"
-            @close="handleClose(tag)"
-          >
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="mini"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加地区</el-button>
-        </el-col>
-        <el-col :span="24">
-          <span style="padding-right: 20px">运费</span>
-          <el-input type="text" style="width: 50%" v-model="freights"></el-input>
-        </el-col>
-      </el-row>
-      <div class="add_noDefaultarea_btns">
-        <el-button @click="DisplayNone2">取消</el-button>
-        <el-button type="primary" @click="adddiqu">添加</el-button>
-      </div>
-    </div>
 
-    <div class="change_freight popup">
-      <div class="popup_title">修改运费模板</div>
-      <div class="popup_form">
-        <div class="popup_form_title">模板名称</div>
-        <el-input v-model="template"></el-input>
-      </div>
-      <div class="popup_form">
-        <div class="popup_form_title">默认运费</div>
-        <el-input v-model="freight"></el-input>
-      </div>
-      <div class="set_up" style="width: 80%;">
-        <div class="freight_set_up">免邮设置</div>
-        <!--<select name="" id="orderState"@change="change" >-->
-        <!--<option v-for="option in options" v-bind:value="option.value">-->
-        <!--{{ option.text }}-->
-        <!--</option>-->
-        <!--</select>-->
-
-        <div class="fullmoney">
-          免邮金额：
-          <el-input v-model="full"></el-input>
-        </div>
-      </div>
-      <div class="popup_btn">
-        <el-button @click="DisplayNone3">取消</el-button>
-        <el-button type="primary" @click="Updata">修改</el-button>
-      </div>
-    </div>
 
   </div>
 </template>
@@ -240,12 +162,12 @@
         this.inputValue = '';
       },
       addFreightTemplate() {
-        if(this.template==''){
+        if (this.template == '') {
           this.$message({
             type: 'info',
             message: '请填写运费模版'
           });
-        }else {
+        } else {
 
         }
         let url = http.apiMap.addFreight;
@@ -264,11 +186,11 @@
                 type: 'success',
                 message: '添加成功!'
               });
-              this.template='';
-              this.freight='';
-              this.full='';
-              this.tableData=[];
-              this.freeShipping='';
+              this.template = '';
+              this.freight = '';
+              this.full = '';
+              this.tableData = [];
+              this.freeShipping = '';
               $(".add_template").hide();
               $(".mask").hide();
               this.getList()
@@ -318,9 +240,14 @@
         });
       },
       DisplayBlock() {
-        $('.mask').css('display', 'block');
-        $('.add_template').css('display', 'block');
+        this.$router.push('/addFreight');
 
+//        $('.mask').css('display', 'block');
+//        $('.add_template').css('display', 'block');
+//        this.template = '';
+//        this.freight = '';
+//        this.tableData = [];
+//        this.full = ''
       },
 
       DisplayNone: function () {
@@ -370,9 +297,9 @@
               let arr = [];
               let num = 0;
               for (let i = 0; i < data.length; i++) {
-                if(data[i].region){
+                if (data[i].region) {
                   data[i].region = '除' + data[i].region + '之外所有地区'
-                }else {
+                } else {
                   data[i].region = '所有地区'
                 }
                 if (data[i].freeShipping == 0) {
@@ -391,30 +318,8 @@
         );
       },
       //修改运费模板
-      Updata() {
-
-        let url = http.apiMap.updataFreight;
-        let data = {
-          common: this.GLOBAL.common,
-          id: this.id,
-          template: this.template,
-          freight: this.freight,
-          full: this.full,
-          freeShipping: this.freeShipping,
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              this.$message({
-                type: 'success',
-                message: '修改成功!'
-              });
-              this.DisplayNone3();
-              this.getList()
-            }
-
-          }
-        );
+      updataf(row) {
+        this.$router.push('/updataFreight/' + row.id);
       },
       change() {
         if ($("#orderState :selected").attr('value') == '1') {
