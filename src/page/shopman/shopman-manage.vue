@@ -151,7 +151,7 @@
         <el-button type="primary" @click="addShopman">添加</el-button>
       </div>
     </div>
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -305,9 +305,14 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.count11=res.body.data.count
+              this.count11=res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               //店主级别
-              let data1 = res.body.data.userVoList
+              let data1 = res.body.data.userVoList;
               let arr = [];
               for (let i = 0; i < data1.length; i++) {
                 if (data1[i].level == 1) {
@@ -349,7 +354,12 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.userVO
-              this.count11=res.body.data.count
+              this.count11=res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               //店主级别
               let arr = [];
               for (let i = 0; i < data.length; i++) {
@@ -370,7 +380,6 @@
       },
 
       addShopman() {
-        console.log(this.imgFiles)
         let url = http.apiMap.addShopman;
         let formData = new FormData();
         formData.append('common', 1)

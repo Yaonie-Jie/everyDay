@@ -18,7 +18,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8888,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // 地址映射表，可以通过设置将复杂的url简化，还可以解决跨域问题

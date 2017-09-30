@@ -40,12 +40,13 @@
           </el-table>
         </div>
 
-        <div class="block">
+        <div class="block fenye">
           <el-pagination
-            layout="prev, pager, next"
-            :total="SumPage"
             @current-change="handleCurrentChange"
-          >
+            :current-page.sync="currentPage"
+            :page-size="10"
+            layout="prev, pager, next, jumper"
+            :total="count11">
           </el-pagination>
         </div>
       </div>
@@ -95,7 +96,7 @@
         <div class="assign_checkbox">
           <ul>
             <li v-for="item in jurData" class="lis">
-              <input type="checkbox" class="check checkAll" :value="item.id" >
+              <input type="checkbox" class="check checkAll" :value="item.id">
               <span class="roleValue">{{item.name}}</span>
               <ul style="padding-left:30px;">
                 <li v-for="list in item.data" class="listLi">
@@ -129,15 +130,14 @@
         AddRoleUrl: this.GLOBAL.baseUrl + 'role/addRole',
         getJurListUrl: this.GLOBAL.baseUrl + 'authority/findAuthorityByRoleId',
         ChangeRoleUrl: this.GLOBAL.baseUrl + 'role/saveAuthority',
-        currentChange: 1,
-        SumPage: '',
+        count11: 1,
         AddName: '',
         AddID: '',
         AddValue: '',
         ChangeID: '',
         ChangeValue: '',
         RoleID: '',
-//        AllList:[]
+        currentPage: 1,
       }
     },
     created: function () {
@@ -148,16 +148,18 @@
       //获取列表信息
       getTable() {
         var tableList = [];
-        var sumPage;
         $.ajax({
           type: 'POST',
-          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentChange},
+          data: {'common': this.GLOBAL.common, 'size': 10, 'nowpage': this.currentPage},
           async: false,
           url: this.TableDataUrl,
           success: function (data) {
             if (data.result) {
               tableList = data.data.list;
-              sumPage = data.data.count;
+              this.count11 = data.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              }
             } else {
               this.$message({
                 type: 'error',
@@ -167,11 +169,10 @@
           }
         })
         this.tableData = tableList;
-        this.SumPage = sumPage;
       },
       //分页
       handleCurrentChange(val) {
-        this.currentChange = val;
+        this.currentPage = val;
         this.getTable()
       },
       //获取权限列表
@@ -365,14 +366,14 @@
             if (data.result) {
               var list = data.data.authorityList;
               var IdList = [];
-              let arr=[];
+              let arr = [];
               for (var i = 0; i < list.length; i++) {
                 IdList.push(list[i].id)
               }
               $(".check").each(function () {
                 for (var j = 0; j < IdList.length; j++) {
                   if ($(this).val() == IdList[j]) {
-                    $(this).attr('checked',true)
+                    $(this).attr('checked', true)
                   }
                 }
               })
@@ -423,7 +424,7 @@
               that.ChangeID = '';
               that.ChangeValue = '';
               that.$message({
-                type: 'error',
+                type: 'warning',
                 message: '修改失败'
               });
             }
@@ -431,7 +432,7 @@
           },
           error: function () {
             that.$message({
-              type: 'error',
+              type: 'warning',
               message: '修改失败'
             });
           }

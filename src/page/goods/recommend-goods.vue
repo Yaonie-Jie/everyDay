@@ -7,8 +7,8 @@
       </el-breadcrumb>
       <div class="titlee" style="border:none;">系统推荐列表</div>
       <div style="margin-bottom: 20px;padding-bottom: 20px">
-        <el-button type="success"  @click="addOneShow">添加到商品详情</el-button>
-        <el-button type="success"  @click="addTwoShow">添加到图文详情</el-button>
+        <el-button type="success" @click="addOneShow">添加banner</el-button>
+        <!--<el-button type="success" @click="addTwoShow">添加到人气爆款</el-button>-->
       </div>
       <div class="boxx" style="max-width:880px;margin:0 auto;">
         <el-table
@@ -36,9 +36,11 @@
             label="操作">
             <template scope="scope">
               <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>
-              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移</el-button>
+              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移
+              </el-button>
               <el-button type="text" size="small" @click=Top(scope.row) v-if="scope.row.num!=1">置顶</el-button>
-              <el-button type="text" size="small" @click="removeBottom(scope.row)" v-if="scope.row.num!=DataLength">置底</el-button>
+              <el-button type="text" size="small" @click="removeBottom(scope.row)" v-if="scope.row.num!=DataLength">置底
+              </el-button>
               <el-button type="text" size="small" @click="updataALl(scope.row)">修改</el-button>
               <el-button type="text" size="small" @click="Delete(scope.row)">删除</el-button>
             </template>
@@ -47,7 +49,7 @@
       </div>
       <el-row>
         <el-col :span="24">
-          <span style="padding-right: 20px">设置系统推荐页最多展示数量：</span>
+          <span style="padding-right: 20px">设置banner最多展示数量：</span>
           <el-input type="text" style="width: 10%"
                     v-model="pAmount"></el-input>
           <el-button type="primary" @click="updatapopAmount">确定</el-button>
@@ -153,7 +155,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="height: 50px;">
+      <div class="block fenye" style="height: 50px;">
         <el-pagination
           @current-change="handleCurrentChange22"
           :current-page.sync="currentPage22"
@@ -188,7 +190,6 @@
     data() {
       return {
         tableData: [],
-        count11: 1,
         count22: 1,
         currentPage: 1,
         currentPage22: 1,
@@ -207,8 +208,8 @@
 
         content: '',
         editorOption: {},
-        DataLength:'',
-        pAmount:''
+        DataLength: '',
+        pAmount: ''
       }
     },
     created: function () {
@@ -230,9 +231,9 @@
               let num = 0;
               for (let i = 0; i < data.length; i++) {
                 if (data[i].mode == 1) {
-                  data[i].mode = '图文推荐'
+                  data[i].mode = '人气爆款'
                 } else {
-                  data[i].mode = '商品推荐'
+                  data[i].mode = 'banner推荐'
                 }
                 num += 1;
                 data[i].num = num;
@@ -275,7 +276,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemRecommend;
         this.$http.post(url, data).then(
@@ -300,7 +301,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number': FrontNumber }, {'id': FrontID, 'number':  nowNumber}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': 1};
         let url = http.apiMap.moveSystemRecommend;
         this.$http.post(url, data).then(
@@ -328,7 +329,7 @@
                   message: '删除成功'
                 });
                 this.findProList();
-              }else {
+              } else {
                 this.$message({
                   type: 'error',
                   message: '已取消删除'
@@ -363,7 +364,7 @@
 
 
       addOneShow() {
-        this.currentPage22=1
+        this.currentPage22 = 1
         $(".leftshow").show();
         $(".mask").show();
       },
@@ -372,7 +373,7 @@
         $(".mask").hide();
       },
       addTwoShow() {
-        this.currentPage22=1
+        this.currentPage22 = 1
         $(".rightshow").show();
         $(".mask").show();
       },
@@ -439,7 +440,7 @@
                 type: 'success',
                 message: '修改成功!'
               });
-            }else {
+            } else {
               this.$message({
                 type: 'error',
                 message: '修改失败'
@@ -573,7 +574,7 @@
       },
       //修改商品推荐
       updataALl(row) {
-        if (row.mode == '商品推荐') {
+        if (row.mode == 'banner推荐') {
           this.$router.push('/updatashopxi/' + row.id);
         } else {
           this.$router.push('/updatashopxipic/' + row.id);
@@ -615,6 +616,11 @@
           function (res) {
             if (res.body.result) {
               this.count22 = res.body.data.count;
+              if (this.count22 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               this.selectData = res.body.data.productList
             }
           }
@@ -636,6 +642,11 @@
           function (res) {
             if (res.body.result) {
               this.count22 = res.body.data.count;
+              if (this.count22 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               this.selectData = res.body.data.productList
             }
           }
@@ -761,10 +772,12 @@
   .leftshow {
     display: none;
   }
-  .editer{
-    width:500px;
+
+  .editer {
+    width: 500px;
     margin-bottom: 40px;
   }
+
   .popup {
     height: 500px;
   }

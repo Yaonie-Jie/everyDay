@@ -13,7 +13,7 @@
       </div>
       <div class="top" style="margin-top: 100px;font-size: 20px">
         <div class="boxleft" style="text-align: center;height: 30px;line-height: 30px">一级分类</div>
-        <div class="boxright" style="text-align: center;height: 30px;line-height: 30px">二级分类</div>
+        <div class="boxright" style="text-align: center;height: 30px;line-height: 30px;width: 55%;">二级分类</div>
       </div>
       <ul class="boxx">
         <li class="shows" v-for="item in tableData">
@@ -664,7 +664,7 @@
   }
 
   .boxright {
-    width: 58%;
+    width: 95%;
     float: left;
   }
 

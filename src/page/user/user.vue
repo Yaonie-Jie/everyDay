@@ -5,9 +5,8 @@
         登录信息
       </div>
       <ul>
-        <li>用户名：<span v-text="accounts.account"></span></li>
+        <li>用户名：<span v-text="acc"></span></li>
         <li>上次登录时间：<span v-text="accounts.loginTime"></span></li>
-        <li>上次登录地址：<span v-text="accounts.loginAddr"></span></li>
         <li>ip地址：<span v-text="accounts.loginIp"></span></li>
       </ul>
     </div>
@@ -18,13 +17,18 @@
     data(){
       return{
         accounts:{},
-        getAccount:this.GLOBAL.baseUrl+'account/findNewsByAccount'
+        getAccount:this.GLOBAL.baseUrl+'account/findNewsByAccount',
+        acc:''
       }
     },
     created: function(){
+      this.getaccount()
       this.getAccounts()
     },
     methods: {
+      getaccount() {
+        this.acc = sessionStorage.getItem('account')
+      },
       getAccounts: function () {
         var account = {};
         $.ajax({

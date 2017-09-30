@@ -46,23 +46,27 @@
             label="用户账号">
           </el-table-column>
           <el-table-column
-            prop="incomeMoney"
             label="金额变化">
+            <template scope="scope">
+              <span type="text">{{scope.row.incomeMoney / 100}}</span>
+            </template>
           </el-table-column>
           <el-table-column
-            prop="balance"
             label="后台余额">
+            <template scope="scope">
+              <span type="text">{{scope.row.balance / 100}}</span>
+            </template>
           </el-table-column>
         </el-table>
       </div>
 
       <div class="current_balance">
-        当前后台余额:￥<span>{{OutMoney}}</span>
+        当前后台余额:￥<span>{{OutMoney / 100}}</span>
       </div>
     </div>
 
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -106,24 +110,21 @@
             if (res.body.result) {
               this.count11 = res.body.data.count
               this.OutMoney = res.body.data.sumInFinance
-
               //发生原因
               let data = res.body.data.list
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
-                  data[i].reason = '付款'
+                  data[i].reason = '订单' + data[i].orderNum + '付款'
                 }
-                if (data[i].incomeMent == 0) {
+                if (data[i].incomeMent == 1) {
                   data[i].incomeMent = '支付宝'
-                } else if (data[i].incomeMent == 1) {
+                } else if (data[i].incomeMent == 0) {
                   data[i].incomeMent = '微信'
                 }
                 arr.push(data[i])
               }
               this.tableData = arr
-
-
 
 
             }
@@ -163,7 +164,11 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              }else {
+                $(".fenye").show()
+              }
               //发生原因
               let data = res.body.data.list
               let arr = [];
@@ -196,7 +201,7 @@
   }
 
   .accounted_for_form {
-    width: 80%;
+    width: 100%;
   }
 
   .current_balance {

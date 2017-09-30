@@ -54,18 +54,18 @@
             prop="outMoney"
             label="出账金额">
             <template scope="scope">
-              <span type="text" >{{scope.row.outMoney/100}}</span>
+              <span type="text">{{scope.row.outMoney / 100}}</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
 
       <div class="accumulated_account">
-        当前后台余额:￥<span>{{OutMoney/100}}</span>
+        当前后台余额:￥<span>{{OutMoney / 100}}</span>
       </div>
     </div>
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -114,19 +114,24 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               this.OutMoney = res.body.data.sumInFinance
               //出账原因
               let data = res.body.data.list
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
-                  data[i].reason = '退款'
+                  data[i].reason = '订单' + data[i].orderNum + '退款'
                 } else if (data[i].reason == 2) {
-                  data[i].reason = '提现'
+                  data[i].reason = '用户' + data[i].userAccount + '提现'
                 }
                 if (data[i].outMent == 1) {
                   data[i].outMent = '支付宝'
-                } else if (data[i].outMent == 2) {
+                } else if (data[i].outMent == 0) {
                   data[i].outMent = '微信'
                 }
                 arr.push(data[i])
@@ -172,8 +177,11 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-              //let data = res.body.data.list;
-//              this.tableData = data;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
 
               //出账原因
               let data = res.body.data.list
@@ -194,7 +202,6 @@
               this.tableData = arr;
 
 
-
             }
           }
         );
@@ -202,7 +209,7 @@
     }
   }
 </script>
-<style >
+<style>
   .operation_time {
     width: 80%;
     margin: 30px 0 30px 10%;
@@ -242,10 +249,12 @@
     font-weight: bold;
     color: #000000;
   }
-  .el-button{
+
+  .el-button {
     margin: 0 !important;
   }
-  #orderState{
+
+  #orderState {
     margin-right: 20px;
-   }
+  }
 </style>

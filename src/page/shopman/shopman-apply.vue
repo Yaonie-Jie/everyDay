@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -119,8 +119,12 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              //this.tableData = res.body.data.oav
-
+              this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data1 = res.body.data.oav;
               let arr = [];
               for (var i = 0; i < data1.length; i++) {
@@ -135,7 +139,6 @@
                 }
                 arr.push(data1[i])
               }
-              console.log(arr)
               this.tableData = arr;
             }
           }
@@ -172,7 +175,12 @@
         this.$http.post(searchurl, searchdata).then(
           function (res) {
             if (res.body.result) {
-
+              this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               data = res.body.data.list;
               //判断级别
               let arr = [];

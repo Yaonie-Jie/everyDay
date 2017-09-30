@@ -9,10 +9,10 @@
     <div class="header">
 
       <select id="orderState" class="chosetime" style="margin-left:10%;" v-model="choseba">
-        <!--<option>请选择版本</option>-->
-        <option value="1">版本1.0.1</option>
-        <option value="2">版本1.0.2</option>
-        <option value="3">版本1.0.3</option>
+        <option value="">请选择版本</option>
+        <option value="1">版本1.0</option>
+        <!--<option value="2">版本1.0.2</option>-->
+        <!--<option value="3">版本1.0.3</option>-->
       </select>
 
       <div class="block chosetime">
@@ -42,15 +42,15 @@
       </div>
     </div>
 
-  <div class="block">
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage"
-      :page-size="10"
-      layout="prev, pager, next, jumper"
-      :total="count11">
-    </el-pagination>
-  </div>
+    <div class="block fenye">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
 
 
   </div>
@@ -61,43 +61,45 @@
 
   export default{
     data(){
-      return{
+      return {
         currentPage: 1,
         count11: 1,
         time: '',  //时间搜索
         startTime: '',
         endTime: '',
-        feedbackList:[],
-        choseba:'',
+        feedbackList: [],
+        choseba: '',
       }
     },
     created(){
       this.createdList()
     },
-    methods:{
+    methods: {
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
         this.createdList()
       },
       createdList(){
-        let url=http.apiMap.findFeed
-        let data={
+        let url = http.apiMap.findFeed
+        let data = {
           nowpage: this.currentPage,
           size: 10,
-          common:1
+          common: 1
         };
-        this.$http.post(url,data).then(
-          function(res){
-            if(res.body.result){
-              this.count11 = res.body.data.count
-
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              }
 
               let data = res.body.data.feedbackList;
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].version == 1) {
-                  data[i].version = '版本1.0.1'
+                  data[i].version = '版本1.0'
                 } else if (data[i].version == 2) {
                   data[i].version = '版本1.0.2'
                 } else if (data[i].version == 3) {
@@ -106,7 +108,6 @@
                 arr.push(data[i])
                 this.feedbackList = arr;
               }
-
 
 
             }
@@ -128,6 +129,7 @@
             return ''
           }
         }
+
         let url = http.apiMap.findFeedback;
         let data = {
           common: 1,
@@ -135,26 +137,30 @@
           nowpage: this.currentPage,
           startTime: FormatDate(this.time[0]),
           endTime: FormatDate(this.time[1]),
-          version:this.choseba
+          version: this.choseba
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
-
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              }else {
+                $(".fenye").show()
+              }
               let data = res.body.data.feedbackList;
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].version == 1) {
-                  data[i].version = '版本1.0.1'
+                  data[i].version = '版本1.0'
                 } else if (data[i].version == 2) {
                   data[i].version = '版本1.0.2'
                 } else if (data[i].version == 3) {
                   data[i].version = '版本1.0.3'
                 }
                 arr.push(data[i])
-             this.feedbackList = arr;
               }
+              this.feedbackList = arr;
             }
           }
         );
@@ -165,40 +171,47 @@
 </script>
 
 <style>
-  .chosetime{
-    float:left;
-    margin-left:10%;
-    margin-top:20px;
+  .chosetime {
+    float: left;
+    margin-left: 10%;
+    margin-top: 20px;
   }
-  h3{
-    line-height:30px;
+
+  h3 {
+    line-height: 30px;
   }
-  hr{
-    color:#aaa;
-    margin-bottom:10px;
+
+  hr {
+    color: #aaa;
+    margin-bottom: 10px;
   }
-  .usertext{
-    height:40px;
-    width:100%;
+
+  .usertext {
+    height: 40px;
+    width: 100%;
   }
-  .textleft{
-    float:left;
-    font-size:16px;
-    line-height:30px;
-    text-align:left;
+
+  .textleft {
+    float: left;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: left;
   }
-  .textright{
-    float:right;
-    color:#aaa;
-    font-size:14px;
+
+  .textright {
+    float: right;
+    color: #aaa;
+    font-size: 14px;
   }
-  .useradvice{
-    width:100%;
-    height:30px;
-    font-size:14px;
-    color:#888;
+
+  .useradvice {
+    width: 100%;
+    height: 30px;
+    font-size: 14px;
+    color: #888;
   }
-  .advice{
-    height:100px;
+
+  .advice {
+    height: 100px;
   }
 </style>

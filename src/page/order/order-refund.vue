@@ -19,7 +19,7 @@
             审核状态：
             <select name="" v-model="refundState">
               <option value="">全部</option>
-              <option value="1">退款中</option>
+              <option value="1,3">退款中</option>
               <option value="2">退款驳回</option>
               <option value="3">退款同意</option>
             </select>
@@ -47,8 +47,9 @@
                         alt="">
                     </div>
                     <div class="shopMessage">
-                      <p>{{list.proName}}</p>
-                      <p>{{list.parameters}}</p>
+                      <p>商品名称：{{list.proName}}</p>
+                      <p>商品条码：{{list.proCode}}</p>
+                      <p>商品规格：{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
                       <p>商品单价：<span>{{list.unitPrice / 100}}</span></p>
@@ -63,17 +64,24 @@
                     <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
                   </div>
                   <div class="right">
-                    <el-button type="danger" v-show="i.refundType==0">退款中&nbsp;&nbsp;&nbsp;退款类型：仅退款</el-button>
-                    <el-button type="danger" v-show="i.refundType==1">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款</el-button>
+                    <el-button type="danger" v-show="i.refundType==0&&i.orderState==4">已退款&nbsp;&nbsp;&nbsp;退款类型：仅退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==1&&i.orderState==4">已退款&nbsp;&nbsp;&nbsp;退款类型：退货退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==0&&i.orderState!=4">退款中&nbsp;&nbsp;&nbsp;退款类型：仅退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==1&&i.orderState!=4">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款
+                    </el-button>
                   </div>
                 </div>
               </div>
               <div class="right AddPic">
                 <p>订单总额：<span>{{(i.price + i.freigh ) / 100}}</span></p>
-                <p>包含运费：<span>{{i.freigh / 100}}</span></p>
-                <el-button v-show="i.refundState == 1" @click="Reject(i)">审核驳回</el-button>
-                <el-button v-show="i.refundState == 1" @click="open3(i)">审核同意</el-button>
-                <el-button v-show="i.orderState != 4" @click="open4(i)">退款成功</el-button>
+                <p>运费：<span>{{i.freigh / 100}}</span></p>
+                <p>退款金额：<span>{{i.refundPrice / 100}}</span></p>
+                <el-button v-show="i.refundState == 1&&i.orderState!=4" @click="Reject(i)">审核驳回</el-button>
+                <el-button v-show="i.refundState == 1&&i.orderState!=4" @click="open3(i)">审核同意</el-button>
+                <el-button v-show="i.refundState == 3&&i.orderState!=4" @click="open4(i)">退款成功</el-button>
                 <el-button @click="shows(i)">订单详情</el-button>
               </div>
             </div>
@@ -102,7 +110,7 @@
       </div>
     </div>
     <div class="mask"></div>
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -165,14 +173,19 @@
           function (res) {
             if (res.body.result) {
               this.count = res.body.data.count;
+              if (this.count == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.orderList;
               for (let i = 0; i < data.length; i++) {
-                let num=0
+                let num = 0
                 for (let q = 0; q < data[i].orderProduct.length; q++) {
-                  num+=data[i].orderProduct[q].amount
+                  num += data[i].orderProduct[q].amount
 
                 }
-                data[i].num=num
+                data[i].num = num
               }
               this.dataList = data;
             }
@@ -198,14 +211,19 @@
                 message: '查询成功'
               });
               this.count = res.body.data.count;
+              if (this.count == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.orderList;
               for (let i = 0; i < data.length; i++) {
-                let num=0
+                let num = 0
                 for (let q = 0; q < data[i].orderProduct.length; q++) {
-                  num+=data[i].orderProduct[q].amount
+                  num += data[i].orderProduct[q].amount
 
                 }
-                data[i].num=num
+                data[i].num = num
               }
               this.dataList = data;
             }
@@ -253,10 +271,13 @@
         });
       },
       shows(i) {
-        console.log(i)
-        if(i.orderState == '4'){
+        if (i.orderState == '4') {
           this.$router.push('/OrderRefundShow/' + i.orderNum);
-        }else {
+        } else if (i.refundState == 1) {
+          this.$router.push('/OrderMoney/' + i.orderNum);
+        } else if (i.refundState == 2) {
+          this.$router.push('/OrderRefundShow/' + i.orderNum);
+        } else if (i.refundState == 3) {
           this.$router.push('/OrderMoney/' + i.orderNum);
         }
       },
@@ -292,10 +313,9 @@
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消驳回'
+            message: '已取消审核'
           });
         });
-
       },
       DisplayNone3() {
         $('.mask').css('display', 'none');
@@ -303,9 +323,10 @@
       },
       //点击退款成功
       open4(i) {
+          console.log(i)
         $(".deliver_goods").show();
         $(".mask").show();
-        this.orderNum = i.orderNum
+        this.orderNum = i.orderNum;
         let url = http.apiMap.gettuikuan;
         let data = {
           orderNum: this.orderNum,

@@ -19,8 +19,8 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
+                <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，订单总额：￥<span
                   class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
@@ -58,9 +58,9 @@
                       <p>{{i.parameters}}</p>
                     </div>
                     <div class="shopPic">
-                      <p>商品单价：<span>{{i.unitPrice/100}}</span></p>
+                      <p>商品单价：<span>{{i.unitPrice / 100}}</span></p>
                       <p>购买数量：X<span>{{i.amount}}</span></p>
-                      <p>总价：<span>{{i.amount * i.unitPrice/100}}</span></p>
+                      <p>总价：<span>{{i.amount * i.unitPrice / 100}}</span></p>
                     </div>
                   </li>
                 </ul>
@@ -70,7 +70,7 @@
               <div class="right">
                 <el-button v-show="listData.refundState == 1" @click="Reject">审核驳回</el-button>
                 <el-button v-show="listData.refundState == 1" @click="open3">审核同意</el-button>
-                <el-button v-show="listData.refundState !=4" @click="open4">退款成功</el-button>
+                <el-button v-show="listData.refundState == 3&&listData.orderState!=4" @click="open4">退款成功</el-button>
 
               </div>
             </div>
@@ -86,25 +86,25 @@
               <li class="marginTopLeft">申请退款时间：<span>{{tui.createOn}}</span></li>
               <li class="marginTopLeft" v-show="tui.type == 0">退款类型：仅退款</li>
               <li class="marginTopLeft" v-show="tui.type == 1">退款类型：退货退款</li>
-              <li class="marginTopLeft">退款金额：{{tui.price}}</li>
+              <li class="marginTopLeft">退款金额：{{tui.price / 100}}</li>
               <li class="marginTopLeft">用户备注：{{tui.remarks}}</li>
-              <li class="marginTopLeft" >用户支付账号：{{pay.income_account}}</li>
+              <li class="marginTopLeft">用户支付账号：{{pay.payAccount}}</li>
             </ul>
 
           </div>
           <!--<div class="TopTitle NoPadding NoBorderBottom">-->
-            <!--<ul class="left width100">-->
-              <!--<div class="titlee">退款记录</div>-->
-              <!--<ul style="overflow: auto;">-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-                <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-              <!--</ul>-->
+          <!--<ul class="left width100">-->
+          <!--<div class="titlee">退款记录</div>-->
+          <!--<ul style="overflow: auto;">-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
+          <!--</ul>-->
 
-            <!--</ul>-->
+          <!--</ul>-->
           <!--</div>-->
         </div>
       </div>
@@ -203,9 +203,10 @@
       return {
         orderNum: '',    //订单号
         listData: '',
-        outAccount:'',
-        msg:'',
-        tui:'',
+        outAccount: '',
+        msg: '',
+        tui: '',
+        pay: ''
       }
     },
     created() {
@@ -238,8 +239,8 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
-              this.tui=res.body.data.refund;
-              this.pay=res.body.data.outfinance;
+              this.tui = res.body.data.refund;
+              this.pay = res.body.data.infinance;
               this.listData = data
 
             }
@@ -278,7 +279,7 @@
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消驳回'
+            message: '已取消审核'
           });
         });
 

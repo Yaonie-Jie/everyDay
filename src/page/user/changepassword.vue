@@ -9,16 +9,18 @@
           <el-form-item label="当前密码:" prop="nowpass">
             <el-input v-model="ruleForm2.nowpass" placeholder="请输入原密码" type="password"></el-input>
           </el-form-item>
-          <el-form-item label="密码:" prop="pass">
+          <el-form-item label="新密码:" prop="pass">
             <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="请输入修改后的密码"></el-input>
           </el-form-item>
-          <el-form-item label="确认密码:" prop="checkPass">
+          <el-form-item label="确认新密码:" prop="checkPass">
             <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"
                       placeholder="确保两次输入的密码一致"></el-input>
           </el-form-item>
+
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-            <el-button @click="resetForm('ruleForm2')" class="right" style="margin-right: 50px;">重置</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm2')" style="float: none;margin: 0 !important;">提交
+            </el-button>
+            <el-button @click="resetForm('ruleForm2')" style="float: none;margin: 0 !important;">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -92,7 +94,7 @@
               'oldPassword': this.ruleForm2.nowpass,
               'newPassword': this.ruleForm2.pass,
               'common': this.GLOBAL.common,
-              'account': 'admin'
+              'account': sessionStorage.getItem('account')
             }
             var that = this;
             $.ajax({
@@ -104,8 +106,9 @@
                   that.ruleForm2.pass = '';
                   that.ruleForm2.nowpass = '';
                   that.ruleForm2.checkPass = '';
+                  sessionStorage.removeItem('account');
+                  that.$router.push('/login');
                 }
-                swal({title: '', text: data.msg})
               }
             })
           }

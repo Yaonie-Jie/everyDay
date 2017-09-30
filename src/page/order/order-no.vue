@@ -3,7 +3,6 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/OrderList' }">未付款订单</el-breadcrumb-item>
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -19,8 +18,8 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
+                <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，订单总额：￥<span
                   class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
@@ -160,7 +159,8 @@
       return {
         orderNum: '',    //订单号
         listData: '',
-        price: ''
+        price: '',
+        fight:'',
       }
     },
     created() {
@@ -207,7 +207,8 @@
       },
       DisplayBlock(i) {
         this.orderNum = i.orderNum;
-        this.price = i.price / 100
+        this.price = (i.price + i.freigh) / 100;
+        this.fight = i.freigh / 100;
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -216,7 +217,7 @@
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
-          price: this.price * 100,
+          price: this.price * 100-this.fight*100,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(

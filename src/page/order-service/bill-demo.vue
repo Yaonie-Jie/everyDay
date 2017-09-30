@@ -28,8 +28,10 @@
               label="模板名称">
             </el-table-column>
             <el-table-column
-              prop="freight"
               label="默认运费">
+              <template scope="scope">
+                <span>{{scope.row.freight / 100}}</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="region"
@@ -105,7 +107,15 @@
       </div>
     </div>
 
-
+    <div class="block fenye">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="count11">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -128,12 +138,19 @@
         inputVisible: false,
         inputValue: '',
         freights: '',
+        count11: 1,
+        currentPage: 1.
       }
     },
     created() {
       this.getList()
     },
     methods: {
+      //分页跳转
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.getList()
+      },
       adddiqu() {
         let data = {
           region: this.dynamicTags.join(','),
@@ -286,13 +303,19 @@
       getList() {
         let url = http.apiMap.freightList;
         let data = {
-          nowpage: 1,
+          nowpage: this.currentPage,
           size: 10,
-          common: this.GLOBAL.common
+          common: 1
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              }else {
+                $(".fenye").show()
+              }
               let data = res.body.data.list;
               let arr = [];
               let num = 0;

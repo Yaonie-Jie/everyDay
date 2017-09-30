@@ -206,7 +206,7 @@ export default [
         path: '/addFreight', component: addFreight,
       },
       {
-        path: '/updataFreight', component: updataFreight,
+        path: '/updataFreight/:id', component: updataFreight,
       },
       {
         path: '/FreightManage', component: FreightManage,

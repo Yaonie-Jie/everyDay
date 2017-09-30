@@ -20,7 +20,8 @@
         <el-col :span="24" style="margin-top: 20px">
           <div class="template_names">
             <div class="template_left">默认运费：</div>
-            <el-input v-model="freight" style="width:30%;"></el-input>元
+            <el-input v-model="freight" style="width:30%;"></el-input>
+            元
           </div>
         </el-col>
         <el-col :span="24" style="margin-top: 20px">
@@ -52,42 +53,43 @@
           <div class="template_names">
             <div class="template_left">非默认运费地区：</div>
             <div id="addFilg">
-              <div v-for="data in datas">
+              <div v-for="data in datas" style="position: relative;">
                 <!--遍历父的-->
                 <input type="checkbox" :id="data.listTitle" value="" :checked="isTitleChecked(data)"
                        @change="changeTitleChecked(data,$event)"
 
                 />{{data.listTitle}}
-
-                <div class="er" v-for="item in data.listItem">
-                  <!--遍历子的-->
-                  <input
-                    type="checkbox"
-                    :value="item"
-                    v-model="data.selected"
-                  />
-                  {{item.name}}
+                <div class="child">
+                  <div class="er" v-for="item in data.listItem">
+                    <!--遍历子的-->
+                    <input
+                      type="checkbox"
+                      :value="item"
+                      v-model="data.selected"
+                    />
+                    {{item.name}}
+                  </div>
                 </div>
+                <i class="la el-icon-caret-right" @click="changeNo($event)"></i>
+
               </div>
             </div>
 
-            <div id="quanxuan">
-              <input id="all-checked"
-                     type="checkbox"
-                     :checked="isAllChecked()"
-                     @change="changeAllChecked($event)"
-              />
-              <span>全选</span>
-            </div>
+            <!--<div id="quanxuan">-->
+            <!--<input id="all-checked"-->
+            <!--type="checkbox"-->
+            <!--:checked="isAllChecked()"-->
+            <!--@change="changeAllChecked($event)"-->
+            <!--/>-->
+            <!--<span>全选</span>-->
+            <!--</div>-->
           </div>
         </el-col>
       </el-row>
       <div style="margin-top: 30px">
-        <el-button type="primary" @click="adddiqu" >添加</el-button>
+        <el-button type="primary" @click="adddiqu">添加</el-button>
       </div>
     </div>
-
-
   </div>
 </template>
 <script>
@@ -515,12 +517,14 @@
               "name": "伊犁哈萨克自治州",
               "code": "654000"
             }, {"name": "塔城地区", "code": "654200"}, {"name": "阿勒泰地区", "code": "654300"}]
-          }]
+          }],
+
       }
     },
     created() {
 
     },
+
     methods: {
       isTitleChecked: function (data) {
         var _selected = data.selected;
@@ -557,7 +561,16 @@
           })
         }
       },
-
+      changeNo(event){
+        $(event.target).prev().toggle();
+        if ($(event.target).prev().css('display') == 'block') {
+          $(event.target).addClass('el-icon-caret-bottom')
+          $(event.target).removeClass('el-icon-caret-right')
+        }else {
+          $(event.target).removeClass('el-icon-caret-bottom')
+          $(event.target).addClass('el-icon-caret-right')
+        }
+      },
 
       adddiqu() {
         let arr = []
@@ -580,12 +593,12 @@
           let data = {
             common: 1,
             template: this.template,
-            freight: this.freight,
-            full: this.full,
+            freight: this.freight * 100,
+            full: this.full * 100,
             freeShipping: this.freeShipping,
             freightNodefaults: JSON.stringify([{
               region: arr.join(','),
-              freight: this.fre,
+              freight: this.fre * 100,
             }])
           };
           this.$http.post(url, data).then(
@@ -609,8 +622,8 @@
 
       },
 
-    },
 
+    },
   }
 
 </script>
@@ -645,5 +658,42 @@
     .er {
       margin-left: 20px;
     }
+  }
+
+  .iconClassRoot {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background: url("../images/ztree/root.png") no-repeat center/100% auto;
+  }
+
+  .iconClassNode {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background: url("../images/ztree/node.png") no-repeat center/100% auto;
+  }
+
+  .operate {
+    display: flex;
+  }
+
+  .operate ul > li {
+
+    float: left;
+    margin: 10px 10px;
+    list-style-type: none;
+  }
+
+  .child {
+    display: none;
+  }
+
+  .la {
+
+    display: block;
+    position: absolute;
+    left: -15px;
+    top: 3px;
   }
 </style>

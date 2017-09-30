@@ -57,7 +57,7 @@
     </div>
 
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -98,8 +98,12 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-
               this.count11 = res.body.data.count;
+              if(this.count11 == 0){
+                $(".fenye").hide()
+              }else {
+                $(".fenye").show()
+              }
               let data = res.body.data.ownerTeamManageList;
               let arr = [];
               for (let i = 0; i < data.length; i++) {

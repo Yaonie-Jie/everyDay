@@ -3,7 +3,7 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>未付款订单</el-breadcrumb-item>
+        <el-breadcrumb-item>订单列表</el-breadcrumb-item>
       </el-breadcrumb>
 
       <div class="apply_">
@@ -60,8 +60,9 @@
                         alt="">
                     </div>
                     <div class="shopMessage">
-                      <p>{{list.proName}}</p>
-                      <p>{{list.parameters}}</p>
+                      <p>商品名称：{{list.proName}}</p>
+                      <p>商品条码：{{list.proCode}}</p>
+                      <p>商品规格：{{list.parameters}}</p>
                     </div>
                     <div class="shopPic">
                       <p>商品单价：<span>{{list.unitPrice / 100}}</span></p>
@@ -71,18 +72,37 @@
                   </li>
                 </ul>
                 <div class="Pic">
-                  <p>共<span class="pink">{{i.num}}</span>件商品</p>
-                  <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
+                  <div class="left">
+                    <p>共<span class="pink">{{i.num}}</span>件商品</p>
+                    <p>商品总额：￥<span class="pink">{{i.price / 100}}</span></p>
+                  </div>
+                  <div class="right">
+                    <el-button type="danger" v-show="i.refundType==0&&i.orderState==4">已退款&nbsp;&nbsp;&nbsp;退款类型：仅退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==1&&i.orderState==4">已退款&nbsp;&nbsp;&nbsp;退款类型：退货退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==0&&i.orderState!=4">退款中&nbsp;&nbsp;&nbsp;退款类型：仅退款
+                    </el-button>
+                    <el-button type="danger" v-show="i.refundType==1&&i.orderState!=4">退款中&nbsp;&nbsp;&nbsp;退款类型：退货退款
+                    </el-button>
+                  </div>
                 </div>
               </div>
               <div class="right AddPic">
-                <p>订单总额：<span>{{i.price / 100}}</span></p>
-                <p>包含运费：<span>{{i.freigh / 100}}</span></p>
-                <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price)">改价</el-button>
-                <el-button v-show="i.orderState==1" @click="addExpress(i)">发货</el-button>
-                <el-button v-show="i.orderState==2||i.orderState==3||i.orderState==4" @click="showwuliu(i.orderNum)">查看物流</el-button>
-                <el-button v-show="i.orderState==0||i.orderState==1" @click="open2(i.orderNum)">取消订单</el-button>
-                <el-button @click="shows(i.orderNum,i.orderState)">订单详情</el-button>
+                <p>订单总额：<span>{{(i.price + i.freigh) / 100}}</span></p>
+                <p>运费：<span>{{i.freigh / 100}}</span></p>
+                <p v-show="i.refundState != 0">退款金额：<span>{{i.refundPrice / 100}}</span></p>
+
+                <el-button v-show="i.orderState==0" @click="DisplayBlock(i.orderNum,i.price,i.freigh)">改价</el-button>
+                <el-button v-show="i.orderState==1&&i.refundState == 0" @click="addExpress(i)">发货</el-button>
+                <el-button v-show="(i.orderState==2&&i.refundState==0)||i.orderState==3" @click="showwuliu(i.orderNum)">
+                  查看物流
+                </el-button>
+                <el-button v-show="i.orderState==0" @click="open2(i.orderNum)">取消订单</el-button>
+                <el-button v-show="i.refundState == 1&&i.orderState!=4" @click="Reject(i)">审核驳回</el-button>
+                <el-button v-show="i.refundState == 1&&i.orderState!=4" @click="open3(i)">审核同意</el-button>
+                <el-button v-show="i.refundState == 3&&i.orderState!=4" @click="open4(i)">退款成功</el-button>
+                <el-button @click="shows(i)">订单详情</el-button>
               </div>
             </div>
           </li>
@@ -137,7 +157,26 @@
         <el-button type="primary" @click="DisplayNone3" style="float:none;">取消</el-button>
       </div>
     </div>
-
+    <div class="deliver_tui popup" style="text-align: left">
+      <el-row>
+        <el-col :span="24" style="text-align: left">
+          <span style="padding-right: 50px">退款方式</span>
+          <span>{{msg.incomeMent}}</span>
+        </el-col>
+        <el-col :span="24" style="text-align: left;margin-top: 20px">
+          <span style="padding-right: 50px">用户账号</span>
+          <span>{{msg.payAccount}}</span>
+        </el-col>
+        <el-col :span="24" style="text-align: left;margin-top: 20px">
+          <span style="padding-right: 50px">退款账号</span>
+          <el-input style="width: 30%;" v-model="outAccount"></el-input>
+        </el-col>
+      </el-row>
+      <div class="deliver_goods_btns" style="text-align: center">
+        <el-button type="primary" @click="backMoney" style="float:none;">确定退款成功</el-button>
+        <el-button @click="Displaytui" style="float:none;">取消</el-button>
+      </div>
+    </div>
     <!--发货-->
     <div class="popup change_left">
       <div class="popup_title">发货</div>
@@ -152,7 +191,7 @@
           <div class="fahuo">
             <span style="padding-right: 20px">运单号：</span>
           </div>
-          <el-input type="text" style="width: 30%" v-model="ExpressNum"></el-input>
+          <el-input type="text" style="width: 30%" v-model="ExpressNum" @blur="qukong()"></el-input>
         </el-col>
         <el-col :span="24" style="margin-bottom: 20px">
           <div class="fahuo">
@@ -179,7 +218,7 @@
     <div class="mask"></div>
 
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -201,6 +240,7 @@
     data() {
       return {
         dataList: '',
+        fight: '',
         price: '',       //改价的订单价格
         orderNum: '',    //订单号
         time: '',         //选择时间搜索
@@ -222,7 +262,9 @@
         ExpressNum: '',
         phone: '',
         wuliu: '',
-        wuliuList: []
+        wuliuList: [],
+        msg: '',
+        outAccount: ""
       }
     },
     created() {
@@ -268,6 +310,7 @@
           }
         );
       },
+
       //发货选择框
       addExpress(i) {
         this.findExpressList();
@@ -278,6 +321,7 @@
       noneblock() {
         $(".change_left").hide();
         $(".mask").hide();
+        this.orderNum = '';
       },
       //发货
       addfa() {
@@ -298,6 +342,7 @@
                 type: 'success',
                 message: '发货成功!'
               });
+
               this.noneblock()
             } else {
               this.$message({
@@ -309,9 +354,10 @@
         );
       },
 
-      DisplayBlock(orderNum, price) {
+      DisplayBlock(orderNum, price, fight) {
         this.orderNum = orderNum;
-        this.price = price / 100
+        this.price = (price + fight) / 100;
+        this.fight = fight / 100;
         $('.mask').css('display', 'block');
         $('.change_price').css('display', 'block');
       },
@@ -323,24 +369,32 @@
         $('.mask').css('display', 'block');
         $('.deliver_goods').css('display', 'block');
       },
+      Displaytui(){
+        $('.mask').hide();
+        $('.deliver_tui').hide();
+      },
       DisplayNone3() {
         $('.mask').css('display', 'none');
         $('.deliver_goods').css('display', 'none');
       },
       //跳转详情页
-      shows(num, state) {
-        if (state == 0) {
-          this.$router.push('/OrderNo/' + num);
-        } else if (state == 1) {
-          this.$router.push('/OrderDeliver/' + num);
-        } else if (state == 2) {
-          this.$router.push('/OrderReceived/' + num);
-        } else if (state == 3) {
-          this.$router.push('/OrderEnd/' + num);
-        } else if (state == 4) {
-          this.$router.push('/OrderMoney/' + num);
-        } else if (state == 5) {
-          this.$router.push('/OrderMoneychao/' + num);
+      shows(i) {
+        if (i.orderState == 0) {
+          this.$router.push('/OrderNo/' + i.orderNum);
+        } else if (i.orderState == 1 && i.refundState == 3) {
+          this.$router.push('/OrderMoney/' + i.orderNum);
+        } else if (i.orderState == 1 && i.refundState == 1) {
+          this.$router.push('/OrderMoney/' + i.orderNum);
+        } else if (i.orderState == 1) {
+          this.$router.push('/OrderDeliver/' + i.orderNum);
+        } else if (i.orderState == 2) {
+          this.$router.push('/OrderReceived/' + i.orderNum);
+        } else if (i.orderState == 3) {
+          this.$router.push('/OrderEnd/' + i.orderNum);
+        } else if (i.orderState == 4) {
+          this.$router.push('/OrderRefundShow/' + i.orderNum);
+        } else if (i.orderState == 5) {
+          this.$router.push('/OrderMoneychao/' + i.orderNum);
         }
       },
       //取消订单
@@ -390,16 +444,153 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.orderList;
               for (let i = 0; i < data.length; i++) {
-                let num=0
+                let num = 0
                 for (let q = 0; q < data[i].orderProduct.length; q++) {
-                  num+=data[i].orderProduct[q].amount
+                  num += data[i].orderProduct[q].amount
                 }
-                data[i].num=num
+                data[i].num = num
               }
               this.dataList = data;
             }
+          }
+        );
+      },
+      //审核同意
+      open3(i) {
+        this.$confirm('审核同意, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: i.orderNum,
+            refundState: 1,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getList()
+                this.$message({
+                  type: 'success',
+                  message: '已审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消审核'
+          });
+        });
+      },
+      //审核驳回
+      Reject(i) {
+        this.$confirm('驳回退款？驳回后用户只能通过客服电话与我们联系!, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let url = http.apiMap.Reject;
+          let data = {
+            orderNum: i.orderNum,
+            refundState: 0,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.getList()
+                this.$message({
+                  type: 'success',
+                  message: '已驳回审核!'
+                });
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: res.body.msg
+                });
+              }
+            }
+          );
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消驳回'
+          });
+        });
+      },
+      //点击退款成功
+      open4(i) {
+        $(".deliver_tui").show();
+        $(".mask").show();
+        this.orderNum = i.orderNum;
+        let url = http.apiMap.gettuikuan;
+        let data = {
+          orderNum: this.orderNum,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let data = res.body.data.msg;
+              this.backincomeMent = data.incomeMent;
+              this.backincomeMent = data.incomeMent;
+
+              if (data.incomeMent == 1) {
+                data.incomeMent = '支付宝'
+              } else {
+                data.incomeMent = '微信'
+              }
+              this.msg = data
+            } else {
+              console.log('暂无物流信息')
+            }
+          }
+        );
+      },
+      //点击确认退款成功
+      backMoney() {
+        let url = http.apiMap.tuikuan;
+        let data = {
+          orderNum: this.orderNum,
+          outMent: this.backincomeMent,
+          incomeAccount: this.msg.payAccount,
+          outAccount: this.outAccount,
+          userAccount: this.msg.userAccount,
+          outMoney: this.msg.incomeMoney,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getList();
+              this.$message({
+                type: 'success',
+                message: '退款成功!'
+              });
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.body.msg
+              });
+            }
+            $(".deliver_tui").hide();
+            $(".mask").hide();
           }
         );
       },
@@ -408,7 +599,7 @@
         let url = http.apiMap.updataOrderNum;
         let data = {
           orderNum: this.orderNum,
-          price: this.price * 100,
+          price: this.price * 100 - this.fight * 100,
           common: this.GLOBAL.common
         };
         this.$http.post(url, data).then(
@@ -460,14 +651,19 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.orderList;
               for (let i = 0; i < data.length; i++) {
-                let num=0
+                let num = 0
                 for (let q = 0; q < data[i].orderProduct.length; q++) {
-                  num+=data[i].orderProduct[q].amount
+                  num += data[i].orderProduct[q].amount
 
                 }
-                data[i].num=num
+                data[i].num = num
               }
               this.dataList = data;
               this.$message({
@@ -477,6 +673,9 @@
             }
           }
         );
+      },
+      qukong(){
+        this.ExpressNum = this.ExpressNum.replace(/\s+/g, '')
       },
       //快递公司列表
       findExpressList() {

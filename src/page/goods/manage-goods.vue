@@ -14,13 +14,12 @@
         <div class="left">
           <i style="margin-top: 10px;">搜索</i>
           <select name="" class="select" id="oneType" @change="OneTypeListChange" v-model="oneTypeId">
-            <option value="">一级分类</option>
+            <option value="">全部</option>
             <option v-for="option in OneTypeList" v-bind:value="option.id">
               {{ option.name }}
             </option>
           </select>
           <select name="" class="select" id="TwoType" v-model="typeId">
-            <option value="">二级分类</option>
             <option v-for="option in TwoypeList" v-bind:value="option.id">
               {{ option.name }}
             </option>
@@ -28,6 +27,7 @@
         </div>
         <div class="right">
           <input placeholder="输入商品名称搜索" style="height:30px;" v-model="name"></input>
+          <input placeholder="输入商品条码搜索" style="height:30px;" v-model="proCode"></input>
           <el-button type="success" style="margin-top: 0px;!important;" @click="find">搜索</el-button>
         </div>
       </div>
@@ -45,6 +45,11 @@
             prop="name"
             :span="2"
             label="商品名称">
+          </el-table-column>
+          <el-table-column
+            prop="proCode"
+            :span="2"
+            label="商品条码">
           </el-table-column>
           <el-table-column
             prop="stock"
@@ -74,7 +79,7 @@
 
     <div class="mask"></div>
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -98,9 +103,11 @@
         dataList: [],
         OneTypeList: [],
         TwoypeList: [],
-        typeId: '-1',
+        typeId: '',
         name: '',
-        oneTypeId: ''
+        oneTypeId: '',
+        id: '',
+        proCode: ''
       }
     },
     created() {
@@ -207,21 +214,31 @@
       find() {
         let url = http.apiMap.findShop;
         if (this.oneTypeId == '') {
-
+          this.typeId = '-1'
         } else {
-          this.typeId = this.oneTypeId
+          if ($("#TwoType :selected").attr('value')) {
+            this.typeId = $("#TwoType :selected").attr('value')
+          } else {
+            this.typeId = this.oneTypeId
+          }
         }
         let data = {
           nowpage: this.currentPage,
           size: 10,
           name: this.name,
           typeId: this.typeId,
+          proCode: this.proCode,
           common: 1
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.productList;
               let arr = [];
               let num = 0;
@@ -231,6 +248,7 @@
                 arr.push(data[i])
               }
               this.dataList = arr;
+              this.id = ''
             }
           }
         );
@@ -246,6 +264,11 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.productList;
               let arr = [];
               let num = 0;

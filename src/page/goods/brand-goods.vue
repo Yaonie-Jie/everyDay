@@ -10,7 +10,11 @@
         <div class="titlee" style='border:0;'>
           商品品牌列表
         </div>
-        <el-button type="success" @click="add" class="right">添加商品品牌</el-button>
+        <el-button type="success" @click="add" class="left">添加商品品牌</el-button>
+        <div class="left" style="margin-left: 50px">
+          <input placeholder="输入商品名称搜索" style="height:30px;" v-model="titleName"></input>
+          <el-button type="success" style="margin-top: 0px;!important;" @click="find">搜索</el-button>
+        </div>
         <div class="brand_form">
           <el-table
             :data="tableData"
@@ -126,7 +130,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -171,12 +175,33 @@
         id: '',
         addimgUrl: '',
         imgFiles: '',
+        titleName: '',
       }
     },
     created: function () {
       this.getTable()//定义方法
     },
     methods: {
+      find(){
+        let url = http.apiMap.findBrand;
+        let data = {
+          name: this.titleName,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              let arr = res.body.data.productBrand;
+              this.tableData = [];
+              this.tableData.push(arr);
+              this.$message({
+                type: 'info',
+                message: '查询成功'
+              });
+            }
+          }
+        )
+      },
       postPhofs() {
         $(".postFilephofs").click()
       },
@@ -213,6 +238,11 @@
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.productBrandList;
               this.tableData = data
               this.DataLength = this.tableData[this.tableData.length - 1].number;
@@ -340,7 +370,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         var that = this;
         $.ajax({
@@ -411,9 +441,9 @@
                 });
                 that.getTable();
               } else {
-                this.$message({
-                  type: 'info',
-                  message: '删除失败!'
+                that.$message({
+                  type: 'error',
+                  message: data.msg
                 });
               }
             }

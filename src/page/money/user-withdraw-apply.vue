@@ -34,7 +34,7 @@
           <el-table-column
             label="结算金额">
             <template scope="scope">
-              <span>{{scope.row.money/100}}</span>
+              <span>{{scope.row.money / 100}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -55,7 +55,7 @@
 
     <div class="mask"></div>
     <div class="modifypass popup">
-      <el-row >
+      <el-row>
         <el-col :span="24" style="margin-top:20px;">
           <span style="float:left;margin-left:21%;">提现方式:</span>
           <select name="" id="orderState" v-model="orderState" style="width:50%;">
@@ -78,7 +78,7 @@
       </el-row>
     </div>
 
-    <div class="block">
+    <div class="block fenye">
       <el-pagination
         @current-change="handleCurrentChange"
         :current-page.sync="currentPage"
@@ -91,24 +91,27 @@
   </div>
 </template>
 <style>
-  .input_f{
-    width:80%;
-    height:30px;
-    font-size:16px;
+  .input_f {
+    width: 80%;
+    height: 30px;
+    font-size: 16px;
   }
-  .mask{
 
-    display:none;
+  .mask {
+
+    display: none;
   }
-  .modifypass{
-    display:none;
+
+  .modifypass {
+    display: none;
   }
-  .input_user{
-    width:80%;
-    height:30px;
-    font-size:16px;
-    line-height:30px;
-   text-align:left;
+
+  .input_user {
+    width: 80%;
+    height: 30px;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: left;
   }
 </style>
 
@@ -118,67 +121,67 @@
   export default{
     data() {
       return {
-        currentPage:1,
-        count11:1,
-        time:'',  //时间搜索
+        currentPage: 1,
+        count11: 1,
+        time: '',  //时间搜索
         tableData: [],
-        orderState:'1',
-        userzfb:'',
-        tkzfb:'',
-        id:'',
-        money:'',
-        userAccount:''
+        orderState: '1',
+        userzfb: '',
+        tkzfb: '',
+        id: '',
+        money: '',
+        userAccount: ''
       }
     },
     created(){
       this.getWithdrawals()
     },
-    methods:{
+    methods: {
       DispalyBlock(row){
-         this.id=row.id;
-         this.money=row.money;
-         this.userAccount=row.userAccount;
-        $('.mask').css('display','block');
-        $('.modifypass').css('display','block');
+        this.id = row.id;
+        this.money = row.money;
+        this.userAccount = row.userAccount;
+        $('.mask').css('display', 'block');
+        $('.modifypass').css('display', 'block');
       },
       DisplayNone(){
-        $('.mask').css('display','none');
-        $('.modifypass').css('display','none');
+        $('.mask').css('display', 'none');
+        $('.modifypass').css('display', 'none');
       },
       //提现成功
       successDra(row){
-           let url=http.apiMap.modifyPass;
-           let data={
-             common:1,
-             id:this.id,
-             outMent:this.orderState,//出账方式
-             outAccount:this.tkzfb,//出账账号
-             incomeAccount:this.userzfb,//收款账号
-             userAccount:this.userAccount,//用户账号
-             outMoney:this.money,//出账金额
-           };
+        let url = http.apiMap.modifyPass;
+        let data = {
+          common: 1,
+          id: this.id,
+          outMent: this.orderState,//出账方式
+          outAccount: this.tkzfb,//出账账号
+          incomeAccount: this.userzfb,//收款账号
+          userAccount: this.userAccount,//用户账号
+          outMoney: this.money,//出账金额
+        };
 
-           this.$http.post(url,data).then(
-             function(res){
-               if(res.body.result){
-                 this.$message({
-                   type: 'success',
-                   message: '提现成功!'
-                 });
-                 this.getWithdrawals()
-               }else{
-                 this.$message({
-                   type: 'info',
-                   message: res.body.msg
-                 });
-               }
-               $('.mask').css('display','none');
-               $('.modifypass').css('display','none');
-               this.orderState='';
-               this.tkzfb='';
-               this.userzfb='';
-             }
-           )
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'success',
+                message: '提现成功!'
+              });
+              this.getWithdrawals()
+            } else {
+              this.$message({
+                type: 'info',
+                message: res.body.msg
+              });
+            }
+            $('.mask').css('display', 'none');
+            $('.modifypass').css('display', 'none');
+            this.orderState = '';
+            this.tkzfb = '';
+            this.userzfb = '';
+          }
+        )
       },
 
       //提现驳回
@@ -188,12 +191,12 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let url =  http.apiMap.modifyReject;
+          let url = http.apiMap.modifyReject;
           let data = {
             common: 2,
-            id:row.id,
+            id: row.id,
           };
-          this.$http.post(url,data).then(
+          this.$http.post(url, data).then(
             function (res) {
               if (res.body.result) {
                 this.$message({
@@ -201,7 +204,7 @@
                   message: '驳回成功!'
                 });
                 this.getWithdrawals();
-              }else{
+              } else {
                 this.$message({
                   type: 'info',
                   message: res.body.msg
@@ -228,13 +231,18 @@
           nowpage: this.currentPage,
           size: 10,
           common: 2,
-          startTime:'',
-          endTime:''
+          startTime: '',
+          endTime: ''
         };
-        this.$http.post(url,data).then(
+        this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.count11 = res.body.data.count
+              this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               this.tableData = res.body.data.list
             }
           }
@@ -242,30 +250,37 @@
       },
       //搜索订单
       findOrder(){
-        var paddNum = function(num){    //如果是一位数就补一个0
+        var paddNum = function (num) {    //如果是一位数就补一个0
           num += "";
-          return num.replace(/^(\d)$/,"0$1");
+          return num.replace(/^(\d)$/, "0$1");
         }
-        function FormatDate (strTime) {
-          if(strTime){
+
+        function FormatDate(strTime) {
+          if (strTime) {
             var date = new Date(strTime);
-            return date.getFullYear()+"-"+paddNum(date.getMonth() + 1)+"-"+paddNum(date.getDate());
-          }else {
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
             return ''
           }
         }
+
         let url = http.apiMap.findWithdrawals;
         let data = {
           common: 1,
-          size:10,
-          nowpage:this.currentPage,
-          startTime:FormatDate(this.time[0]),
-          endTime:FormatDate(this.time[1]),
+          size: 10,
+          nowpage: this.currentPage,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               this.count11 = res.body.data.count;
+              if (this.count11 == 0) {
+                $(".fenye").hide()
+              } else {
+                $(".fenye").show()
+              }
               let data = res.body.data.list;
               this.tableData = data;
             }

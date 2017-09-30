@@ -52,33 +52,36 @@
           <div class="template_names">
             <div class="template_left">非默认运费地区：</div>
             <div id="addFilg">
-              <div v-for="data in datas">
+              <div v-for="data in datas" style="position: relative;" class="oneList">
                 <!--遍历父的-->
                 <input type="checkbox" :id="data.listTitle" value="" :checked="isTitleChecked(data)"
                        @change="changeTitleChecked(data,$event)"
 
-                />{{data.listTitle}}
-
-                <div class="er" v-for="item in data.listItem">
-                  <!--遍历子的-->
-                  <input
-                    type="checkbox"
-                    :value="item"
-                    v-model="data.selected"
-                  />
-                  {{item.name}}
+                /><span>{{data.listTitle}}</span>
+                <div class="child">
+                  <div class="er" v-for="item in data.listItem">
+                    <!--遍历子的-->
+                    <input
+                      type="checkbox"
+                      :value="item"
+                      v-model="data.selected"
+                    />
+                    {{item.name}}
+                  </div>
                 </div>
+                <i class="la el-icon-caret-right" @click="changeNo($event)"></i>
+
               </div>
             </div>
 
-            <div id="quanxuan">
-              <input id="all-checked"
-                     type="checkbox"
-                     :checked="isAllChecked()"
-                     @change="changeAllChecked($event)"
-              />
-              <span>全选</span>
-            </div>
+            <!--<div id="quanxuan">-->
+            <!--<input id="all-checked"-->
+            <!--type="checkbox"-->
+            <!--:checked="isAllChecked()"-->
+            <!--@change="changeAllChecked($event)"-->
+            <!--/>-->
+            <!--<span>全选</span>-->
+            <!--</div>-->
           </div>
         </el-col>
       </el-row>
@@ -595,7 +598,16 @@
       }
       ,
 
-
+      changeNo(event){
+        $(event.target).prev().toggle();
+        if ($(event.target).prev().css('display') == 'block') {
+          $(event.target).addClass('el-icon-caret-bottom')
+          $(event.target).removeClass('el-icon-caret-right')
+        } else {
+          $(event.target).removeClass('el-icon-caret-bottom')
+          $(event.target).addClass('el-icon-caret-right')
+        }
+      },
       adddiqu() {
         let arr = []
         for (let i = 0; i < this.datas.length; i++) {
@@ -605,7 +617,6 @@
             }
           }
         }
-        console.log(arr)
 
         if (this.template == '') {
           this.$message({
@@ -618,12 +629,12 @@
             common: 1,
             id: this.freId,
             template: this.template,
-            freight: this.freight,
-            full: this.full,
+            freight: this.freight * 100,
+            full: this.full * 100,
             freeShipping: this.freeShipping,
             freightNodefaults: JSON.stringify([{
               region: arr.join(','),
-              freight: this.fre,
+              freight: this.fre * 100,
             }])
           };
           this.$http.post(url, data).then(
@@ -660,10 +671,10 @@
             if (res.body.result) {
               let data = res.body.data.ft;
               this.template = data.template;
-              this.freight = data.freight;
+              this.freight = data.freight / 100;
               this.freeShipping = data.freeShipping;
-              this.full = data.full;
-              this.fre = data.noDefaultFreight
+              this.full = data.full / 100;
+              this.fre = data.noDefaultFreight / 100;
               let region = data.region.split(',');
               for (let i = 0; i < this.datas.length; i++) {
                 for (let q = 0; q < this.datas[i].listItem.length; q++) {
@@ -673,12 +684,21 @@
                     }
                   }
                 }
+
+                if (this.datas[i].selected != '') {
+                  for (let a = 0; a < $(".oneList").length; a++) {
+                    if ($(".oneList span").eq(a).text().replace(/\s+/g, '') == this.datas[i].listTitle) {
+                      $(".oneList").eq(i).find('.child').css('display','block')
+                    }
+                  }
+                }
+
               }
+
             }
           }
         );
-      }
-      ,
+      },
 
     }
     ,
@@ -708,6 +728,18 @@
     .template_right {
       float: left;
     }
+  }
+
+  .child {
+    display: none;
+  }
+
+  .la {
+
+    display: block;
+    position: absolute;
+    left: -15px;
+    top: 3px;
   }
 
   #addFilg {

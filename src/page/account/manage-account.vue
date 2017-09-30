@@ -536,7 +536,7 @@
   }
 
   .login_account, .login_password {
-    width: 40%;
+    width: 65%;
     font-size: 16px;
     margin: 0 auto;
     margin-top: 30px;

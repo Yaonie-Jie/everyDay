@@ -7,8 +7,8 @@
       </el-breadcrumb>
       <div class="titlee" style="border:none;">兴趣推荐列表</div>
       <div style="margin-bottom: 20px;padding-bottom: 20px">
-        <el-button type="success" @click="addOneShow">添加到商品详情</el-button>
-        <el-button type="success" @click="addTwoShow">添加到图文详情</el-button>
+        <el-button type="success" @click="addOneShow">添加到优品推荐</el-button>
+        <el-button type="success" @click="addTwoShow">添加到人气爆款</el-button>
       </div>
 
       <div class="boxx">
@@ -97,11 +97,11 @@
                   <span class="left">性别</span>
                   <div class="left" style="padding-left: 20px">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="jack" value="m" v-model="sex">
+                      <input type="checkbox" id="jack" value="m" v-model="sex">
                       <label for="jack">男</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="john" value="w" v-model="sex">
+                      <input type="checkbox" id="john" value="w" v-model="sex">
                       <label for="john">女</label>
                     </div>
                   </div>
@@ -110,30 +110,30 @@
                   <span class="left">年龄</span>
                   <div class="left" style="padding-left: 20px">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="60" value="60" v-model="age">
+                      <input type="checkbox" id="60" value="60" v-model="age">
                       <label for="60">60后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="70" value="70" v-model="age">
+                      <input type="checkbox" id="70" value="70" v-model="age">
                       <label for="70">70后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="80" value="80" v-model="age">
+                      <input type="checkbox" id="80" value="80" v-model="age">
                       <label for="80">80后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="90" value="90" v-model="age">
+                      <input type="checkbox" id="90" value="90" v-model="age">
                       <label for="90">90后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="00" value="00" v-model="age">
+                      <input type="checkbox" id="00" value="00" v-model="age">
                       <label for="00">00后</label>
                     </div>
                   </div>
                 </div>
                 <div class="left aaa">
                   <span class="left">兴趣</span>
-                  <div class="left" style="padding-left: 20px">
+                  <div class="left" style="padding-left: 20px;text-align: left">
                     <div class="listshow" v-for="i in TagList">
                       <input type="checkbox" :id="i.id" :value="i.id" v-model="interest">
                       <label :for="i.id">{{i.interest}}</label>
@@ -185,36 +185,36 @@
                   <span class="left">性别</span>
                   <div class="left" style="padding-left: 20px">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="jackpic" value="m" v-model="picsex">
+                      <input type="checkbox" id="jackpic" value="m" v-model="picsex">
                       <label for="jackpic">男</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="johnpic" value="w" v-model="picsex">
+                      <input type="checkbox" id="johnpic" value="w" v-model="picsex">
                       <label for="johnpic">女</label>
                     </div>
                   </div>
                 </div>
                 <div class="right aaa">
                   <span class="left">年龄</span>
-                  <div class="left" style="padding-left: 20px">
+                  <div class="left" style="padding-left: 20px;text-align: left">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="pic60" value="60" v-model="picage">
+                      <input type="checkbox" id="pic60" value="60" v-model="picage">
                       <label for="pic60">60后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic70" value="70" v-model="picage">
+                      <input type="checkbox" id="pic70" value="70" v-model="picage">
                       <label for="pic70">70后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic80" value="80" v-model="picage">
+                      <input type="checkbox" id="pic80" value="80" v-model="picage">
                       <label for="pic80">80后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic90" value="90" v-model="picage">
+                      <input type="checkbox" id="pic90" value="90" v-model="picage">
                       <label for="pic90">90后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic00" value="00" v-model="picage">
+                      <input type="checkbox" id="pic00" value="00" v-model="picage">
                       <label for="pic00">00后</label>
                     </div>
                   </div>
@@ -272,7 +272,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="height: 50px;">
+      <div class="block fenye" style="height: 50px;">
         <el-pagination
           @current-change="handleCurrentChange22"
           :current-page.sync="currentPage22"
@@ -317,8 +317,8 @@
         images: '',
         imgFiles: '',
         id: '',
-        sex: '',
-        age: '',
+        sex: [],
+        age: [],
         interest: [],
         TagList: [],
         //图文推荐
@@ -328,8 +328,8 @@
         picid: '',
         picimages: '',
         picimgFiles: '',
-        picsex: '',
-        picage: '',
+        picsex: [],
+        picage: [],
         picinterest: [],
 
         popAmount: '',
@@ -472,9 +472,9 @@
               let num = 0;
               for (let i = 0; i < data.length; i++) {
                 if (data[i].mode == 1) {
-                  data[i].mode = '图文推荐'
+                  data[i].mode = '人气爆款'
                 } else {
-                  data[i].mode = '商品推荐'
+                  data[i].mode = '优品推荐'
                 }
                 num += 1;
                 data[i].num = num;
@@ -683,7 +683,7 @@
       },
       //修改商品推荐
       updataALl(row) {
-        if (row.mode == '商品推荐') {
+        if (row.mode == '优品推荐') {
           this.$router.push('/updatashop/' + row.id);
         }else {
           this.$router.push('/updatashoppic/' + row.id);
@@ -746,6 +746,7 @@
           function (res) {
             if (res.body.result) {
               this.count22 = res.body.data.count;
+
               this.selectData = res.body.data.productList
             }
           }

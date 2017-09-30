@@ -1,6 +1,6 @@
 const hosts = {
   // api: 'http://test.sunxung.cn:3083/'
-  api: 'http://meirimeic.com/'
+  api: 'https://meirimeic.com/'
 
 }
 const apiMap={
@@ -16,6 +16,7 @@ const apiMap={
   'AddProductBrand':hosts.api+'productBrand/addProductBrand',   //添加商品品牌信息
   'updataProductBrand':hosts.api+'productBrand/modifyProductBrand',    //修改商品品牌信息
   'getBrand':hosts.api+'productBrand/findProductBrandList',    //获取商品品牌分类
+  'findBrand':hosts.api+'productBrand/findProductBrandByCon',    //搜索商品品牌
 
   'listSystemRecommend':hosts.api+'systemRecommend/findSystemRecommendList',    //系统推荐列表
   'addInterestRecommend':hosts.api+'interestRecommend/addInterestRecommend',    //添加商品到根据兴趣推荐列表商品详情
@@ -42,7 +43,7 @@ const apiMap={
   'addSystemRecommend':hosts.api+'systemRecommend/addSystemRecommend',    //添加商品到系统推荐列表商品详情
   'modifyProPos':hosts.api+'product/modifyProductPosition',    //商品管理上移下移
   'modifyProTop':hosts.api+'product/modifyProductTop',    //商品管理置顶
-  'modifyRec':hosts.api+'systemRecommend/addSystemRecommend',    //商品管理置底
+  'modifyRec':hosts.api+'product/modifyProductBottom',    //商品管理置底
 
 
 

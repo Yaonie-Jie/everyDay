@@ -35,7 +35,7 @@
                            size="small" icon="edit">{{scope.row.edit ? '完成' : '编辑'}}
                 </el-button>
               </template>
-            </el-table-column>a
+            </el-table-column>
           </el-table>
         </div>
         <div style="text-align: center;margin-top: 20px">

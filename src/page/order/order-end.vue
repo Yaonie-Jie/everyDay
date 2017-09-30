@@ -19,8 +19,8 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.amounts}}</b>件商品，商品总额：￥<span
+                <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.amounts}}</b>件商品，订单总额：￥<span
                   class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
                 </li>
               </ul>
@@ -81,18 +81,11 @@
             <div class=" width100  NoBorderBottom">
               <div class="titlee">物流信息</div>
               <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
+                <li class="marginTopLeft">物流公司：<span>{{wuliu.company}}</span></li>
+                <li class="marginTopLeft"> 运单编号：<span>{{wuliu.expressNum}}</span></li>
                 <li class="marginTopLeft">电话：<span>{{wuliu.phone}}</span></li>
               </ul>
-              <!--<div class="right imgNum">-->
-              <!--<div class="imgBOXs">-->
-              <!--<img-->
-              <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
-              <!--alt="">-->
-              <!--</div>-->
-              <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
-              <!--</div>-->
+
             </div>
             <div class=" width100  NoBorderBottom">
               <div class="jt">

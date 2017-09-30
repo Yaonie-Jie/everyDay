@@ -3,7 +3,6 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>待发货订单</el-breadcrumb-item>
         <el-breadcrumb-item>订单详情</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -19,9 +18,9 @@
               </ul>
               <ul class="right">
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
-                <li>订单总额：￥<span>{{listData.price / 100}}</span> 包含运费：￥<span>{{listData.freigh / 100}}</span></li>
-                <li>共<b class="pink">{{listData.orderState}}</b>件商品，商品总额：￥<span
-                  class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
+                <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
+                <li>共<b class="pink">{{listData.orderState}}</b>件商品，订单总额：￥<span
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -69,7 +68,7 @@
             <div class="TopTitle NoBorderTop NoBorderBottom">
               <div class="right">
                 <el-button @click="addExpress">发货</el-button>
-                <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
+                <el-button v-show="listData.orderState == 0" @click="Delete(listData.orderNum)">取消此订单</el-button>
 
               </div>
             </div>

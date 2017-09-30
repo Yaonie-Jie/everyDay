@@ -26,6 +26,12 @@
           </div>
         </el-col>
         <el-col :span="24">
+          <div class="add_goods_name">
+            <div class="add_goods_name_title">商品条码</div>
+            <el-input v-model="proCode"></el-input>
+          </div>
+        </el-col>
+        <el-col :span="24">
           <div class="add_goods_saleprice">
             <div class="add_goods_saleprice_title">商品销售价</div>
             <el-input v-model="price"></el-input>
@@ -170,8 +176,8 @@
 
           <div class="add_goods_commission">
             <div class="add_goods_commission_title">店主可得提成</div>
-            <div class="add_goods_commission_ipt">
-              <el-input v-model="royalty" placeholder="请输入内容"></el-input>
+            <div class="add_goods_commission_ipt" style="font-size: 16px;line-height: 36px">
+              <el-input v-model="royalty" placeholder="请输入内容"></el-input>%
               （销售价-成本价）
             </div>
           </div>
@@ -247,10 +253,47 @@
         value: '',
         brandId: '',
         content: '',
-        editorOption: {},
-
+        editorOption: {
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{'header': 1}, {'header': 2}],
+              [{'list': 'ordered'}, {'list': 'bullet'}],
+              [{'script': 'sub'}, {'script': 'super'}],
+              [{'indent': '-1'}, {'indent': '+1'}],
+              [{'direction': 'rtl'}],
+              [{'size': ['small', false, 'large', 'huge']}],
+              [{'header': [1, 2, 3, 4, 5, 6, false]}],
+              [{'color': []}, {'background': []}],
+              [{'font': []}],
+              [{'align': []}],
+              ['clean'],
+              ['image']
+            ]
+          }
+        },
+        proCode:'',
         contentCan: '',
-        editorOptionCan: {},
+        editorOptionCan: {
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              ['blockquote', 'code-block'],
+              [{'header': 1}, {'header': 2}],
+              [{'list': 'ordered'}, {'list': 'bullet'}],
+              [{'script': 'sub'}, {'script': 'super'}],
+              [{'indent': '-1'}, {'indent': '+1'}],
+              [{'direction': 'rtl'}],
+              [{'size': ['small', false, 'large', 'huge']}],
+              [{'header': [1, 2, 3, 4, 5, 6, false]}],
+              [{'color': []}, {'background': []}],
+              [{'font': []}],
+              [{'align': []}],
+              ['clean'],
+            ]
+          }
+        },
         paramlist: [],
         paramName: '', //规格名称
         dynamicTags: [],//单个规格数组
@@ -295,6 +338,7 @@
               this.royalty = data.royalty / 100;
               this.images = data.picture.split(',');
               this.pic = data.picture.split(',');
+              this.proCode = data.proCode;
               for (let i = 0; i < data.picture.split(',').length; i++) {
                 let o = new Object();
                 o.name = data.picture.split(',')[i];
@@ -571,6 +615,7 @@
                 formData.append('freightId', this.freightId);
                 formData.append('pictureOriginal', this.pic.join(','));
                 formData.append('parameter', this.contentCan);
+                formData.append('proCode', this.proCode);
 
                 this.$http.post(url, formData, {
                   method: 'post',
