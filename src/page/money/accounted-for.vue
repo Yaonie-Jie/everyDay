@@ -99,11 +99,28 @@
     },
     methods: {
       getInfinance() {
+        var paddNum = function (num) {    //如果是一位数就补一个0
+          num += "";
+          return num.replace(/^(\d)$/, "0$1");
+        }
+
+        function FormatDate(strTime) {  //转换时间格式
+          if (strTime) {
+            var date = new Date(strTime);
+            return date.getFullYear() + "-" + paddNum(date.getMonth() + 1) + "-" + paddNum(date.getDate());
+          } else {
+            return ''
+          }
+        }
+
+
         let url = http.apiMap.findInFinance;
         let data = {
           nowpage: this.currentPage,
           size: 10,
           common: 2,
+          startTime: FormatDate(this.time[0]),
+          endTime: FormatDate(this.time[1]),
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -134,7 +151,7 @@
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.getInfinance()  //页面 加载数据
+        this.getInfinance()
       },
       //搜索订单
       findOrder() {
@@ -174,11 +191,11 @@
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
-                  data[i].reason = '付款'
+                  data[i].reason = '订单' + data[i].orderNum + '付款'
                 }
-                if (data[i].incomeMent == 0) {
+                if (data[i].incomeMent == 1) {
                   data[i].incomeMent = '支付宝'
-                } else if (data[i].incomeMent == 1) {
+                } else if (data[i].incomeMent == 0) {
                   data[i].incomeMent = '微信'
                 }
                 arr.push(data[i])

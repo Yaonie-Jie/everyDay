@@ -43,7 +43,7 @@
             label="出款方式">
           </el-table-column>
           <el-table-column
-            prop="incomeAccount"
+            prop="outAccount"
             label="财务出款账号">
           </el-table-column>
           <el-table-column
@@ -131,7 +131,7 @@
                 }
                 if (data[i].outMent == 1) {
                   data[i].outMent = '支付宝'
-                } else if (data[i].outMent == 0) {
+                } else if (data[i].outMent == 0||data[i].outMent == 2) {
                   data[i].outMent = '微信'
                 }
                 arr.push(data[i])
@@ -188,13 +188,13 @@
               let arr = [];
               for (let i = 0; i < data.length; i++) {
                 if (data[i].reason == 1) {
-                  data[i].reason = '退款'
+                  data[i].reason = '订单' + data[i].orderNum + '退款'
                 } else if (data[i].reason == 2) {
-                  data[i].reason = '提现'
+                  data[i].reason = '用户' + data[i].userAccount + '提现'
                 }
                 if (data[i].outMent == 1) {
                   data[i].outMent = '支付宝'
-                } else if (data[i].outMent == 2) {
+                } else if (data[i].outMent == 0||data[i].outMent == 2) {
                   data[i].outMent = '微信'
                 }
                 arr.push(data[i])

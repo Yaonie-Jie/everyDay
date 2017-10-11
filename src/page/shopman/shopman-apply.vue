@@ -52,8 +52,10 @@
               label="当前级别">
             </el-table-column>
             <el-table-column
-              prop=""
               label="累计销售金">
+              <template scope="scope">
+                <span type="text">{{scope.row.money / 100}}</span>
+              </template>
             </el-table-column>
 
             <el-table-column

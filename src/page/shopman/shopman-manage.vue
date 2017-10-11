@@ -18,7 +18,7 @@
           <div class="apply_information">
             筛选：
             <select name="" id="shopManState" v-model="teamState">
-              <option  v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
+              <option v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
             </select>
 
             <input type="text" placeholder="输入账号查找店主" style="padding:0 10px;" v-model="account"/>
@@ -44,12 +44,14 @@
               label="账号">
             </el-table-column>
             <el-table-column
-              prop="account"
+              prop="headAccount"
               label="所属团队--团长账号">
             </el-table-column>
             <el-table-column
-              prop="totalMoney"
               label="累计销售金额">
+              <template scope="scope">
+                <span type="text">{{scope.row.totalMoney / 100}}</span>
+              </template>
             </el-table-column>
             <el-table-column
               fixed="right"
@@ -111,7 +113,7 @@
         </div>
       </div>
 
-      <hr >
+      <hr>
       <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">选填个人店主资料</h2>
       <div class="zfb_account">
         <div class="zfb_account_title">支付宝账号</div>
@@ -123,26 +125,26 @@
       </div>
 
       <div v-show="teLevel==2 || teLevel==3">
-      <!--公司店主-->
-      <hr >
-      <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填公司店主资料</h2>
-      <div class="true_name">
-        <div class="true_name_title">公司名称</div>
-        <el-input placeholder="请填写公司名称" v-model="comName"></el-input>
-      </div>
-      <div class="id_num">
-        <div class="id_num_title">公司注册号</div>
-        <el-input placeholder="请填写公司注册号" v-model="comNumber"></el-input>
-      </div>
-      <div class="id_img_title">公司营业执照</div>
-      <!--公司营业执照-->
-      <div class="id_img_upload">
-        <div @click="postPhofs" class="showPho phof">+请上传公司营业执照</div>
-        <input type="file" class="postFilephofs" @change="selectChangefs" style="display:none;">
-        <div class="imgUrl" style="float:right;">
-          <img :src="imagesfs" style="text-align:center;">
+        <!--公司店主-->
+        <hr>
+        <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填公司店主资料</h2>
+        <div class="true_name">
+          <div class="true_name_title">公司名称</div>
+          <el-input placeholder="请填写公司名称" v-model="comName"></el-input>
         </div>
-      </div>
+        <div class="id_num">
+          <div class="id_num_title">公司注册号</div>
+          <el-input placeholder="请填写公司注册号" v-model="comNumber"></el-input>
+        </div>
+        <div class="id_img_title">公司营业执照</div>
+        <!--公司营业执照-->
+        <div class="id_img_upload">
+          <div @click="postPhofs" class="showPho phof">+请上传公司营业执照</div>
+          <input type="file" class="postFilephofs" @change="selectChangefs" style="display:none;">
+          <div class="imgUrl" style="float:right;">
+            <img :src="imagesfs" style="text-align:center;">
+          </div>
+        </div>
 
       </div>
 
@@ -194,9 +196,11 @@
         imgFilesf: '',
         imagesfs: '',
         imgFilesfs: '',
-        teLevel:'',
-        comName:'',
-        comNumber:''
+        teLevel: '',
+        comName: '',
+        comNumber: '',
+
+        meiyong:1
       }
     },
 
@@ -296,23 +300,25 @@
 
 
       getData() {
-        let url = http.apiMap.OwnerShopmanData;
+        let url = http.apiMap.findShopmanData;
         let data = {
           common: 1,
           size: 10,
           nowpage: this.currentPage,
+          account:'',
+          teamState: '',
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.count11=res.body.data.count;
+              this.count11 = res.body.data.count;
               if (this.count11 == 0) {
                 $(".fenye").hide()
               } else {
                 $(".fenye").show()
               }
               //店主级别
-              let data1 = res.body.data.userVoList;
+              let data1 = res.body.data.userVO;
               let arr = [];
               for (let i = 0; i < data1.length; i++) {
                 if (data1[i].level == 1) {
@@ -322,6 +328,10 @@
                 } else if (data1[i].level == 3) {
                   data1[i].level = '高级店主'
                 }
+
+                if(data1[i].headAccount == '0'){
+                  data1[i].headAccount = '暂无'
+                }
                 arr.push(data1[i])
               }
               this.tableData = arr
@@ -330,12 +340,12 @@
       },
 
 
-      DisplayBlock () {
+      DisplayBlock() {
         $('.mask').css('display', 'block');
         $('.add_shopman').css('display', 'block');
       },
 
-      DisplayNone () {
+      DisplayNone() {
         $('.mask').css('display', 'none');
         $('.add_shopman').css('display', 'none');
       },
@@ -350,11 +360,12 @@
           size: 10,
           nowpage: this.currentPage,
         };
+        console.log(data.nowpage)
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
               let data = res.body.data.userVO
-              this.count11=res.body.data.count;
+              this.count11 = res.body.data.count;
               if (this.count11 == 0) {
                 $(".fenye").hide()
               } else {
@@ -370,10 +381,13 @@
                 } else if (data[i].level == 3) {
                   data[i].level = '高级店主'
                 }
+                if(data[i].headAccount == '0'){
+                  data[i].headAccount = '暂无'
+                }
                 arr.push(data[i])
               }
-              this.tableData = arr
-
+              this.tableData = arr;
+              this.meiyong =2
             }
           }
         )
@@ -415,7 +429,12 @@
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.getData()  //页面 加载数据
+        if(this.meiyong == 1){
+          this.getData()
+        }else {
+          this.checkShopman()
+
+        }
       },
     },
 
@@ -527,12 +546,14 @@
     line-height: 80px;
     color: #000;
   }
+
   .phof {
     width: 150px;
     height: 80px;
     border: solid 3px #ccc;
     margin-top: 20px;
   }
+
   .postFilepho {
     display: none;
   }

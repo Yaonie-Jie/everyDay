@@ -3,22 +3,21 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>店主管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/ShopmanManage'}">店主管理</el-breadcrumb-item>
         <el-breadcrumb-item>店主资料</el-breadcrumb-item>
       </el-breadcrumb>
 
       <div class="shopman_data" v-bind="shopmanManage">
-        <p class="shopman_data_title">团队资料<span>所属团队：无</span></p>
+        <p class="shopman_data_title">团队资料<span>所属团队：{{shopmanManage.headAccount}}</span></p>
         <ul class="shopman_data1" >
           <li><i>账号：</i><span>{{shopmanManage.account}}</span></li>
           <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
-          <li><i>店主级别：</i><span>{{shopmanManage.canLevel}}</span></li>
-          <li><i>所属团队：</i><span>高级店主团队</span></li>
-          <li><i>累计销售金：</i><span>￥{{shopmanManage.sumPrice}}</span></li>
-          <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney}}</span></li>
-          <li><i>累计所得奖励：</i><span>{{shopmanManage.sumBonus}}</span></li>
-          <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
+          <li><i>店主级别：</i><span>{{shopmanManage.level}}</span></li>
+          <li><i>所属团队：</i><span>{{shopmanManage.headAccount}}</span></li>
+          <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney/100}}</span></li>
+          <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney/100}}</span></li>
+          <li><i>累计所得奖励：</i><span>￥{{shopmanManage.sumBonus/100}}</span></li>
+          <li><i>上月所得奖励：</i><span>￥{{shopmanManage.lastMonthBonus/100}}</span></li>
         </ul>
 
       </div>
@@ -89,7 +88,6 @@
   }
   .shopman_data1 li span{
     display: inline-block;
-    float: right;
     width: 55%;
     text-align: left;
   }
@@ -149,7 +147,6 @@
     width: 200px;
     min-height: 100px;
     border: 1px solid #dddddd;
-    background: #cccccc;
     float: left;
     margin-top: 10px;
   }
@@ -323,8 +320,19 @@
         this.$http.post(url,data).then(
           function(res){
             if(res.body.result){
-              let data=res.body.data.user
-              this.account=data.account
+              let data=res.body.data.user;
+              this.account=data.account;
+              if(data.level == 1){
+                  data.level='个人店主'
+              }else if(data.level == 2){
+
+              }else if(data.level == 3){
+                data.level='高级店主'
+              }
+              if(data.headAccount == 0){
+                data.headAccount ='暂无'
+              }
+              console.log(data)
               this.shopmanManage=data
             }
           }

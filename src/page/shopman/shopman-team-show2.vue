@@ -44,12 +44,17 @@
                 label="团员级别">
               </el-table-column>
               <el-table-column
-                prop="money"
                 label="累计销售金">
+                <template scope="scope">
+                  <span type="text">{{scope.row.money / 100}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="lastMonthMoney"
                 label="上月销售金">
+                <template scope="scope">
+                  <span type="text">{{scope.row.lastMonthMoney / 100}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="操作">
@@ -63,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="mask"></div>
+    <div class="mask" @click="xxx"></div>
     <!--添加公司店主-->
     <div class="add_junior_member popup">
       <p>添加下级团员</p>
@@ -81,10 +86,10 @@
           <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
           <!--<li><i>升级到高级店主时间：</i><span>{{shopmanManagey.modifiedOn}}</span></li>-->
-          <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney}}</span></li>
-          <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney}}</span></li>
-          <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
-          <li><i>上月所得奖励：</i><span>{{shopmanManagey.lastMonthBonus}}</span></li>
+          <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney/100}}</span></li>
+          <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney/100}}</span></li>
+          <li><i>累计所得奖励：</i><span>￥{{shopmanManagey.sumBonus/100}}</span></li>
+          <li><i>上月所得奖励：</i><span>￥{{shopmanManagey.lastMonthBonus/100}}</span></li>
         </ul>
         <div class="add_junior_member_btn">
           <el-button @click="DisplayNone">取消</el-button>
@@ -94,7 +99,6 @@
     </div>
 
 
-    <!--<div class="mask"></div>-->
     <div class="popup change_ticheng">
       <div class="popup_title">请补充下面的店主资料，将此人升级到公司店主<span style="font-weight:bold;" v-text="updataText"></span></div>
       <div class="popup_form">
@@ -229,6 +233,11 @@
           }
         );
       },
+      xxx(){
+        $('.add_junior_member').hide();
+        $('.add_junior_member1').hide();
+        $(".mask").hide()
+      },
       //查询
       findTeamaccount() {
         let url = http.apiMap.findTeamli;
@@ -241,6 +250,7 @@
             if (res.body.result) {
               let data = res.body.data.userVO
               this.shopmanManagey = data
+              $(".junior_menber_information").show()
 
               if (data.level == 1) {
                 data.level = '个人店主'

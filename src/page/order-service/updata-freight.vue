@@ -688,7 +688,9 @@
                 if (this.datas[i].selected != '') {
                   for (let a = 0; a < $(".oneList").length; a++) {
                     if ($(".oneList span").eq(a).text().replace(/\s+/g, '') == this.datas[i].listTitle) {
-                      $(".oneList").eq(i).find('.child').css('display','block')
+                      $(".oneList").eq(i).find('.child').css('display','block');
+                      $(".oneList").eq(i).find('.child').next().addClass('el-icon-caret-bottom')
+                      $(".oneList").eq(i).find('.child').next().removeClass('el-icon-caret-right')
                     }
                   }
                 }

@@ -44,7 +44,7 @@
         </div>
         <div class="accumulated_sales clear_">
           <div class="left_">累计销售金：</div>
-          <div class="right_">¥{{shopmanApply.money}}</div>
+          <div class="right_">¥{{shopmanApply.money/100}}</div>
         </div>
         <div class="subordinate_team clear_">
           <div class="left_">所属团队：</div>

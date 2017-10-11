@@ -41,36 +41,36 @@
                   <span class="left">性别</span>
                   <div class="left" style="padding-left: 20px">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="jackpic" value="m" v-model="sex">
+                      <input type="checkbox" id="jackpic" value="m" v-model="picsex">
                       <label for="jackpic">男</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="johnpic" value="w" v-model="sex">
+                      <input type="checkbox" id="johnpic" value="w" v-model="picsex">
                       <label for="johnpic">女</label>
                     </div>
                   </div>
                 </div>
                 <div class="right aaa">
                   <span class="left">年龄</span>
-                  <div class="left" style="padding-left: 20px">
+                  <div class="left" style="padding-left: 20px;text-align: left">
                     <div class="listshow" style=" ">
-                      <input type="radio" id="pic60" value="60" v-model="age">
+                      <input type="checkbox" id="pic60" value="60" v-model="picage">
                       <label for="pic60">60后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic70" value="70" v-model="age">
+                      <input type="checkbox" id="pic70" value="70" v-model="picage">
                       <label for="pic70">70后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic80" value="80" v-model="age">
+                      <input type="checkbox" id="pic80" value="80" v-model="picage">
                       <label for="pic80">80后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic90" value="90" v-model="age">
+                      <input type="checkbox" id="pic90" value="90" v-model="picage">
                       <label for="pic90">90后</label>
                     </div>
                     <div class="listshow">
-                      <input type="radio" id="pic00" value="00" v-model="age">
+                      <input type="checkbox" id="pic00" value="00" v-model="picage">
                       <label for="pic00">00后</label>
                     </div>
                   </div>
@@ -172,12 +172,11 @@
         images: '',
         imgFiles: '',
         id: '',
-        sex: '',
-        age: '',
         interest: [],
         TagList: [],
         ids: '',
-
+        picsex:[],
+        picage:[],
         content: '',
         editorOption: {},
       }
@@ -246,8 +245,8 @@
               let data = res.body.data.interestRecommend
               this.name = data.proName;
               this.images = data.proPicture;
-              this.sex = data.sex;
-              this.age = data.age;
+              this.picsex = data.sex.split(',');
+              this.picage = data.age.split(',');
               this.interest = data.interest.split(',');
               this.id = data.proId;
               this.title=data.title;
@@ -282,8 +281,8 @@
           formData.append('proName', this.name);
           formData.append('id', this.ids);
           formData.append('proId', this.id);
-          formData.append('sex', this.sex);
-          formData.append('age', this.age);
+          formData.append('sex', this.picsex);
+          formData.append('age', this.picage);
           formData.append('interest', this.interest);
           formData.append('title', this.title);
           formData.append('introduce', this.content);

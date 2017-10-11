@@ -9,9 +9,15 @@
 
       <div class="contents">
         <div class="item1">
-          <div class="left">用户信息查看</div>
-          <div class="right">
+          <div class="left">
             <el-button type="success" icon="icon-plus" @click="DisplayBlock">添加普通用户</el-button>
+          </div>
+        </div>
+        <div class="goods_search">
+
+          <div class="right">
+            <input placeholder="输入账号搜索" style="height:30px;" v-model="account"></input>
+            <el-button type="success" style="margin-top: 0px;!important;" @click="findAccount">搜索</el-button>
           </div>
         </div>
         <div class="item2">
@@ -25,10 +31,18 @@
             <el-table-column prop="level" label="用户层级" align="center" :span='1' header-align="center"></el-table-column>
             <el-table-column prop="sumOrder" label="下单总数" align="center" :span='1'
                              header-align="center"></el-table-column>
-            <el-table-column prop="sumPrice" label="下单总额" align="center" :span='1'
-                             header-align="center"></el-table-column>
-            <el-table-column prop="sumBonus" label="用户当前奖励金" align="center" header-align="center"
-                             :span='3'></el-table-column>
+            <el-table-column label="下单总额" align="center" :span='1'
+                             header-align="center">
+              <template scope="scope">
+                <span type="text">{{scope.row.sumPrice / 100}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="用户当前奖励金" align="center" header-align="center"
+                             :span='3'>
+              <template scope="scope">
+                <span type="text">{{scope.row.sumBonus / 100}}</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </div>
@@ -77,7 +91,8 @@
         currentPage: 1,
         count11: 1,
         phoneNum: '',
-        psd: ''
+        psd: '',
+        account: ''
       }
     },
     created() {
@@ -125,12 +140,47 @@
             )
           }
         }
+      },
+      findAccount() {
+        if(this.account == ''){
+          this.getUserManage()
+        }else {
+          let url = http.apiMap.findUserManage;
+          let data = {
+            common: 2,
+            size: 10,
+            nowpage: this.currentPage,
+            account: this.account
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                this.count11 = res.body.data.count
+                //用户层级
+                let data = res.body.data.userList
+                let arr = [];
+                if (data.level == 0) {
+                  data.level = '普通用户'
+                } else if (data.level == 1) {
+                  data.level = '个人店主'
+                } else if (data.level == 2) {
+                  data.level = '公司店主'
+                } else if (data.level == 3) {
+                  data.level = '高级店主'
+                }
+                arr.push(data);
+
+                this.tableData = arr
+              }
+            }
+          );
+        }
 
       },
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.getUserManage()  //页面 加载数据
+        this.getUserManage()
       },
 
       getUserManage() {
@@ -138,7 +188,8 @@
         let data = {
           common: 2,
           size: 10,
-          nowpage: this.currentPage
+          nowpage: this.currentPage,
+          account: ''
         };
         this.$http.post(url, data).then(
           function (res) {

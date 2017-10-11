@@ -179,28 +179,33 @@
       }
     },
     created: function () {
-      this.getTable()//定义方法
+      this.getTable()
     },
     methods: {
-      find(){
-        let url = http.apiMap.findBrand;
-        let data = {
-          name: this.titleName,
-          common: 1
-        };
-        this.$http.post(url, data).then(
-          function (res) {
-            if (res.body.result) {
-              let arr = res.body.data.productBrand;
-              this.tableData = [];
-              this.tableData.push(arr);
-              this.$message({
-                type: 'info',
-                message: '查询成功'
-              });
+      find() {
+        if (this.titleName == '') {
+          this.getTable()
+        } else {
+          let url = http.apiMap.findBrand;
+          let data = {
+            name: this.titleName,
+            common: 1
+          };
+          this.$http.post(url, data).then(
+            function (res) {
+              if (res.body.result) {
+                let arr = res.body.data.productBrand;
+                this.tableData = [];
+                this.tableData.push(arr);
+                this.$message({
+                  type: 'info',
+                  message: '查询成功'
+                });
+              }
             }
-          }
-        )
+          )
+        }
+
       },
       postPhofs() {
         $(".postFilephofs").click()
@@ -327,7 +332,7 @@
       }
       ,
       //上移
-      Up (row) {
+      Up(row) {
         var nowID = row.id;
         var nowNumber = row.number;
         var table = this.tableData;
@@ -358,7 +363,7 @@
       }
       ,
       //下移
-      Down (row) {
+      Down(row) {
         var nowID = row.id;
         var nowNumber = row.number;
         var table = this.tableData;

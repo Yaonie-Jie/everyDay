@@ -21,7 +21,7 @@
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
                 <li>共<b class="pink">{{listData.amounts}}</b>件商品，订单总额：￥<span
-                  class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>

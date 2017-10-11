@@ -44,12 +44,16 @@
                 label="团员级别">
               </el-table-column>
               <el-table-column
-                prop="money"
                 label="累计销售金">
+                <template scope="scope">
+                  <span type="text">{{scope.row.money / 100}}</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="lastMonthMoney"
                 label="上月销售金">
+                <template scope="scope">
+                  <span type="text">{{scope.row.lastMonthMoney / 100}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="lowerMember"
@@ -68,7 +72,7 @@
         </div>
       </div>
     </div>
-    <div class="mask"></div>
+    <div class="mask" @click="xxx"></div>
     <!--添加公司店主-->
     <div class="add_junior_member popup">
       <p>添加下级团员</p>
@@ -85,16 +89,17 @@
           <li><i>昵称：</i><span>{{shopmanManagey.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
-          <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney}}</span></li>
-          <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney}}</span></li>
-          <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
-          <li><i>上月所得奖励：</i><span>{{shopmanManagey.lastMonthBonus}}</span></li>
+          <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney/100}}</span></li>
+          <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney/100}}</span></li>
+          <li><i>累计所得奖励：</i><span>￥{{shopmanManagey.sumBonus/100}}</span></li>
+          <li><i>上月所得奖励：</i><span>￥{{shopmanManagey.lastMonthBonus/100}}</span></li>
         </ul>
         <div class="add_junior_member_btn">
           <el-button @click="DisplayNone">取消</el-button>
           <el-button type="primary" @click="addTeamaccount">添加下级团员</el-button>
         </div>
       </div>
+
     </div>
     <!--添加个人店主-->
     <div class="add_junior_member1 popup">
@@ -123,9 +128,10 @@
           <el-button type="primary" @click="addTeamaccount1">添加下级团员</el-button>
         </div>
       </div>
+
     </div>
 
-<!--查看-->
+    <!--查看-->
     <div class="show_teamAccount popup">
       <p>公司店主的下级团员</p>
       <el-table
@@ -145,12 +151,16 @@
           label="团员级别">
         </el-table-column>
         <el-table-column
-          prop="money"
           label="累计销售金">
+          <template scope="scope">
+            <span type="text">{{scope.row.money / 100}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="lastMonthMoney"
           label="上月销售金">
+          <template scope="scope">
+            <span type="text">{{scope.row.lastMonthMoney / 100}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="操作">
@@ -175,18 +185,18 @@
       return {
         id: '',
         tableData: [],
-        account:'',
-        teamAccount:'',//团长账号
+        account: '',
+        teamAccount: '',//团长账号
         teamLevel: '',   //团队等级
         teamLastMoney: '', //上月累计销售金
         teamMoney: '',     //团队累计销售金
-        data1: ''  ,     //团队级别
-        teamNum:'',//团队人数
+        data1: '',     //团队级别
+        teamNum: '',//团队人数
         shopmanManagey: '',
-        shopmanManage:'',
-        userAccount:'',
-        dataYuan:[],
-        companyAccount:''
+        shopmanManage: '',
+        userAccount: '',
+        dataYuan: [],
+        companyAccount: ''
       }
     },
     created() {
@@ -194,9 +204,18 @@
       this.showId()
     },
     methods: {
-      closeManage(){
-        $('.add_junior_member1').css('display','none');
-        $('.mask').css('display','none');
+      stataFilter(value) {
+        if (value == 1) {
+          return '个人店主'
+        } else if (value == 2) {
+          return '公司店主'
+        } else if (value == 3) {
+          return '高级店主'
+        }
+      },
+      closeManage() {
+        $('.add_junior_member1').css('display', 'none');
+        $('.mask').css('display', 'none');
       },
 
       DisplayBlock() {
@@ -207,7 +226,7 @@
       DisplayBlock1(row) {
         $('.mask').css('display', 'block');
         $('.add_junior_member1').css('display', 'block');
-        this.userAccount=row.account;
+        this.userAccount = row.account;
       },
 
       DisplayBlock2(row) {
@@ -221,8 +240,19 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              let data = res.body.data.list
-               this.dataYuan=data;
+              let data = res.body.data.list;
+              let arr=[]
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].level == 1) {
+                  data[i].level = '个人店主'
+                } else if (data[i].level == 2) {
+                  data[i].level = '公司店主'
+                } else if (data[i].level == 3) {
+                  data[i].level = '高级店主'
+                }
+                arr.push(data[i])
+              }
+              this.dataYuan = arr;
             }
           }
         );
@@ -242,7 +272,7 @@
         $('.mask').css('display', 'none');
         $('.show_teamAccount').css('display', 'none');
       },
-       //刷新页面
+      //刷新页面
       showId() {
         let url = http.apiMap.getTeamMessage
         let data = {
@@ -255,8 +285,8 @@
               let data = res.body.data;
               this.teamLastMoney = data.headManage.lastMonthMoney;
               this.teamMoney = data.headManage.money;
-              this.teamNum=data.otm.teamNum;
-              this.teamAccount=data.headManage.account;//团长账号
+              this.teamNum = data.otm.teamNum;
+              this.teamAccount = data.headManage.account;//团长账号
               let data1 = data.otm.teamLevel;
               if (data1 == 0) {
                 data1 = '公司店主团队_美日美C'
@@ -265,17 +295,17 @@
               } else if (data1 == 2) {
                 data1 = '高级店主团队'
               }
-              this.teamLevel=data1;
+              this.teamLevel = data1;
 
               let data2 = data.list;
               let arr1 = [];
               for (let i = 0; i < data2.length; i++) {
 
-                if (data2[i].level == 0) {
+                if (data2[i].level == 1) {
                   data2[i].level = '个人店主'
-                } else if (data2[i].level == 1) {
-                  data2[i].level = '公司店主'
                 } else if (data2[i].level == 2) {
+                  data2[i].level = '公司店主'
+                } else if (data2[i].level == 3) {
                   data2[i].level = '高级店主'
                 }
                 arr1.push(data2[i])
@@ -286,16 +316,22 @@
           }
         );
       },
-       //查询
-      findTeamaccount(){
+      xxx(){
+        $('.add_junior_member').hide();
+        $('.add_junior_member1').hide();
+        $(".mask").hide()
+      },
+      //查询
+      findTeamaccount() {
         let url = http.apiMap.findTeamli;
         let data = {
           common: 2,
-          account:this.account,
+          account: this.account,
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
+              $(".junior_menber_information").show()
               let data = res.body.data.userVO
               this.shopmanManagey = data
 
@@ -316,18 +352,18 @@
           }
         )
       },
-          //添加公司店主
-      addTeamaccount(){
+      //添加公司店主
+      addTeamaccount() {
         let url = http.apiMap.addTeamliy;
         let data = {
           common: 2,
           account: this.account,
-          userAccount:this.teamAccount,//给团长添加
+          userAccount: this.teamAccount,//给团长添加
         };
         this.$http.post(url, data).then(
           function (res) {
-            this.shopmanManagey=''
-            this.account=''
+            this.shopmanManagey = ''
+            this.account = ''
             if (res.body.result) {
               this.$message({
                 type: 'success',
@@ -345,18 +381,18 @@
           }
         )
       },
-           //添加个人店主
-      addTeamaccount1(){
+      //添加个人店主
+      addTeamaccount1() {
         let url = http.apiMap.addTuan;
         let data = {
           common: 2,
           account: this.account,
-          userAccount:this.userAccount,
+          userAccount: this.userAccount,
         };
         this.$http.post(url, data).then(
           function (res) {
-            this.shopmanManagey=''
-            this.account=''
+            this.shopmanManagey = ''
+            this.account = ''
             if (res.body.result) {
               this.$message({
                 type: 'success',
@@ -375,11 +411,11 @@
         )
       },
       //升级公司店主
-      aaa(row){
+      aaa(row) {
         let url = http.apiMap.modifyCom;
         let data = {
           common: 2,
-          account:row.account,
+          account: row.account,
         };
         this.$confirm('此操作将升级该店主, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -410,12 +446,12 @@
         });
 
       },
-     //升级个人店主
-      modifyTeam(row){
+      //升级个人店主
+      modifyTeam(row) {
         let url = http.apiMap.modifytTeam;
         let data = {
           common: 2,
-          account:row.memberAccount,
+          account: row.memberAccount,
           //companyAccount:this.companyAccount,
         };
         this.$confirm('此操作将升级该店主, 是否继续?', '提示', {
@@ -452,26 +488,34 @@
 </script>
 
 
-  <style>
-    .shopman_data{
-      width:90%;
-    }
-    .shopman_data li{
-      width:100%;
-      height:30px;
-    }
-    .shopman_data i{
-      display:block;
-      width:30%;
-      float:left;
-      font-size:16px;
-      line-height:30px;
+<style>
+  .shopman_data {
+    width: 90%;
+  }
 
-    }
-    .shopman_data span{
-      display:block;
-      width:60%;
-    }
+  .shopman_data li {
+    width: 100%;
+    height: 30px;
+  }
+
+  .shopman_data i {
+    display: block;
+    width: 30%;
+    float: left;
+    font-size: 16px;
+    line-height: 30px;
+
+  }
+.junior_menber_information{
+
+
+
+}
+  .shopman_data span {
+    display: block;
+    width: 60%;
+  }
+
   .team_information {
     margin: 30px 0;
   }
@@ -521,7 +565,7 @@
 
   .form_head {
     width: 80%;
-    margin:20px auto;
+    margin: 20px auto;
   }
 
   .form_head tr td {
@@ -595,6 +639,7 @@
     height: auto;
     overflow: hidden;
     text-align: center;
+    display: none;
   }
 
   .junior_menber_information p {
