@@ -41,7 +41,9 @@
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>订单备注：<span>{{listData.remarks}}</span></li>
+                <li>买家备注：<span>{{listData.remarks}}</span></li>
+                <li>卖家备注：<span>{{listData.sellRemarks}}</span> <el-button type="success" @click="updataRemark">修改</el-button>
+
               </ul>
             </div>
             <div class="Bottom NoBorderBottom">
@@ -92,24 +94,19 @@
             </ul>
 
           </div>
-          <!--<div class="TopTitle NoPadding NoBorderBottom">-->
-          <!--<ul class="left width100">-->
-          <!--<div class="titlee">退款记录</div>-->
-          <!--<ul style="overflow: auto;">-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请 </li>-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-          <!--<li class="marginTopLeft">后台账号admin于2017-12-22 12：00:00审核同意了此订单的退款申请</li>-->
-          <!--</ul>-->
-
-          <!--</ul>-->
-          <!--</div>-->
         </div>
       </div>
     </div>
-
+    <div class="change_sellRemarks popup">
+      <div class="change_nowprice">
+        <div class="change_nowprice_title">修改买家备注</div>
+        <el-input v-model="sellRemarks"></el-input>
+      </div>
+      <div class="deliver_goods_btns">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary" @click="Remark">确定</el-button>
+      </div>
+    </div>
     <div class="mask"></div>
     <div class="deliver_goods popup" style="text-align: left">
       <el-row>
@@ -206,7 +203,9 @@
         outAccount: '',
         msg: '',
         tui: '',
-        pay: ''
+        pay: '',
+        sellRemarks:'',
+
       }
     },
     created() {
@@ -246,6 +245,27 @@
             }
           }
         );
+      },
+      updataRemark(){
+        $(".change_sellRemarks").show();
+        $(".mask").show();
+      },
+      Remark(){
+        let url = http.apiMap.updataRemark;
+        let data = {
+          orderNum: this.orderNum,
+          sellRemarks:this.sellRemarks,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getshow()
+            }
+          }
+        );
+        $(".change_sellRemarks").hide();
+        $(".mask").hide()
       },
       //审核同意
       open3() {
@@ -381,11 +401,14 @@
       },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
+        $(".change_sellRemarks").hide()
+
         $('.change_price').css('display', 'none');
       },
       DisplayNone3() {
         $('.mask').css('display', 'none');
         $('.deliver_goods').css('display', 'none');
+
       },
     }
   }

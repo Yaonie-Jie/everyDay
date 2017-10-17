@@ -64,6 +64,7 @@ const apiMap={
   'updataOrderNum':hosts.api+'order/modifyOrderPriceByOrderNum',    //订单改价
   'removeOrder':hosts.api+'order/removeOrder',    //取消订单
   'showOrder':hosts.api+'order/findOrderByOrderNum',    //订单详情
+  'updataRemark':hosts.api+'order/modifySellRemark',    //修改买家备注
   'returnOrderList':hosts.api+'order/findOrderRefundList',    //退款中订单列表
   'findOrder':hosts.api+'order/findOrder',    //搜索订单
   'findExpress':hosts.api+'express/findExpressByOrderNum',    //查看物流

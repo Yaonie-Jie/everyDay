@@ -7,7 +7,7 @@
       </el-breadcrumb>
 
       <div class="add_goods">
-        <el-button type="success" class="right addGoods" @click="shows()">添加商品</el-button>
+        <el-button type="success" class="right addGoods" @click="shows()">添加商品链接</el-button>
       </div>
 
       <div class="goods_search">
@@ -20,9 +20,20 @@
             </option>
           </select>
           <select name="" class="select" id="TwoType" v-model="typeId">
+            <option value="">全部</option>
+
             <option v-for="option in TwoypeList" v-bind:value="option.id">
               {{ option.name }}
             </option>
+          </select>
+        </div>
+        <div class="left" style="margin-left: 30px">
+          <i style="margin-top: 10px;">排序</i>
+          <select name="" class="select" id="sort" v-model="sort">
+            <option value="">请选择</option>
+            <option value="0">正序</option>
+            <option value="1">倒序</option>
+            <option value="2">时间</option>
           </select>
         </div>
         <div class="right">
@@ -107,6 +118,7 @@
         name: '',
         oneTypeId: '',
         id: '',
+        sort:'',
         proCode: ''
       }
     },
@@ -228,6 +240,7 @@
           name: this.name,
           typeId: this.typeId,
           proCode: this.proCode,
+          sort: this.sort,
           common: 1
         };
         this.$http.post(url, data).then(
@@ -384,7 +397,6 @@
   .goods_search i {
     float: left;
     margin-left: 10px;
-    line-height: 32px;
   }
 
   .goods_search select {

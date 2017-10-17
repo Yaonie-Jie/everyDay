@@ -22,7 +22,7 @@
         <el-col :span="24">
           <div class="add_goods_name">
             <div class="add_goods_name_title">商品名称</div>
-            <el-input v-model="name"></el-input>
+            <input v-model="name" maxlength="10" class="el-input__inner" style="float: left;width: 70%;"></input>
           </div>
         </el-col>
         <el-col :span="24">

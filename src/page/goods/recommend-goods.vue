@@ -687,7 +687,6 @@
           reader.onload = function (e) {
             vm.images = e.target.result;
             vm.imgFiles = $('.imgLocal')[0].files[0];
-
           };
         }
       },

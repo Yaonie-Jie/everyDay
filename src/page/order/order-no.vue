@@ -40,7 +40,9 @@
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>订单备注：<span>{{listData.remarks}}</span></li>
+                <li>买家备注：<span>{{listData.remarks}}</span></li>
+                <li>卖家备注：<span>{{listData.sellRemarks}}</span> <el-button type="success" @click="updataRemark">修改</el-button>
+                </li>
               </ul>
             </div>
             <div class="Bottom NoBorderBottom">
@@ -69,7 +71,6 @@
               <div class="right">
                 <el-button @click="DisplayBlock(listData)">订单改价</el-button>
                 <el-button @click="Delete(listData.orderNum)">取消此订单</el-button>
-
               </div>
             </div>
           </li>
@@ -85,6 +86,18 @@
       <div class="deliver_goods_btns">
         <el-button @click="DisplayNone">取消</el-button>
         <el-button type="primary" @click="updata">订单改价</el-button>
+      </div>
+    </div>
+
+
+    <div class="change_sellRemarks popup">
+      <div class="change_nowprice">
+        <div class="change_nowprice_title">修改买家备注</div>
+        <el-input v-model="sellRemarks"></el-input>
+      </div>
+      <div class="deliver_goods_btns">
+        <el-button @click="DisplayNone">取消</el-button>
+        <el-button type="primary" @click="Remark">确定</el-button>
       </div>
     </div>
   </div>
@@ -160,6 +173,7 @@
         orderNum: '',    //订单号
         listData: '',
         price: '',
+        sellRemarks:'',
         fight:'',
       }
     },
@@ -193,17 +207,37 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data.order;
-
               this.listData = data
-
-
+              this.sellRemarks = data.sellRemarks
             }
           }
         );
       },
+      updataRemark(){
+        $(".change_sellRemarks").show();
+        $(".mask").show();
+      },
+      Remark(){
+        let url = http.apiMap.updataRemark;
+        let data = {
+          orderNum: this.orderNum,
+          sellRemarks:this.sellRemarks,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getshow()
+            }
+          }
+        );
+        $(".change_sellRemarks").hide();
+        $(".mask").hide()
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
+        $(".change_sellRemarks").hide()
       },
       DisplayBlock(i) {
         this.orderNum = i.orderNum;

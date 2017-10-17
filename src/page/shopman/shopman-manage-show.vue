@@ -3,7 +3,6 @@
     <div class="box">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>店主管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/ShopmanManage'}">店主管理</el-breadcrumb-item>
         <el-breadcrumb-item>店主资料</el-breadcrumb-item>
       </el-breadcrumb>
 
@@ -11,10 +10,10 @@
         <p class="shopman_data_title">团队资料<span>所属团队：{{shopmanManage.headAccount}}</span></p>
         <ul class="shopman_data3">
           <li><i>账号：</i><span>{{shopmanManage.account}}</span></li>
-          <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
+          <li><i>昵称：</i><span>{{shopmanManage.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{stataFilter(shopmanManage.level)}}</span></li>
-          <li><i>升级到公司店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
+          <li><i>升级到个人店主时间：</i><span>{{shopmanManage.modifiedOn}}</span></li>
           <li><i>所属团队：</i><span>{{shopmanManage.headAccount}}</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney/100}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney/100}}</span></li>
@@ -146,8 +145,9 @@
               this.DisplayNone()
               this.$message({
                 type: 'info',
-                message: '添加成功'
+                message: '升级成功'
               })
+              this.showAccount()
             } else {
               this.$message({
                 type: 'error',

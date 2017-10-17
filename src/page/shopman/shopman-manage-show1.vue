@@ -14,7 +14,7 @@
           <li><i>昵称：</i><span>{{shopmanManage.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{stataFilter(shopmanManage.level)}}</span></li>
-          <li><i>升级到高级店主时间：</i><span>{{shopmanManage.loginTime}}</span></li>
+          <li><i>升级到公司店主时间：</i><span>{{shopmanManage.modifiedOn}}</span></li>
           <li><i>所属团队：</i><span>{{shopmanManage.headAccount}}</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney/100}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney/100}}</span></li>

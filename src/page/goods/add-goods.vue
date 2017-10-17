@@ -4,10 +4,23 @@
     <div class="box">
       <el-row>
         <el-col :span="24">
-          <div class="add_goods_title mid">添加商品</div>
+          <div class="add_goods_title mid">添加商品链接</div>
 
           <div class="add_goods_img">
-            <div class="add_goods_img_title" style="width: 10%;">商品图片</div>
+            <div class="add_goods_img_title" style="width: 10%;">链接封面</div>
+            <form name="imgForm" id="imgFor" enctype="multipart/form-data" action="" method='post'>
+              <div class="labe el-icon-plus" @click="labe1"></div>
+              <input class="input-loc-img imgLocal1" name="pictureUrl" type='file' accept="image/*"
+                     @change="coverChange"/>
+            </form>
+            <div class="imgurl" v-if="images1">
+              <img :src="images1" alt="">
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_img">
+            <div class="add_goods_img_title" style="width: 10%;">banner图</div>
             <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
               <div class="labe el-icon-plus" @click="labe"></div>
               <input class="input-loc-img imgLocal" name="pictureUrl" type='file' accept="image/*"
@@ -22,7 +35,7 @@
         <el-col :span="24">
           <div class="add_goods_name">
             <div class="add_goods_name_title">商品名称</div>
-            <el-input v-model="name"></el-input>
+            <input v-model="name" maxlength="10" class="el-input__inner" style="float: left;width: 70%;"></input>
           </div>
         </el-col>
         <el-col :span="24">
@@ -70,6 +83,7 @@
           <div class="add_goods_brands">
             <div class="add_goods_brands_title">商品品牌</div>
             <select name="" class="select" id="BrandList" v-model="brandId">
+              <option value="">请选择</option>
               <option v-for="option in BrandList" v-bind:value="option.id">
                 {{ option.name }}
               </option>
@@ -164,7 +178,6 @@
                 fixed="right"
                 label="操作">
                 <template scope="scope">
-                  <!--<el-button type="primary" icon="edit" @click="DisplayBlock2(scope.row)"></el-button>-->
                   <el-button type="primary" icon="delete" @click="deleteParam(scope.row)"></el-button>
                 </template>
               </el-table-column>
@@ -206,8 +219,9 @@
 
           <div class="add_goods_commission">
             <div class="add_goods_commission_title">店主可得提成</div>
-            <div class="add_goods_commission_ipt"  style="font-size: 16px;line-height: 36px">
-              <el-input v-model="royalty" placeholder="请输入内容"></el-input>%
+            <div class="add_goods_commission_ipt" style="font-size: 16px;line-height: 36px">
+              <el-input v-model="royalty" placeholder="请输入内容"></el-input>
+              %
               （销售价-成本价）
             </div>
           </div>
@@ -297,7 +311,7 @@
             ]
           }
         },
-        proCode:'',
+        proCode: '',
         contentCan: '',
         editorOptionCan: {
           modules: {
@@ -326,6 +340,8 @@
         royalty: '',   //店主可的提成
         feightList: [],
         freightId: '',//运费模版Id
+        images1: '', //链接封面
+        imgFiles1: ''
       };
     },
     created() {
@@ -510,8 +526,10 @@
       ,
       labe() {
         $(".imgLocal").click()
-      }
-      ,
+      },
+      labe1() {
+        $(".imgLocal1").click()
+      },
       //上传图片
       deletes(e) {
         let el = e.target;
@@ -611,16 +629,32 @@
             }
           }
         }
+      },
+      coverChange(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage1(files);
+      },
+      createImage1(file) {
+        var vm = this;
+        var leng = file.length;
+        let arr = []
+        for (var i = 0; i < leng; i++) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.images1 = e.target.result;
+            vm.imgFiles1 = $('.imgLocal1')[0].files[0];
+          }
+        }
+      },
 
 
-      }
-      ,
       selectChange(e) {
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length) return;
         this.createImage(files);
-      }
-      ,
+      },
       createImage(file) {
         if (typeof FileReader === 'undefined') {
           alert('您的浏览器不支持图片上传，请升级您的浏览器');
@@ -640,9 +674,7 @@
             }
           };
         }
-      }
-      ,
-
+      },
       open3() {
         this.$confirm('此操作将删除此规格, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -864,11 +896,11 @@
     margin-right: 10px;
   }
 
-  #imgForm {
+  #imgForm, #imgFor {
     float: left;
   }
 
-  .imgLocal {
+  .imgLocal, .imgLocal1 {
     display: none;
   }
 

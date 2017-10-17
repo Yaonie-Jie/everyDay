@@ -290,7 +290,8 @@
         }).then(() => {
           var data = {
             'common': this.GLOBAL.common,
-            'id': row.id
+            'id': row.id,
+            loginAccount:sessionStorage.getItem('account')
           }
           var that = this;
           $.ajax({

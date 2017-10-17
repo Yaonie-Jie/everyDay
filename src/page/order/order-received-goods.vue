@@ -21,7 +21,7 @@
                 <li>订单状态：<span class="pink">{{stataFilter(listData.orderState)}}</span></li>
                 <li>商品总额：￥<span>{{listData.price / 100}}</span> 运费：￥<span>{{listData.freigh / 100}}</span></li>
                 <li>共<b class="pink">{{listData.amounts}}</b>件商品，订单总额：￥<span
-                  class="pink">{{listData.price / 100 + listData.freigh / 100}}</span>
+                  class="pink">{{(listData.price + listData.freigh) / 100}}</span>
                 </li>
               </ul>
             </div>
@@ -41,7 +41,9 @@
             </div>
             <div class="TopTitle NoBorderTop">
               <ul class="left">
-                <li>订单备注：<span>{{listData.remarks}}</span></li>
+                <li>买家备注：<span>{{listData.remarks}}</span></li>
+                <li>卖家备注：<span>{{listData.sellRemarks}}</span> <el-button type="success" @click="updataRemark">修改</el-button>
+
               </ul>
             </div>
             <div class="Bottom NoBorderBottom">
@@ -76,17 +78,17 @@
             <div class=" width100  NoBorderBottom">
               <div class="titlee">物流信息</div>
               <ul class="left">
-                <li class="marginTopLeft">物流公司：<span>{{company}}</span></li>
-                <li class="marginTopLeft"> 运单编号：<span>{{expressNum}}</span></li>
+                <li class="marginTopLeft">物流公司：<span>{{wuliu.company}}</span></li>
+                <li class="marginTopLeft"> 运单编号：<span>{{wuliu.expressNum}}</span></li>
                 <li class="marginTopLeft">电话：<span>{{wuliu.phone}}</span></li>
               </ul>
               <!--<div class="right imgNum">-->
-                <!--<div class="imgBOXs">-->
-                  <!--<img-->
-                    <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
-                    <!--alt="">-->
-                <!--</div>-->
-                <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
+              <!--<div class="imgBOXs">-->
+              <!--<img-->
+              <!--src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1500286899&di=895509c86877025244b6199b04b41a66&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8718367adab44aede5f5b1c1b91c8701a18bfb58.jpg"-->
+              <!--alt="">-->
+              <!--</div>-->
+              <!--<div class="shopNUMs">共 <span>20</span>件商品</div>-->
               <!--</div>-->
             </div>
             <div class=" width100  NoBorderBottom">
@@ -103,6 +105,18 @@
           </div>
         </div>
       </div>
+
+      <div class="mask"></div>
+      <div class="change_sellRemarks popup">
+        <div class="change_nowprice">
+          <div class="change_nowprice_title">修改买家备注</div>
+          <el-input v-model="sellRemarks"></el-input>
+        </div>
+        <div class="deliver_goods_btns">
+          <el-button @click="DisplayNone">取消</el-button>
+          <el-button type="primary" @click="Remark">确定</el-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -116,11 +130,13 @@
         orderNum: '',    //订单号
         listData: '',
         price: '',
-        wuliu:'',
-        company:'',
-        expressNum:'',
-        dataList:[],
-        abbreviation:''
+        wuliu: '',
+        company: '',
+        expressNum: '',
+        dataList: [],
+        abbreviation: '',
+        sellRemarks:'',
+
       }
     },
     created() {
@@ -154,11 +170,11 @@
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.wuliu=res.body.data.expressNew;
+              this.wuliu = res.body.data.expressNew;
 
               let data = JSON.parse(res.body.data.express);
-              this.expressNum=data.nu;
-              this.abbreviation=data.abbreviation;
+              this.expressNum = data.nu;
+              this.abbreviation = data.abbreviation;
               this.dataList = data.data
             } else {
               console.log('暂无物流信息')
@@ -178,13 +194,38 @@
             if (res.body.result) {
               let data = res.body.data.order;
               this.listData = data
+              this.sellRemarks = data.sellRemarks
+
             }
           }
         );
       },
+      updataRemark(){
+        $(".change_sellRemarks").show();
+        $(".mask").show();
+      },
+      Remark(){
+        let url = http.apiMap.updataRemark;
+        let data = {
+          orderNum: this.orderNum,
+          sellRemarks:this.sellRemarks,
+          common: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.getshow()
+            }
+          }
+        );
+        $(".change_sellRemarks").hide();
+        $(".mask").hide()
+      },
       DisplayNone: function () {
         $('.mask').css('display', 'none');
         $('.change_price').css('display', 'none');
+        $(".change_sellRemarks").hide()
+
       },
 
     }

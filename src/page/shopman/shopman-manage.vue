@@ -83,7 +83,7 @@
 
 
       <!--个人店主-->
-      <div class="required_" style="width:100%;">添加个人店主</div>
+      <div class="required_" style="width:100%;">添加店主</div>
       <h2 style="float:left;margin-left:20%;margin-top:10px;margin-bottom:10px;">必填个人店主资料</h2>
       <div class="true_name">
         <div class="true_name_title">真实姓名</div>
@@ -418,8 +418,8 @@
               })
             } else {
               this.$message({
-                type: 'error',
-                message: '添加失败'
+                type: 'info',
+                message: res.body.msg
               })
             }
           }

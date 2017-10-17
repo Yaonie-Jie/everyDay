@@ -660,19 +660,7 @@
     }
   }
 
-  .iconClassRoot {
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    background: url("../images/ztree/root.png") no-repeat center/100% auto;
-  }
 
-  .iconClassNode {
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    background: url("../images/ztree/node.png") no-repeat center/100% auto;
-  }
 
   .operate {
     display: flex;

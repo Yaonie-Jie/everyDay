@@ -20,11 +20,11 @@
           <li><i>昵称：</i><span>{{shopmanManage.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManage.level}}</span></li>
-          <li><i>升级到高级店主时间：</i><span>{{shopmanManage.canLevel}}</span></li>
-          <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney}}</span></li>
-          <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney}}</span></li>
-          <li><i>累计所得奖励：</i><span>{{shopmanManage.sumBonus}}</span></li>
-          <li><i>上月所得奖励：</i><span>{{shopmanManage.lastMonthBonus}}</span></li>
+          <li><i>升级到{{shopmanManage.level}}时间：</i><span>{{shopmanManage.modifiedOn}}</span></li>
+          <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney / 100}}</span></li>
+          <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney / 100}}</span></li>
+          <li><i>累计所得奖励：</i><span>￥{{shopmanManage.sumBonus / 100}}</span></li>
+          <li><i>上月所得奖励：</i><span>￥{{shopmanManage.lastMonthBonus / 100}}</span></li>
         </ul>
       </div>
 
@@ -50,7 +50,7 @@
           <li><i>昵称：</i><span>{{shopmanManagey.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManagey.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManagey.level}}</span></li>
-          <li><i>升级到高级店主时间：</i><span>{{shopmanManagey.modifiedOn}}</span></li>
+          <li><i>升级到{{shopmanManage.level}}时间：</i><span>{{shopmanManage.modifiedOn}}</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManagey.totalMoney}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManagey.lastMonthMoney}}</span></li>
           <li><i>累计所得奖励：</i><span>{{shopmanManagey.sumBonus}}</span></li>
@@ -62,8 +62,8 @@
           <el-button type="primary" @click="addTeamy">完成，继续添加团员</el-button>
         </div>
       </div>
-
     </div>
+  </div>
 </template>
 
 <script>
@@ -83,12 +83,12 @@
     },
     methods: {
       findTeamli() {
-        if(this.account==''){
+        if (this.account == '') {
           this.$message({
             type: 'info',
             message: '请输入账号查询'
           });
-        }else {
+        } else {
           let url = http.apiMap.findTeamli;
           let data = {
             common: 2,
@@ -145,7 +145,7 @@
                 $('.add_team2').css('display', 'block');
               } else {
                 this.$message({
-                  type: 'error',
+                  type: 'info',
                   message: res.body.msg,
                 });
               }
@@ -194,15 +194,15 @@
         let data = {
           common: 2,
           account: this.teamAccount,
-          userAccount:this.shopmanManage.account
+          userAccount: this.shopmanManage.account
         };
         this.$http.post(url, data).then(
           function (res) {
             if (res.body.result) {
-              this.$router.push('/ShopmanTeamShow/' + this.teamAccount);
+              this.$router.push('/ShopmanTeamShow/' + this.shopmanManage.account);
             } else {
               this.$message({
-                type: 'error',
+                type: 'info',
                 message: res.body.msg
               });
             }

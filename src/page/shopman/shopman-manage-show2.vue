@@ -10,9 +10,10 @@
         <p class="shopman_data_title">团队资料<span>所属团队：{{shopmanManage.headAccount}}</span></p>
         <ul class="shopman_data1" >
           <li><i>账号：</i><span>{{shopmanManage.account}}</span></li>
-          <li><i>昵称：</i><span>{{shopmanManage.alipay}}</span></li>
+          <li><i>昵称：</i><span>{{shopmanManage.name}}</span></li>
           <li><i>注册时间：</i><span>{{shopmanManage.createOn}}</span></li>
           <li><i>店主级别：</i><span>{{shopmanManage.level}}</span></li>
+          <li><i>升级到公司店主时间：</i><span>{{shopmanManage.modifiedOn}}</span></li>
           <li><i>所属团队：</i><span>{{shopmanManage.headAccount}}</span></li>
           <li><i>累计销售金：</i><span>￥{{shopmanManage.totalMoney/100}}</span></li>
           <li><i>上月销售金：</i><span>￥{{shopmanManage.lastMonthMoney/100}}</span></li>
@@ -82,7 +83,7 @@
   .shopman_data1 li i{
     display: inline-block;
     float: left;
-    width: 15%;
+    width: 18%;
     text-align: left;
     margin-left: 27%;
   }

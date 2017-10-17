@@ -283,8 +283,8 @@
           function (res) {
             if (res.body.result) {
               let data = res.body.data;
-              this.teamLastMoney = data.headManage.lastMonthMoney;
-              this.teamMoney = data.headManage.money;
+              this.teamLastMoney = data.headManage.lastMonthMoney/100;
+              this.teamMoney = data.otm.money/100;
               this.teamNum = data.otm.teamNum;
               this.teamAccount = data.headManage.account;//团长账号
               let data1 = data.otm.teamLevel;
