@@ -569,12 +569,18 @@
                 type: 'info',
                 message: '请选择运费模版'
               })
+            } else if (this.content.length > 5242880) {
+              this.$message({
+                type: 'warning',
+                message: '商品详情上传图片不能超过5M'
+              });
             } else {
               this.$confirm('是否继续添加商品?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
+                $(".mask").show()
                 let url = http.apiMap.addShop;
                 let formData = new FormData();//通过formdata上传
                 let arr = []
@@ -584,6 +590,7 @@
                   }
                   formData.append('pictureUrl', arr[i]);
                 }
+                formData.append('pictureUrl1', this.imgFiles1);
                 formData.append('common', '2');
                 formData.append('typeId', this.typeId);
                 formData.append('stock', this.stock);
@@ -602,6 +609,7 @@
                   method: 'post',
                   headers: {'Content-Type': 'multipart/form-data'}
                 }).then(function (res) {
+                  $(".mask").hide()
                   if (res.body.result) {
                     this.$message({
                       type: 'success',
@@ -611,7 +619,7 @@
                   } else {
                     this.$message({
                       type: 'warning',
-                      message: '添加失败'
+                      message: res.body.msg
                     });
                   }
                 }).catch(function (error) {

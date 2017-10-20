@@ -472,7 +472,7 @@
           let url = http.apiMap.Reject;
           let data = {
             orderNum: i.orderNum,
-            refundState: 1,
+            refundState: 3,
             common: 1
           };
           this.$http.post(url, data).then(
@@ -508,7 +508,7 @@
           let url = http.apiMap.Reject;
           let data = {
             orderNum: i.orderNum,
-            refundState: 0,
+            refundState: 2,
             common: 1
           };
           this.$http.post(url, data).then(

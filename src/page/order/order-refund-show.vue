@@ -76,7 +76,7 @@
     <div class="mask"></div>
     <div class="change_sellRemarks popup">
       <div class="change_nowprice">
-        <div class="change_nowprice_title">修改买家备注</div>
+        <div class="change_nowprice_title">修改卖家备注</div>
         <el-input v-model="sellRemarks"></el-input>
       </div>
       <div class="deliver_goods_btns">
@@ -167,7 +167,7 @@
           let url = http.apiMap.Reject;
           let data = {
             orderNum: this.orderNum,
-            refundState: 1,
+            refundState: 3,
             common: 1
           };
           this.$http.post(url, data).then(
@@ -233,7 +233,7 @@
           let url = http.apiMap.Reject;
           let data = {
             orderNum: i.orderNum,
-            refundState: 0,
+            refundState: 2,
             common: 1
           };
           this.$http.post(url, data).then(

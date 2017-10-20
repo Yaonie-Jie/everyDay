@@ -36,7 +36,8 @@
             label="操作">
             <template scope="scope">
               <el-button type="text" size="small" @click="Up(scope.row)" v-show="scope.row.num!=1">上移</el-button>
-              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移</el-button>
+              <el-button type="text" size="small" @click="Down(scope.row)" v-show="scope.row.num!=DataLength">下移
+              </el-button>
               <el-button type="text" size="small" @click="removeTop(scope.row)">置顶</el-button>
               <el-button type="text" size="small" @click="removeBottom(scope.row)">置底</el-button>
               <el-button type="text" size="small" @click="updataALl(scope.row)">修改</el-button>
@@ -45,16 +46,19 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="block">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-size="10"
-          layout="prev, pager, next, jumper"
-          :total="count11">
-        </el-pagination>
-      </div>
+
       <el-row>
+        <el-col :span="24">
+          <div class="block">
+            <el-pagination
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-size="10"
+              layout="prev, pager, next, jumper"
+              :total="count11">
+            </el-pagination>
+          </div>
+        </el-col>
         <el-col :span="24">
           <span style="padding-right: 20px">设置推荐页的链接到商品推荐（优品推荐）最多展示数量：</span>
           <el-input type="text" style="width: 10%"
@@ -337,7 +341,7 @@
 
         content: '',
         editorOption: {},
-        DataLength:''
+        DataLength: ''
       }
     },
     created() {
@@ -347,7 +351,7 @@
     },
     methods: {
       addOneShow() {
-        this.currentPage22=1
+        this.currentPage22 = 1
         $(".leftshow").show();
         $(".mask").show();
       },
@@ -356,7 +360,7 @@
         $(".mask").hide();
       },
       addTwoShow() {
-        this.currentPage22=1
+        this.currentPage22 = 1
         $(".rightshow").show();
         $(".mask").show();
       },
@@ -423,7 +427,7 @@
                 message: '修改成功'
               });
               this.findProductNum()
-            }else {
+            } else {
               this.$message({
                 type: 'error',
                 message: '修改失败'
@@ -447,7 +451,7 @@
                 message: '修改成功'
               });
               this.findProductNum()
-            }else {
+            } else {
               this.$message({
                 type: 'error',
                 message: '修改失败'
@@ -611,7 +615,7 @@
             FrontNumber = table[i - 1].number;
           }
         }
-        var arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
+        var arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         var data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemxing;
         this.$http.post(url, data).then(
@@ -635,7 +639,7 @@
             FrontNumber = table[i + 1].number;
           }
         }
-        let arr = [{'id': nowID, 'number':  FrontNumber}, {'id': FrontID, 'number':  nowNumber}];
+        let arr = [{'id': nowID, 'number': FrontNumber}, {'id': FrontID, 'number': nowNumber}];
         let data = {'list': JSON.stringify(arr), 'common': this.GLOBAL.common};
         let url = http.apiMap.moveSystemxing;
         this.$http.post(url, data).then(
@@ -685,7 +689,7 @@
       updataALl(row) {
         if (row.mode == '优品推荐') {
           this.$router.push('/updatashop/' + row.id);
-        }else {
+        } else {
           this.$router.push('/updatashoppic/' + row.id);
         }
       },
@@ -719,7 +723,12 @@
           size: 10,
           name: this.name,
           typeId: -1,
-          nowpage: this.currentPage22
+          nowpage: this.currentPage22,
+          proCode: '',
+          sort: '',
+          isShelve: '',
+          stock: '',
+          endStock: '',
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -731,6 +740,7 @@
         )
       },
       selectShowTwo() {
+        console.log(2)
         this.flag = 2
         $('.mask').css('display', 'block');
         $('.change_left').css('display', 'block');
@@ -740,7 +750,12 @@
           size: 10,
           name: this.picName,
           typeId: -1,
-          nowpage: this.currentPage22
+          nowpage: this.currentPage22,
+          proCode: '',
+          sort: '',
+          isShelve: '',
+          stock: '',
+          endStock: '',
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -761,9 +776,9 @@
       //xiao分页跳转
       handleCurrentChange22(val) {
         this.currentPage22 = val;
-        if(this.flag = 1){
+        if (this.flag = 1) {
           this.selectShowOne()
-        }else {
+        } else {
           this.selectShowTwo()
         }
       },
@@ -877,11 +892,13 @@
   .leftshow {
     display: none;
   }
-  .editer{
-    width:500px;
+
+  .editer {
+    width: 500px;
     margin-bottom: 40px;
   }
+
   .popup {
-    height:500px;
+    height: 500px;
   }
 </style>

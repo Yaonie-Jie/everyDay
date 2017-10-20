@@ -7,6 +7,19 @@
           <div class="add_goods_title mid">修改商品</div>
 
           <div class="add_goods_img">
+            <div class="add_goods_img_title" style="width: 10%;">链接封面</div>
+            <form name="imgForm" id="imgFor" enctype="multipart/form-data" action="" method='post'>
+              <div class="labe el-icon-plus" @click="labe1"></div>
+              <input class="input-loc-img imgLocal1" name="pictureUrl" type='file' accept="image/*"
+                     @change="coverChange"/>
+            </form>
+            <div class="imgurl" v-if="images1">
+              <img :src="images1" alt="">
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="24">
+          <div class="add_goods_img">
             <div class="add_goods_img_title" style="width: 10%;">商品图片</div>
             <form name="imgForm" id="imgForm" enctype="multipart/form-data" action="" method='post'>
               <div class="labe el-icon-plus" @click="labe"></div>
@@ -177,7 +190,8 @@
           <div class="add_goods_commission">
             <div class="add_goods_commission_title">店主可得提成</div>
             <div class="add_goods_commission_ipt" style="font-size: 16px;line-height: 36px">
-              <el-input v-model="royalty" placeholder="请输入内容"></el-input>%
+              <el-input v-model="royalty" placeholder="请输入内容"></el-input>
+              %
               （销售价-成本价）
             </div>
           </div>
@@ -273,7 +287,7 @@
             ]
           }
         },
-        proCode:'',
+        proCode: '',
         contentCan: '',
         editorOptionCan: {
           modules: {
@@ -304,7 +318,8 @@
         freightId: '',//运费模版Id
         typeIdOne: '',
         pic: [],//存放已有图片路径
-        typeId_two: ''
+        typeId_two: '',
+        images1: ''
       };
     },
     created() {
@@ -327,6 +342,7 @@
             if (res.body.result) {
               let data = res.body.data.product;
               this.name = data.name;
+              this.images1 = data.coverPicture
               this.price = data.price / 100;
               this.stock = data.stock;
               this.cose = data.cose / 100;
@@ -410,13 +426,13 @@
             type: 'info',
             message: '请填写规格名称'
           });
-        }else {
-          if(this.dynamicTags==''){
+        } else {
+          if (this.dynamicTags == '') {
             this.$message({
               type: 'info',
               message: '请填写规格参数'
             });
-          }else {
+          } else {
             let arr = {
               paramName: this.paramName,
               parameters: this.dynamicTags.join(',')
@@ -566,6 +582,27 @@
         }
         this.pic.splice(tmpi, 1);
       },
+      labe1() {
+        $(".imgLocal1").click()
+      },
+      coverChange(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage1(files);
+      },
+      createImage1(file) {
+        var vm = this;
+        var leng = file.length;
+        let arr = []
+        for (var i = 0; i < leng; i++) {
+          var reader = new FileReader();
+          reader.readAsDataURL(file[i]);
+          reader.onload = function (e) {
+            vm.images1 = e.target.result;
+            vm.imgFiles1 = $('.imgLocal1')[0].files[0];
+          }
+        }
+      },
       submitUpload() {
         if (this.typeId == '') {
           this.$message({
@@ -584,12 +621,18 @@
                 type: 'info',
                 message: '请选择运费模版'
               })
-            } else {
+            } else if (this.content.length > 6291456) {
+              this.$message({
+                type: 'warning',
+                message: '商品详情上传图片不能超过5M'
+              });
+            }else {
               this.$confirm('是否修改商品?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
+                $(".mask").show()
                 let url = http.apiMap.updataShop;
                 let formData = new FormData();//通过formdata上传
                 let arr = []
@@ -602,6 +645,7 @@
                   }
                 }
                 formData.append('id', this.id);
+                formData.append('pictureUrl1', this.imgFiles1);
                 formData.append('common', '2');
                 formData.append('typeId', this.typeId);
                 formData.append('stock', this.stock);
@@ -621,17 +665,24 @@
                   method: 'post',
                   headers: {'Content-Type': 'multipart/form-data'}
                 }).then(function (res) {
-                  this.$message({
-                    type: 'success',
-                    message: '修改成功!'
-                  });
-                  this.$router.push('/ManageGoods');
+                  $(".mask").hide()
+                  if (res.body.result) {
+                    this.$message({
+                      type: 'success',
+                      message: '修改成功!'
+                    });
+                    this.$router.push('/ManageGoods');
+                  } else {
+                    this.$message({
+                      type: 'warning',
+                      message: res.body.msg
+                    });
+                  }
                 }).catch(function (error) {
                   this.$message({
                     type: 'info',
                     message: '修改失败'
                   });
-                  console.log(error);
                 })
 
 

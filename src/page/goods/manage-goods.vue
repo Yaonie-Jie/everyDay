@@ -12,7 +12,7 @@
 
       <div class="goods_search">
         <div class="left">
-          <i style="margin-top: 10px;">搜索</i>
+          <i style="margin-top: 10px;">分类</i>
           <select name="" class="select" id="oneType" @change="OneTypeListChange" v-model="oneTypeId">
             <option value="">全部</option>
             <option v-for="option in OneTypeList" v-bind:value="option.id">
@@ -34,6 +34,23 @@
             <option value="0">正序</option>
             <option value="1">倒序</option>
             <option value="2">时间</option>
+          </select>
+        </div>
+        <div class="left" style="margin-left: 30px">
+          <i style="margin-top: 10px;">是否上架</i>
+          <select name="" class="select" id="isShelve" v-model="isShelve">
+            <option value="">请选择</option>
+            <option value="1">上架</option>
+            <option value="0">下架</option>
+          </select>
+        </div>
+        <div class="left" style="margin-left: 30px">
+          <i style="margin-top: 10px;">库存区间</i>
+          <select name="" class="select" id="isShe">
+            <option value="3">请选择</option>
+            <option value="0">0～100</option>
+            <option value="1">100～1000</option>
+            <option value="2">1000～</option>
           </select>
         </div>
         <div class="right">
@@ -81,6 +98,10 @@
               <el-button type="text" size="small" @click="Top(scope.row)">置顶</el-button>
               <el-button type="text" size="small" @click="Bottom(scope.row)">置底</el-button>
               <el-button type="text" size="small" @click="DisplayBlock(scope.row)">修改</el-button>
+              <el-button type="text" size="small" @click="showLive(scope.row)" v-if="scope.row.isShelve == 0">上架
+              </el-button>
+              <el-button type="text" size="small" @click="hideLive(scope.row)" v-if="scope.row.isShelve == 1">下架
+              </el-button>
               <el-button type="text" size="small" @click="open2(scope.row)">删除</el-button>
             </template>
           </el-table-column>
@@ -118,12 +139,15 @@
         name: '',
         oneTypeId: '',
         id: '',
-        sort:'',
-        proCode: ''
+        sort: '',
+        proCode: '',
+        isShelve: '',
+        endStock: '',
+        stock: ''
       }
     },
     created() {
-      this.getList();
+      this.find();
       this.findTypeList()
     },
     methods: {
@@ -223,6 +247,44 @@
           }
         )
       },
+      showLive(row) {
+        let url = http.apiMap.showLive;
+        let data = {
+          common: 1,
+          id: row.id,
+          isShelve: 1
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'info',
+                message: '上架成功'
+              });
+              this.getList()
+            }
+          }
+        )
+      },
+      hideLive(row) {
+        let url = http.apiMap.showLive;
+        let data = {
+          common: 1,
+          id: row.id,
+          isShelve: 0
+        };
+        this.$http.post(url, data).then(
+          function (res) {
+            if (res.body.result) {
+              this.$message({
+                type: 'info',
+                message: '下架成功'
+              });
+              this.getList()
+            }
+          }
+        )
+      },
       find() {
         let url = http.apiMap.findShop;
         if (this.oneTypeId == '') {
@@ -234,6 +296,20 @@
             this.typeId = this.oneTypeId
           }
         }
+        if ($("#isShe :selected").attr('value') == 0) {
+          console.log(111)
+          this.stock = 0
+          this.endStock = 100
+        }else if ($("#isShe :selected").attr('value') == 1){
+          this.stock = 100
+          this.endStock = 1000
+        }else if ($("#isShe :selected").attr('value') == 2){
+          this.stock = 1000
+          this.endStock = ''
+        }else if($("#isShe :selected").attr('value') == 3){
+          this.stock = ''
+          this.endStock = ''
+        }
         let data = {
           nowpage: this.currentPage,
           size: 10,
@@ -241,6 +317,9 @@
           typeId: this.typeId,
           proCode: this.proCode,
           sort: this.sort,
+          isShelve: this.isShelve,
+          stock: this.stock,
+          endStock: this.endStock,
           common: 1
         };
         this.$http.post(url, data).then(
@@ -268,9 +347,39 @@
       },
       getList() {
         let url = http.apiMap.findShopList;
+        if (this.oneTypeId == '') {
+          this.typeId = '-1'
+        } else {
+          if ($("#TwoType :selected").attr('value')) {
+            this.typeId = $("#TwoType :selected").attr('value')
+          } else {
+            this.typeId = this.oneTypeId
+          }
+        }
+        if ($("#isShe :selected").attr('value') == 0) {
+          console.log(111)
+          this.stock = 0
+          this.endStock = 100
+        }else if ($("#isShe :selected").attr('value') == 1){
+          this.stock = 100
+          this.endStock = 1000
+        }else if ($("#isShe :selected").attr('value') == 2){
+          this.stock = 1000
+          this.endStock = ''
+        }else if($("#isShe :selected").attr('value') == 3){
+          this.stock = ''
+          this.endStock = ''
+        }
         let data = {
           nowpage: this.currentPage,
           size: 10,
+          name: this.name,
+          typeId: this.typeId,
+          proCode: this.proCode,
+          sort: this.sort,
+          isShelve: this.isShelve,
+          stock: this.stock,
+          endStock: this.endStock,
           common: 1
         };
         this.$http.post(url, data).then(
@@ -344,7 +453,7 @@
       //分页跳转
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.getList()
+        this.find()
       },
       OneTypeListChange() {//一级分类改变
         let url = http.apiMap.findTypeListTwo;
@@ -389,9 +498,8 @@
   }
 
   .goods_search {
-    width: 80%;
     overflow: hidden;
-    margin: 0 0 30px 10%;
+    margin: 0 0 30px 0;
   }
 
   .goods_search i {

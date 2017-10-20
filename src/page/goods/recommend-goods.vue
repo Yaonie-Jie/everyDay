@@ -610,7 +610,12 @@
           size: 10,
           name: this.name,
           typeId: -1,
-          nowpage: this.currentPage22
+          nowpage: this.currentPage22,
+          proCode: '',
+          sort: '',
+          isShelve: '',
+          stock: '',
+          endStock: '',
         };
         this.$http.post(url, data).then(
           function (res) {
@@ -636,7 +641,12 @@
           size: 10,
           name: this.picName,
           typeId: -1,
-          nowpage: 1
+          nowpage: this.currentPage22,
+          proCode: '',
+          sort: '',
+          isShelve: '',
+          stock: '',
+          endStock: '',
         };
         this.$http.post(url, data).then(
           function (res) {

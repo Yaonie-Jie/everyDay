@@ -92,7 +92,7 @@
 
     <div class="change_sellRemarks popup">
       <div class="change_nowprice">
-        <div class="change_nowprice_title">修改买家备注</div>
+        <div class="change_nowprice_title">修改卖家备注</div>
         <el-input v-model="sellRemarks"></el-input>
       </div>
       <div class="deliver_goods_btns">
